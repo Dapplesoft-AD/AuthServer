@@ -60,13 +60,13 @@ dotnet run --project src/AuthServer/AuthServer.csproj
 ```
 
 The server will start and be available at:
-- HTTPS: `https://localhost:5001`
-- HTTP: `http://localhost:5000`
+- HTTPS: `https://localhost:7110`
+- HTTP: `http://localhost:5004`
 
 ### 5. Access the API Documentation
 
 Once the application is running in development mode, navigate to:
-- Swagger UI: `https://localhost:5001/swagger`
+- Swagger UI: `https://localhost:7110/swagger`
 
 ## Project Structure
 
