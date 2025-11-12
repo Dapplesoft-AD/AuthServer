@@ -7,7 +7,10 @@ using SharedKernel;
 
 namespace Application.Users.Register;
 
-internal sealed class RegisterUserCommandHandler(IApplicationDbContext context, IPasswordHasher passwordHasher)
+internal sealed class RegisterUserCommandHandler(
+    IApplicationDbContext context,
+    IDateTimeProvider dateTimeProvider,
+    IPasswordHasher passwordHasher)
     : ICommandHandler<RegisterUserCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
@@ -21,9 +24,14 @@ internal sealed class RegisterUserCommandHandler(IApplicationDbContext context, 
         {
             Id = Guid.NewGuid(),
             Email = command.Email,
-            FirstName = command.FirstName,
-            LastName = command.LastName,
-            PasswordHash = passwordHasher.Hash(command.Password)
+            FullName = command.FullName,
+            PasswordHash = passwordHasher.Hash(command.Password),
+            CreatedAt = dateTimeProvider.UtcNow,
+            UpdatedAt = dateTimeProvider.UtcNow,
+            Phone = command.Phone,
+            Status = Status.Active,
+            IsEmailVarified = false,
+            IsMFAEnabled = false
         };
 
         user.Raise(new UserRegisteredDomainEvent(user.Id));

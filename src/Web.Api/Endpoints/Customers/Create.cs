@@ -35,7 +35,7 @@ public class Create : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
-        .WithTags(Tags.Customers)
-        .RequireAuthorization();
+        .WithTags(Tags.Customers);
+        
     }
 }

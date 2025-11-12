@@ -18,7 +18,7 @@ internal sealed class UpdateTodoCommandHandler(
         if (todoItem is null)
         {
             return Result.Failure(TodoItemErrors.NotFound(command.TodoItemId));
-        }
+        } 
 
         todoItem.Description = command.Description;
 
