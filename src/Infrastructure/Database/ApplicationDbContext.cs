@@ -1,9 +1,11 @@
 ﻿using Application.Abstractions.Data;
 using Domain.Customers;
+using Domain.Supliers;
 using Domain.Todos;
 using Domain.Users;
 using Infrastructure.DomainEvents;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SharedKernel;
 
 namespace Infrastructure.Database;
@@ -18,6 +20,8 @@ public sealed class ApplicationDbContext(
     public DbSet<TodoItem> TodoItems { get; set; }
 
     public DbSet<Customer> Customers { get; set; }
+
+    public DbSet<Suplier> Supliers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -62,4 +66,6 @@ public sealed class ApplicationDbContext(
 
         await domainEventsDispatcher.DispatchAsync(domainEvents);
     }
+
+    public new EntityEntry Entry(object entity) => base.Entry(entity);
 }
