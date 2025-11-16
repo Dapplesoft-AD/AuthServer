@@ -13,7 +13,7 @@ internal sealed class GetTodoByIdQueryHandler(IApplicationDbContext context, IUs
     public async Task<Result<TodoResponse>> Handle(GetTodoByIdQuery query, CancellationToken cancellationToken)
     {
         TodoResponse? todo = await context.TodoItems
-            .Where(todoItem => todoItem.Id == query.TodoItemId && todoItem.UserId == userContext.UserId)
+            .Where(todoItem => todoItem.Id == query.TodoItemId && todoItem.UserId == userContext.OwnerUserId)
             .Select(todoItem => new TodoResponse
             {
                 Id = todoItem.Id,

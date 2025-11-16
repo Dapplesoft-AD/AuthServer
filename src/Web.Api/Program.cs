@@ -1,13 +1,18 @@
 using System.Reflection;
 using Application;
+using Application.Abstractions.Messaging;
+using Application.Businesses.Create;
 using HealthChecks.UI.Client;
 using Infrastructure;
+using Infrastructure.Database;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Web.Api;
 using Web.Api.Extensions;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
@@ -19,7 +24,6 @@ builder.Services
     .AddInfrastructure(builder.Configuration);
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
-
 WebApplication app = builder.Build();
 
 app.MapEndpoints();

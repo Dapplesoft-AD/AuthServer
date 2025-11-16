@@ -1,0 +1,61 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Application.Abstractions.Data;
+using Application.Abstractions.Messaging;
+using Domain.BusinessMembers;
+using Microsoft.EntityFrameworkCore;
+using SharedKernel;
+
+namespace Application.BusinessMembers.Create;
+public sealed class CreateBusinessMemberCommandHandler : ICommandHandler<CreateBusinessMemberCommand, Guid>
+{
+    private readonly IApplicationDbContext _context;
+    private readonly IDateTimeProvider _dateTimeProvider;
+
+    public CreateBusinessMemberCommandHandler(IApplicationDbContext context, IDateTimeProvider dateTimeProvider)
+    {
+        _context = context;
+        _dateTimeProvider = dateTimeProvider;
+    }
+
+    public async Task<Result<Guid>> Handle(CreateBusinessMemberCommand command, CancellationToken cancellationToken)
+    {
+        // Check if Business exists
+        bool businessExists = await _context.Businesses
+            .AnyAsync(b => b.Id == command.BusinessId, cancellationToken);
+
+        if (!businessExists)
+        {
+            return Result.Failure<Guid>(
+                Error.NotFound("Business.NotFound", "The specified business does not exist."));
+        }
+
+        // Check if User exists
+        bool userExists = await _context.Users
+            .AnyAsync(u => u.Id == command.UserId, cancellationToken);
+
+        if (!userExists)
+        {
+            return Result.Failure<Guid>(
+                Error.NotFound("User.NotFound", "The specified user does not exist."));
+        }
+
+        // Create BusinessMember entry
+        var member = new BusinessMember
+        {
+            Id = Guid.NewGuid(),
+            BusinessId = command.BusinessId,
+            UserId = command.UserId,
+            RoleId = command.RoleId,
+            JoinedAt = _dateTimeProvider.UtcNow  // centralized provider
+        };
+
+        _context.BusinessMembers.Add(member);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return Result.Success(member.Id);
+    }
+}
