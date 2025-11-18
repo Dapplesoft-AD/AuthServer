@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿
 
 using Domain.Users;
@@ -12,6 +13,15 @@ using Domain.Permissions;
 using Application.Abstractions.Data;
 using Domain.Applications;
 using Domain.RolePermissions;
+=======
+﻿using Application.Abstractions.Data;
+using Domain.Customers;
+using Domain.Todos;
+using Domain.Users;
+using Infrastructure.DomainEvents;
+using Microsoft.EntityFrameworkCore;
+using SharedKernel;
+>>>>>>> 8be9632798b68d2f9b5ec678c438c63cb1b8eb79
 
 namespace Infrastructure.Database;
 
@@ -25,12 +35,16 @@ public sealed class ApplicationDbContext(
     public DbSet<TodoItem> TodoItems { get; set; }
 
     public DbSet<Customer> Customers { get; set; }
+<<<<<<< HEAD
     //role based access control entities would go here
     public DbSet<Applicationapply> Applications { get; set; }
     public DbSet<Permission> Permissions { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
+=======
+
+>>>>>>> 8be9632798b68d2f9b5ec678c438c63cb1b8eb79
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
@@ -40,7 +54,19 @@ public sealed class ApplicationDbContext(
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+<<<<<<< HEAD
        
+=======
+        // When should you publish domain events?
+        //
+        // 1. BEFORE calling SaveChangesAsync
+        //     - domain events are part of the same transaction
+        //     - immediate consistency
+        // 2. AFTER calling SaveChangesAsync
+        //     - domain events are a separate transaction
+        //     - eventual consistency
+        //     - handlers can fail
+>>>>>>> 8be9632798b68d2f9b5ec678c438c63cb1b8eb79
 
         int result = await base.SaveChangesAsync(cancellationToken);
 

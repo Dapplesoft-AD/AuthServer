@@ -1,6 +1,9 @@
 ﻿using System.Text;
 using Application.Abstractions.Authentication;
+<<<<<<< HEAD
 using Application.Abstractions.Authorization;
+=======
+>>>>>>> 8be9632798b68d2f9b5ec678c438c63cb1b8eb79
 using Application.Abstractions.Data;
 using Application.Abstractions.Email;
 using Infrastructure.Authentication;
@@ -39,7 +42,11 @@ public static class DependencyInjection
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
         services.AddTransient<IDomainEventsDispatcher, DomainEventsDispatcher>();
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 8be9632798b68d2f9b5ec678c438c63cb1b8eb79
         return services;
     }
 

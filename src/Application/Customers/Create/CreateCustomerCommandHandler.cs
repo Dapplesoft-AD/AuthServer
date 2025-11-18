@@ -10,7 +10,11 @@ using SharedKernel;
 
 namespace Application.Customers.Create;
 
+<<<<<<< HEAD
 public class CreateCustomerCommandHandler : ICommandHandler<CreateSupplierCommand, Guid>
+=======
+public class CreateCustomerCommandHandler : ICommandHandler<CreateCustomerCommand, Guid>
+>>>>>>> 8be9632798b68d2f9b5ec678c438c63cb1b8eb79
 {
     private readonly IApplicationDbContext context;
 
@@ -19,7 +23,11 @@ public class CreateCustomerCommandHandler : ICommandHandler<CreateSupplierComman
         this.context = context;
     }
 
+<<<<<<< HEAD
     public async Task<Result<Guid>> Handle(CreateSupplierCommand command, CancellationToken cancellationToken)
+=======
+    public async Task<Result<Guid>> Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
+>>>>>>> 8be9632798b68d2f9b5ec678c438c63cb1b8eb79
     {
         var existingCustomer = new Customer
         {

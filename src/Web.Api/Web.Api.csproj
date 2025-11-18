@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+=======
+<Project Sdk="Microsoft.NET.Sdk.Web">
+>>>>>>> 8be9632798b68d2f9b5ec678c438c63cb1b8eb79
 
   <PropertyGroup>
     <UserSecretsId>7af30323-108a-4923-bd46-e13b7648968c</UserSecretsId>
@@ -15,7 +19,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
+<<<<<<< HEAD
     <PackageReference Include="Scrutor" />
+=======
+>>>>>>> 8be9632798b68d2f9b5ec678c438c63cb1b8eb79
     <PackageReference Include="Serilog.AspNetCore" />
     <PackageReference Include="Serilog.Sinks.Seq" />
     <PackageReference Include="Swashbuckle.AspNetCore" />

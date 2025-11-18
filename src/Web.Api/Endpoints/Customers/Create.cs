@@ -21,10 +21,17 @@ public class Create : IEndpoint
     {
         app.MapPost("customer", async (
             Request request,
+<<<<<<< HEAD
             ICommandHandler<CreateSupplierCommand, Guid> handler,
             CancellationToken cancellationToken) =>
         {
             var command = new CreateSupplierCommand
+=======
+            ICommandHandler<CreateCustomerCommand, Guid> handler,
+            CancellationToken cancellationToken) =>
+        {
+            var command = new CreateCustomerCommand
+>>>>>>> 8be9632798b68d2f9b5ec678c438c63cb1b8eb79
             {
                 Name = request.Name,
                 Email = request.Email,
