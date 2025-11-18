@@ -2,6 +2,8 @@
 using Domain.Customers;
 using Domain.Supliers;
 using Domain.Todos;
+using Domain.UserLoginHistories;
+using Domain.UserProfiles;
 using Domain.Users;
 using Infrastructure.DomainEvents;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,10 @@ public sealed class ApplicationDbContext(
     : DbContext(options), IApplicationDbContext
 {
     public DbSet<User> Users { get; set; }
+
+    public DbSet<UserLoginHistory> UserLoginHistory { get; set; }
+
+    public DbSet<UserProfile> UserProfile { get; set; }
 
     public DbSet<TodoItem> TodoItems { get; set; }
 

@@ -1,4 +1,6 @@
-﻿using SharedKernel;
+﻿using Domain.UserLoginHistories;
+using Domain.UserProfiles;
+using SharedKernel;
 
 namespace Domain.Users;
 
@@ -23,4 +25,7 @@ public sealed class User : Entity
     public DateTime CreatedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }
+
+    public UserProfile? Profile { get; set; }       // Navigation property to UserProfile 1:1
+    public ICollection<UserLoginHistory> LoginHistories { get; set; } = [];    // Navigation collection property to LoginHistory 1:N
 }
