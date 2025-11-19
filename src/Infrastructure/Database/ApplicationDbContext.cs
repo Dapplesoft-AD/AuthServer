@@ -1,5 +1,8 @@
 ﻿using Application.Abstractions.Data;
+using Domain.AuditLogs;
 using Domain.Customers;
+using Domain.MfaLogs;
+using Domain.MfaSettings;
 using Domain.Todos;
 using Domain.Users;
 using Infrastructure.DomainEvents;
@@ -18,6 +21,14 @@ public sealed class ApplicationDbContext(
     public DbSet<TodoItem> TodoItems { get; set; }
 
     public DbSet<Customer> Customers { get; set; }
+
+    public DbSet<MfaSetting> MfaSettings { get; set; }
+
+    public DbSet<MfaLog> MfaLogs { get; set; }
+
+    public DbSet<AuditLog> AuditLogs { get; set; }
+
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SharedKernel;
+
+namespace Domain.MfaLogs;
+
+public static class MfaLogErrors
+{
+    public static Error NotFound(Guid id) =>
+        Error.NotFound("MfaLog.NotFound", $"MfaLog with Id {id} not found.");
+}
+
