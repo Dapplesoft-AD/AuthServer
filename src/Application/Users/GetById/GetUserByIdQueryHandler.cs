@@ -24,7 +24,7 @@ internal sealed class GetUserByIdQueryHandler(IApplicationDbContext context, IUs
                 Id = u.Id,
                 FullName = u.FullName,
                 Email = u.Email,
-                IsEmailVarified = u.IsEmailVarified,
+                IsEmailVerified = u.IsEmailVerified,
                 IsMFAEnabled = u.IsMFAEnabled,
                 Phone = u.Phone,
                 Status = u.Status,

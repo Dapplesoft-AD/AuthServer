@@ -60,9 +60,9 @@ internal sealed class UpdateUserCommandHandler(
             userTuple.IsMFAEnabled = command.IsMFAEnabled.Value;
         }
 
-        if (command.IsEmailVarified.HasValue)
+        if (command.IsEmailVerified.HasValue)
         {
-            userTuple.IsEmailVarified = command.IsEmailVarified.Value;
+            userTuple.IsEmailVerified = command.IsEmailVerified.Value;
         }
 
         if (context.Entry(userTuple).State == EntityState.Modified)

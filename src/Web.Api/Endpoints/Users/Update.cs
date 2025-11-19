@@ -12,9 +12,9 @@ internal sealed class Update : IEndpoint
     public sealed class Request
     {
         public Guid UserId { get; set; }
-        
+
         public string? Fullname { get; set; }
-        
+
         public string? Email { get; set; }
 
         public string? Password { get; set; }
@@ -23,20 +23,20 @@ internal sealed class Update : IEndpoint
 
         public Status? Status { get; set; }
 
-        public bool? IsMFAEnabled {  get; set; }
+        public bool? IsMFAEnabled { get; set; }
 
-        public bool? IsEmailVarified { get; set; }
+        public bool? IsEmailVerified { get; set; }
     }
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("user/update/{id:guid}", async(
+        app.MapPut("user/update/{id:guid}", async (
             Guid id,
             Request request,
             ICommandHandler<UpdateUserCommand> handler,
-            CancellationToken cancellationToken) => 
+            CancellationToken cancellationToken) =>
             {
                 var command = new UpdateUserCommand(
-                    
+
                     UserId: request.UserId,
                     Fullname: request.Fullname,
                     Email: request.Email,
@@ -44,7 +44,7 @@ internal sealed class Update : IEndpoint
                     Phone: request.Phone,
                     Status: request.Status,
                     IsMFAEnabled: request.IsMFAEnabled,
-                    IsEmailVarified: request.IsEmailVarified
+                    IsEmailVerified: request.IsEmailVerified
 
                 );
 

@@ -16,6 +16,6 @@ public sealed record UpdateUserCommand(
     string? Phone,
     Status? Status,
     bool? IsMFAEnabled,
-    bool? IsEmailVarified
+    bool? IsEmailVerified
     ) : ICommand;
 

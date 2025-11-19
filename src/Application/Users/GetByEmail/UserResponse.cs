@@ -12,7 +12,7 @@ public sealed record UserResponse
 
     public string? Phone { get; set; }
 
-    public bool IsEmailVarified { get; set; }
+    public bool IsEmailVerified { get; set; }
 
     public bool IsMFAEnabled { get; set; }
 
