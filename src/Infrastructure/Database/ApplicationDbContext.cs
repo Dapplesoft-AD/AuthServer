@@ -1,10 +1,17 @@
-﻿using Application.Abstractions.Data;
-using Domain.Customers;
-using Domain.Todos;
+﻿
+
 using Domain.Users;
-using Infrastructure.DomainEvents;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.DomainEvents;
+using Domain.Todos;
+using Domain.Customers;
+using Domain.Roles;
+using Domain.UserRoles;
 using SharedKernel;
+using Domain.Permissions;
+using Application.Abstractions.Data;
+using Domain.Applications;
+using Domain.RolePermissions;
 
 namespace Infrastructure.Database;
 
@@ -18,7 +25,12 @@ public sealed class ApplicationDbContext(
     public DbSet<TodoItem> TodoItems { get; set; }
 
     public DbSet<Customer> Customers { get; set; }
-
+    //role based access control entities would go here
+    public DbSet<Applicationapply> Applications { get; set; }
+    public DbSet<Permission> Permissions { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<RolePermission> RolePermissions { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
@@ -28,15 +40,7 @@ public sealed class ApplicationDbContext(
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        // When should you publish domain events?
-        //
-        // 1. BEFORE calling SaveChangesAsync
-        //     - domain events are part of the same transaction
-        //     - immediate consistency
-        // 2. AFTER calling SaveChangesAsync
-        //     - domain events are a separate transaction
-        //     - eventual consistency
-        //     - handlers can fail
+       
 
         int result = await base.SaveChangesAsync(cancellationToken);
 
