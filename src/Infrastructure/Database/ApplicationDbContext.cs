@@ -5,6 +5,10 @@ using Domain.Users;
 using Infrastructure.DomainEvents;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
+using Domain.Application;
+using Domain.EmailVerification;
+using Domain.PasswordResets;
+using Domain.Token;
 
 namespace Infrastructure.Database;
 
@@ -16,9 +20,13 @@ public sealed class ApplicationDbContext(
     public DbSet<User> Users { get; set; }
 
     public DbSet<TodoItem> TodoItems { get; set; }
-    public DbSet<TodoItem> Applications { get; set; }
 
     public DbSet<Customer> Customers { get; set; }
+    public DbSet<Applications> Applications { get; set; }
+    public DbSet<EmailVerifications> EmailVerifications { get; set; }
+    public DbSet<PasswordReset> PasswordReset{ get; set; }
+    public DbSet<Tokens> Tokens{ get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,14 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿
+<Project Sdk="Microsoft.NET.Sdk">
 	<ItemGroup>
 		<None Update="Database\Migrations\**\*.cs">
 			<ExcludeFromStyleCop>true</ExcludeFromStyleCop>
 		</None>
 	</ItemGroup>
-
-	<PropertyGroup>
-		<CodeAnalysisRuleSet>none</CodeAnalysisRuleSet>
-	</PropertyGroup>
-
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
@@ -26,6 +22,10 @@
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="ArchitectureTests" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Database\Migrations\" />
 	</ItemGroup>
 
 </Project>

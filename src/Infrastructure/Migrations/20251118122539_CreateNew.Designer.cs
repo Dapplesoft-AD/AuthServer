@@ -10,11 +10,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Infrastructure.Database.Migrations
+namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251109165202_create_customer")]
-    partial class create_customer
+    [Migration("20251118122539_CreateNew")]
+    partial class CreateNew
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,52 @@ namespace Infrastructure.Database.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Domain.Application.Applications", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Api_base_url")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("api_base_url");
+
+                    b.Property<int>("Application_status")
+                        .HasColumnType("integer")
+                        .HasColumnName("application_status");
+
+                    b.Property<string>("Client_id")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("client_id");
+
+                    b.Property<string>("Client_secret")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("client_secret");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Redirect_url")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("redirect_url");
+
+                    b.HasKey("Id")
+                        .HasName("pk_applications");
+
+                    b.ToTable("applications", "public");
+                });
 
             modelBuilder.Entity("Domain.Customers.Customer", b =>
                 {
@@ -60,6 +106,67 @@ namespace Infrastructure.Database.Migrations
                         .HasDatabaseName("ix_customers_email");
 
                     b.ToTable("customers", "public");
+                });
+
+            modelBuilder.Entity("Domain.EmailVerification.EmailVerifications", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("Expires_at")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("token");
+
+                    b.Property<Guid>("User_Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.Property<DateTime>("Verified_at")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("verified_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_email_verifications");
+
+                    b.ToTable("email_verifications", "public");
+                });
+
+            modelBuilder.Entity("Domain.PasswordResets.PasswordReset", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("Expires_at")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("token");
+
+                    b.Property<bool>("Used")
+                        .HasColumnType("boolean")
+                        .HasColumnName("used");
+
+                    b.Property<Guid>("User_Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_password_reset");
+
+                    b.ToTable("password_reset", "public");
                 });
 
             modelBuilder.Entity("Domain.Todos.TodoItem", b =>
@@ -110,6 +217,41 @@ namespace Infrastructure.Database.Migrations
                         .HasDatabaseName("ix_todo_items_user_id");
 
                     b.ToTable("todo_items", "public");
+                });
+
+            modelBuilder.Entity("Domain.Token.Tokens", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Acess_token")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("acess_token");
+
+                    b.Property<Guid>("App_id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("app_id");
+
+                    b.Property<DateTime>("Issued_at")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("issued_at");
+
+                    b.Property<string>("Refresh_token")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("refresh_token");
+
+                    b.Property<Guid>("User_id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_tokens");
+
+                    b.ToTable("tokens", "public");
                 });
 
             modelBuilder.Entity("Domain.Users.User", b =>
