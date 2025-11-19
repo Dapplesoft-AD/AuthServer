@@ -7,6 +7,7 @@ using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.UserProfiles;
 
+// both  create and update used
 internal sealed class Create : IEndpoint
 {
     public sealed record Request(  // req body
@@ -19,7 +20,7 @@ internal sealed class Create : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("user-profile/create/{id:guid}", async (
+        app.MapPost("user-profile/update/{id:guid}", async (
             Guid id,  // from route prameter
             Request request,
             ICommandHandler<CreateUserProfileCommand, Guid> handler,
