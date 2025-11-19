@@ -12,7 +12,7 @@ internal sealed class GetTodosQueryHandler(IApplicationDbContext context, IUserC
 {
     public async Task<Result<List<TodoResponse>>> Handle(GetTodosQuery query, CancellationToken cancellationToken)
     {
-        if (query.UserId != userContext.UserId)
+        if (query.UserId != userContext.OwnerUserId)
         {
             return Result.Failure<List<TodoResponse>>(UserErrors.Unauthorized());
         }

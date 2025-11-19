@@ -1,5 +1,8 @@
 ﻿using Application.Abstractions.Data;
+using Domain.Businesses;
+using Domain.BusinessMembers;
 using Domain.Customers;
+using Domain.Roles;
 using Domain.Todos;
 using Domain.Users;
 using Infrastructure.DomainEvents;
@@ -18,6 +21,9 @@ public sealed class ApplicationDbContext(
     public DbSet<TodoItem> TodoItems { get; set; }
 
     public DbSet<Customer> Customers { get; set; }
+    public DbSet<Business> Businesses { get; set; }
+    public DbSet<BusinessMember> BusinessMembers { get; set; }
+    public DbSet<Role> Roles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

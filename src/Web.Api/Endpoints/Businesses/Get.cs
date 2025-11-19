@@ -1,0 +1,30 @@
+﻿using Application.Abstractions.Authentication;
+using Application.Abstractions.Messaging;
+using Application.Businesses.Get;
+using SharedKernel;
+using Web.Api.Extensions;
+using Web.Api.Infrastructure;
+
+namespace Web.Api.Endpoints.Businesses;
+
+public class Get : IEndpoint
+{
+    public void MapEndpoint(IEndpointRouteBuilder app)
+    {
+        app.MapGet("/businesses", async (
+            IQueryHandler<GetBusinessesQuery, List<BusinessResponse>> handler,
+            IUserContext userContext,
+            CancellationToken cancellationToken) =>
+        {
+            // Logged-in user এর Id
+            var query = new GetBusinessesQuery(userContext.OwnerUserId);
+
+            Result<List<BusinessResponse>> result = await handler.Handle(query, cancellationToken);
+
+            return result.Match(Results.Ok, CustomResults.Problem);
+
+        })
+        .WithTags(Tags.Businesses)
+        .RequireAuthorization();
+    }
+}
