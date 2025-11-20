@@ -2,7 +2,6 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Users;
-using Domain.PasswordResets;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -19,13 +18,13 @@ internal sealed class GetPasswordResetQueryHandler(IApplicationDbContext context
         }
 
         List<PasswordResetResponse> passwordResets = await context.PasswordReset
-            .Where(passwordReset => passwordReset.User_Id == query.UserId)
+            .Where(passwordReset => passwordReset.UserId == query.UserId)
             .Select(passwordReset => new PasswordResetResponse
             {
-                PR_Id = passwordReset.PR_Id,
-                User_Id = passwordReset.User_Id,
+                PrId = passwordReset.PrId,
+                User_Id = passwordReset.UserId,
                 Token = passwordReset.Token,
-                Expires_at = passwordReset.Expires_at,
+                Expires_at = passwordReset.ExpiresAt,
                 Used = passwordReset.Used
             }).ToListAsync(cancellationToken);
 

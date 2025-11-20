@@ -6,7 +6,7 @@ internal sealed class DeleteEmailVerificationCommandValidator : AbstractValidato
 {
     public DeleteEmailVerificationCommandValidator()
     {
-		RuleFor(x => x.EV_Id)
+        RuleFor(x => x.EvId)
             .NotEmpty().WithMessage("Email Verification ID is required.");
     }
 }

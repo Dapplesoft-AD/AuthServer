@@ -21,8 +21,8 @@ internal sealed class DeleteTokenCommandHandler : ICommandHandler<DeleteTokenCom
     public async Task<Result> Handle(DeleteTokenCommand command, CancellationToken cancellationToken)
     {
         Tokens? tokens = await _context.Tokens
-            .FirstOrDefaultAsync(t => t.TokenId == command.TokenId && t.User_id == _userContext.UserId, cancellationToken);
-        if(tokens is null)
+            .FirstOrDefaultAsync(t => t.TokenId == command.TokenId && t.UserId == _userContext.UserId, cancellationToken);
+        if (tokens is null)
         {
             return Result.Failure(TokenErrors.NotFound(command.TokenId));
         }

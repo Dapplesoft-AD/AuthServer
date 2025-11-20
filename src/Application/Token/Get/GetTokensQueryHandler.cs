@@ -1,5 +1,4 @@
-﻿using System;
-using Application.Abstractions.Authentication;
+﻿using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Users;
@@ -20,20 +19,20 @@ internal sealed class GetTokensQueryHandler : IQueryHandler<GetTokensQuery, List
 
     public async Task<Result<List<TokenResponse>>> Handle(GetTokensQuery query, CancellationToken cancellationToken)
     {
-        if(query.User_id != userContext.UserId)
+        if (query.UserId != userContext.UserId)
         {
             return Result.Failure<List<TokenResponse>>(UserErrors.Unauthorized());
         }
         List<TokenResponse> tokens = await _context.Tokens
-            .Where(tokens => tokens.User_id == query.User_id)
+            .Where(tokens => tokens.UserId == query.UserId)
             .Select(tokens => new TokenResponse
             {
                 TokenId = tokens.TokenId,
-                User_id = tokens.User_id,
-                App_id = tokens.App_id,
-                Access_token = tokens.Access_token,
-                Refresh_token = tokens.Refresh_token,
-                Issued_at = tokens.Issued_at
+                UserId = tokens.UserId,
+                AppId = tokens.AppId,
+                Accesstoken = tokens.Accesstoken,
+                Refreshtoken = tokens.Refreshtoken,
+                IssuedAt = tokens.IssuedAt
             }).ToListAsync(cancellationToken);
 
         return tokens;

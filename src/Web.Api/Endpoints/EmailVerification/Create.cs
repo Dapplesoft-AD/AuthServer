@@ -1,6 +1,5 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.EmailVerification.Create;
-using Domain.EmailVerification;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
@@ -11,10 +10,10 @@ public sealed class Create : IEndpoint
 {
     public sealed class Request
     {
-        public Guid User_Id { get; set; }
+        public Guid UserId { get; set; }
         public string Token { get; set; }
-        public DateTime Expires_at { get; set; }
-        public DateTime Verified_at { get; set; }
+        public DateTime ExpiresAt { get; set; }
+        public DateTime VerifiedAt { get; set; }
     }
 
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -26,10 +25,10 @@ public sealed class Create : IEndpoint
         {
             var command = new CreateEmailVerificationCommand
             {
-                User_Id = request.User_Id,
-                Verified_at = request.Verified_at,
+                UserId = request.UserId,
+                VerifiedAt = request.VerifiedAt,
                 Token = request.Token,
-                Expires_at = request.Expires_at,
+                ExpiresAt = request.ExpiresAt,
             };
 
             Result<Guid> result = await handler.Handle(command, cancellationToken);

@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SharedKernel;
+﻿using SharedKernel;
 
 namespace Domain.EmailVerification;
 
 public class EmailVerifications : Entity
 {
-    public Guid EV_Id { get; set; }
-    public Guid User_Id { get; set; }
-    public string Token { get; set; }  
-    public DateTime Expires_at { get; set; }
-    public DateTime Verified_at { get; set; }    
+    public Guid EvId { get; set; }
+    public Guid UserId { get; set; }
+    public string Token { get; set; } = string.Empty;
+    public DateTime ExpiresAt { get; set; }
+    public DateTime VerifiedAt { get; set; }
 }

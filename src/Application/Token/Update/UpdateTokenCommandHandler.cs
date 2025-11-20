@@ -1,6 +1,5 @@
 ﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Domain.Todos;
 using Domain.Token;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -21,7 +20,7 @@ internal sealed class UpdateTokenCommandHandler(
             return Result.Failure(TokenErrors.NotFound(command.TokenId));
         }
 
-        token.App_id = command.App_id;
+        token.AppId = command.AppId;
 
         await context.SaveChangesAsync(cancellationToken);
 

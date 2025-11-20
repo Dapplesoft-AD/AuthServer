@@ -2,4 +2,4 @@
 
 namespace Application.EmailVerification.Delete;
 
-public sealed record DeleteEmailVerificationCommand(Guid EV_Id) : ICommand;
+public sealed record DeleteEmailVerificationCommand(Guid EvId) : ICommand;

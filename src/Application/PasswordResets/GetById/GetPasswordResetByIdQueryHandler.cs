@@ -13,18 +13,18 @@ internal sealed class GetPasswordResetByIdQueryHandler(IApplicationDbContext con
     public async Task<Result<PasswordResetResponse>> Handle(GetPasswordResetByIdQuery query, CancellationToken cancellationToken)
     {
         PasswordResetResponse? passwordResetResponse = await context.PasswordReset
-            .Where(passwordResetResponse => passwordResetResponse.PR_Id == query.PR_Id && passwordResetResponse.User_Id == userContext.UserId)
+            .Where(passwordResetResponse => passwordResetResponse.PrId == query.PrId && passwordResetResponse.UserId == userContext.UserId)
             .Select(passwordResetResponse => new PasswordResetResponse
             {
-                User_Id = passwordResetResponse.User_Id,
+                User_Id = passwordResetResponse.UserId,
                 Token = passwordResetResponse.Token,
-                Expires_at = passwordResetResponse.Expires_at,
+                Expires_at = passwordResetResponse.ExpiresAt,
                 Used = passwordResetResponse.Used
             }).SingleOrDefaultAsync(cancellationToken);
 
         if (passwordResetResponse is null)
         {
-            return Result.Failure<PasswordResetResponse>(PasswordResetsErrors.NotFound(query.PR_Id));
+            return Result.Failure<PasswordResetResponse>(PasswordResetsErrors.NotFound(query.PrId));
         }
 
         return passwordResetResponse;

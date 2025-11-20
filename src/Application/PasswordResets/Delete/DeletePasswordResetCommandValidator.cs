@@ -1,5 +1,4 @@
-﻿using Application.Abstractions.Messaging;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Application.PasswordResets.Delete;
 
@@ -7,7 +6,7 @@ internal sealed class DeletePasswordResetCommandValidator : AbstractValidator<De
 {
     public DeletePasswordResetCommandValidator()
     {
-        RuleFor(x => x.PR_Id)
+        RuleFor(x => x.PrId)
             .NotEmpty().WithMessage("Password reset ID is required.");
     }
 }

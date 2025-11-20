@@ -16,35 +16,35 @@ internal sealed class CreatePasswordResetCommandHandler(
 {
     public async Task<Result<Guid>> Handle(CreatePasswordResetCommand command, CancellationToken cancellationToken)
     {
-        if (userContext.UserId != command.User_Id)
+        if (userContext.UserId != command.UserId)
         {
             return Result.Failure<Guid>(UserErrors.Unauthorized());
         }
 
         User? user = await context.Users.AsNoTracking()
-            .SingleOrDefaultAsync(u => u.Id == command.User_Id, cancellationToken);
+            .SingleOrDefaultAsync(u => u.Id == command.UserId, cancellationToken);
 
         if (user is null)
         {
-            return Result.Failure<Guid>(UserErrors.NotFound(command.User_Id));
+            return Result.Failure<Guid>(UserErrors.NotFound(command.UserId));
         }
 
         var passwordReset = new PasswordReset
         {
-            User_Id = command.User_Id,
+            UserId = command.UserId,
             Token = command.Token,
-            Expires_at = command.Expires_at == default
+            ExpiresAt = command.ExpiresAt == default
                 ? dateTimeProvider.UtcNow
-                : command.Expires_at,
+                : command.ExpiresAt,
             Used = command.Used
         };
 
-        passwordReset.Raise(new PasswordResetCreatedDomainEvent(passwordReset.PR_Id));
+        passwordReset.Raise(new PasswordResetCreatedDomainEvent(passwordReset.PrId));
 
         context.PasswordReset.Add(passwordReset);
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return passwordReset.PR_Id;
+        return passwordReset.PrId;
     }
 }

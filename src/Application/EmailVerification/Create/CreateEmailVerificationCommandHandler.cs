@@ -16,37 +16,37 @@ internal sealed class CreateEmailVerificationCommandHandler(
 {
     public async Task<Result<Guid>> Handle(CreateEmailVerificationCommand command, CancellationToken cancellationToken)
     {
-        if (userContext.UserId != command.User_Id)
+        if (userContext.UserId != command.UserId)
         {
             return Result.Failure<Guid>(UserErrors.Unauthorized());
         }
 
         User? user = await context.Users.AsNoTracking()
-            .SingleOrDefaultAsync(u => u.Id == command.User_Id, cancellationToken);
+            .SingleOrDefaultAsync(u => u.Id == command.UserId, cancellationToken);
 
         if (user is null)
         {
-            return Result.Failure<Guid>(UserErrors.NotFound(command.User_Id));
+            return Result.Failure<Guid>(UserErrors.NotFound(command.UserId));
         }
 
         var emailVerifications = new EmailVerifications
         {
-            User_Id = command.User_Id,
+            UserId = command.UserId,
             Token = command.Token,
-            Expires_at = command.Expires_at == default
+            ExpiresAt = command.ExpiresAt == default
                 ? dateTimeProvider.UtcNow
-                : command.Expires_at,
-            Verified_at = command.Verified_at == default
+                : command.ExpiresAt,
+            VerifiedAt = command.VerifiedAt == default
                 ? dateTimeProvider.UtcNow
-                : command.Verified_at
+                : command.VerifiedAt
         };
 
-        emailVerifications.Raise(new EmailVerificationCreatedDomainEvent(emailVerifications.EV_Id));
+        emailVerifications.Raise(new EmailVerificationCreatedDomainEvent(emailVerifications.EvId));
 
         context.EmailVerifications.Add(emailVerifications);
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return emailVerifications.EV_Id;
+        return emailVerifications.EvId;
     }
 }

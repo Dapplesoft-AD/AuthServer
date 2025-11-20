@@ -4,11 +4,11 @@ namespace Domain.EmailVerification;
 
 public static class EmailVerificationErrors
 {
-    public static Error AlreadyCompleted(Guid EV_Id) => Error.Problem(
+    public static Error AlreadyCompleted(Guid EvId) => Error.Problem(
         "Email verification.AlreadyCompleted",
-        $"The Email Verification with Id = '{EV_Id}' is already completed.");
+        $"The Email Verification with Id = '{EvId}' is already completed.");
 
-    public static Error NotFound(Guid EV_Id) => Error.NotFound(
+    public static Error NotFound(Guid EvId) => Error.NotFound(
         "Email verification",
-        $"The Email Verification with the Id = '{EV_Id}' was not found");
+        $"The Email Verification with the Id = '{EvId}' was not found");
 }

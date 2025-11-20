@@ -1,6 +1,5 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.PasswordResets.Create;
-using Domain.PasswordResets;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
@@ -11,9 +10,9 @@ public sealed class Create : IEndpoint
 {
     public sealed class Request
     {
-        public Guid User_Id { get; set; }
+        public Guid UserId { get; set; }
         public string Token { get; set; }
-        public DateTime Expires_at { get; set; }
+        public DateTime ExpiresAt { get; set; }
         public bool Used { get; set; }
     }
 
@@ -26,10 +25,10 @@ public sealed class Create : IEndpoint
         {
             var command = new CreatePasswordResetCommand
             {
-                Expires_at = request.Expires_at,
+                ExpiresAt = request.ExpiresAt,
                 Token = request.Token,
                 Used = request.Used,
-                User_Id = request.User_Id
+                UserId = request.UserId
             };
 
             Result<Guid> result = await handler.Handle(command, cancellationToken);

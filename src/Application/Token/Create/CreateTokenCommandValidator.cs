@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Application.Token.Create;
 
@@ -11,18 +6,18 @@ public class CreateTokenCommandValidator : AbstractValidator<CreateTokenCommand>
 {
     public CreateTokenCommandValidator()
     {
-        RuleFor(x => x.User_id)
+        RuleFor(x => x.UserId)
             .NotEmpty().WithMessage("User ID is required.");
-        RuleFor(x => x.App_id)
+        RuleFor(x => x.AppId)
             .NotEmpty().WithMessage("App ID is required.")
             .NotEqual(Guid.Empty);
-        RuleFor(x => x.Access_token)
+        RuleFor(x => x.Accesstoken)
             .NotEmpty().WithMessage("Access token is required.")
             .MaximumLength(500).WithMessage("Access token cannot exceed 500 characters.");
-        RuleFor(x => x.Refresh_token)
+        RuleFor(x => x.Refreshtoken)
             .NotEmpty().WithMessage("Refresh token is required.")
             .MaximumLength(500).WithMessage("Refresh token cannot exceed 500 characters.");
-        RuleFor(x => x.Issued_at)
+        RuleFor(x => x.IssuedAt)
             .LessThanOrEqualTo(DateTime.UtcNow).WithMessage("Issued at cannot be in the future.");
     }
 }

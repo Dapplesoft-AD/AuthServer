@@ -2,7 +2,6 @@
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Users;
-using Domain.EmailVerification;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -19,14 +18,14 @@ internal sealed class GetEmailVerificationQueryHandler(IApplicationDbContext con
         }
 
         List<EmailVerificationResponse> emailVerifications = await context.EmailVerifications
-            .Where(emailVerifications => emailVerifications.User_Id == query.UserId)
+            .Where(emailVerifications => emailVerifications.UserId == query.UserId)
             .Select(emailVerifications => new EmailVerificationResponse
             {
-                EV_Id = emailVerifications.EV_Id,
-                User_Id = emailVerifications.User_Id,
+                EvId = emailVerifications.EvId,
+                UserId = emailVerifications.UserId,
                 Token = emailVerifications.Token,
-                Expires_at = emailVerifications.Expires_at,
-                Verified_at = emailVerifications.Verified_at
+                ExpiresAt = emailVerifications.ExpiresAt,
+                VerifiedAt = emailVerifications.VerifiedAt
             }).ToListAsync(cancellationToken);
 
         return emailVerifications;

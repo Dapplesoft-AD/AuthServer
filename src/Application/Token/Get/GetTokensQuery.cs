@@ -2,4 +2,4 @@
 
 namespace Application.Token.Get;
 
-public sealed record GetTokensQuery(Guid User_id) : IQuery<List<TokenResponse>>;
+public sealed record GetTokensQuery(Guid UserId) : IQuery<List<TokenResponse>>;

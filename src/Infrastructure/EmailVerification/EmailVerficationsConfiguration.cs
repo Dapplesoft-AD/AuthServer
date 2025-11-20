@@ -12,10 +12,10 @@ public class EmailVerificationsConfiguration : IEntityTypeConfiguration<EmailVer
 {
     public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<EmailVerifications> builder)
     {
-        builder.HasKey(c => c.EV_Id);
-        builder.Property(c => c.User_Id).IsRequired();
+        builder.HasKey(c => c.EvId);
+        builder.Property(c => c.UserId).IsRequired();
         builder.Property(c => c.Token).IsRequired().HasMaxLength(255);
-        builder.Property(c => c.Expires_at).IsRequired();
-        builder.Property(c => c.Verified_at).IsRequired();
+        builder.Property(c => c.ExpiresAt).IsRequired();
+        builder.Property(c => c.VerifiedAt).IsRequired();
     }
 }

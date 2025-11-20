@@ -4,4 +4,4 @@ namespace Application.Token.Update;
 
 public sealed record UpdateTokenCommand(
     Guid TokenId,
-    Guid App_id ) : ICommand;
+    Guid AppId) : ICommand;

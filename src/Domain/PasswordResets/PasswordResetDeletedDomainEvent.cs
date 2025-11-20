@@ -2,4 +2,4 @@
 
 namespace Domain.PasswordResets;
 
-public sealed record PasswordResetDeletedDomainEvent(Guid PR_Id) : IDomainEvent;
+public sealed record PasswordResetDeletedDomainEvent(Guid PrId) : IDomainEvent;

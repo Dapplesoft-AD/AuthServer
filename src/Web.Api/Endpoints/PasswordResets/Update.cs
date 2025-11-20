@@ -1,7 +1,5 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.PasswordResets.Update;
-using Domain.Enums;
-using Domain.Users;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
