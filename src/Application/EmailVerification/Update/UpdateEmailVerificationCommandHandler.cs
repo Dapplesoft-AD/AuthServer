@@ -6,7 +6,7 @@ using SharedKernel;
 
 namespace Application.EmailVerification.Update;
 
-internal sealed class UpdateTodoCommandHandler(
+internal sealed class UpdateEmailVerificationCommandHandler(
     IApplicationDbContext context)
     : ICommandHandler<UpdateEmailVerificationCommand>
 {
