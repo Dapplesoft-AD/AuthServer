@@ -41,6 +41,5 @@ public class MfaLogConfiguration : IEntityTypeConfiguration<MfaLog>
                .HasMaxLength(20)
                .IsRequired();
 
-        
     }
 }

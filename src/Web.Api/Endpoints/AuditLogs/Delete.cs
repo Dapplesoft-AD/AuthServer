@@ -9,7 +9,7 @@ public static class Delete
 {
     public static void MapDeleteAuditLogEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapDelete("AuditLogs/{id}", async (
+        app.MapDelete("/AuditLogs/{id}", async (
             Guid id,
             IApplicationDbContext context,
             CancellationToken cancellationToken) =>

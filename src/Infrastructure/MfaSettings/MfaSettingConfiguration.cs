@@ -14,7 +14,7 @@ public class MfaSettingConfiguration : IEntityTypeConfiguration<MfaSetting>
 
         // 🔗 Foreign key: user_id → users.id
         builder.HasOne(m => m.User)
-               .WithMany() // যদি User entity তে ICollection<MfaSetting> না থাকে
+               .WithMany() 
                .HasForeignKey(m => m.UserId)
                .OnDelete(DeleteBehavior.Cascade);
 
