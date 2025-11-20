@@ -10,7 +10,7 @@ public class CreateEmailVerificationCommandValidator : AbstractValidator<CreateE
             .NotEmpty().WithMessage("User ID is required.");
         RuleFor(x => x.Token)
             .NotEmpty().WithMessage("Token is required.")
-            .MaximumLength(256).WithMessage("Token must not exceed 256 characters.");
+            .MaximumLength(255).WithMessage("Token must not exceed 255 characters.");
         RuleFor(x => x.ExpiresAt)
             .GreaterThan(DateTime.UtcNow).WithMessage("Expiration date must be in the future.");
         RuleFor(x => x.VerifiedAt)
