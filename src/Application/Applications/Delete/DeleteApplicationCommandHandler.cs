@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.Abstractions.Data;
+﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Applications.Get;
+using Application.RolePermissions.Get;
+using Domain.RolePermissions;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -22,8 +20,11 @@ public sealed class DeleteApplicationCommandHandler
     public async Task<Result> Handle(DeleteApplicationCommand command, CancellationToken cancellationToken)
     {
         Domain.Applications.Applicationapply? application = await _context.Applications
-            .FirstOrDefaultAsync(a => a.Id == command.Id, cancellationToken) ?? throw new InvalidOperationException("Application not found.");
-
+            .FirstOrDefaultAsync(a => a.Id == command.Id, cancellationToken);
+        if (application is null)
+        {
+            return Result.Failure<ApplicationResponse>("Application not found.");
+        }
         _context.Applications.Remove(application);
         await _context.SaveChangesAsync(cancellationToken);
 

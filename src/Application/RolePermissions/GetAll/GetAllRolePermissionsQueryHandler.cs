@@ -1,5 +1,4 @@
-﻿using System;
-using Application.Abstractions.Data;
+﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Application.RolePermissions.Get;
 using Microsoft.EntityFrameworkCore;

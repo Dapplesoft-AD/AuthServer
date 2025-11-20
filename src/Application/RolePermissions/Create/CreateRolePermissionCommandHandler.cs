@@ -33,7 +33,7 @@ public sealed class CreateRolePermissionCommandHandler
 
         if (!permissionExists)
         {
-            throw new InvalidOperationException("The specified permission does not exist.");
+            return Result.Failure<Guid>("The specified permission does not exist.");
         }
 
         // Check if the relationship already exists

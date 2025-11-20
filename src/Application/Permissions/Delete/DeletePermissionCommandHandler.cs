@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Abstractions.Data;
+﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Permissions.Get;
 using Domain.Permissions;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -22,8 +20,11 @@ public sealed class DeletePermissionCommandHandler
     public async Task<Result> Handle(DeletePermissionCommand command, CancellationToken cancellationToken)
     {
         Permission? permission = await _context.Permissions
-            .FirstOrDefaultAsync(p => p.Id == command.Id, cancellationToken) ?? throw new InvalidOperationException("Permission not found.");
-
+            .FirstOrDefaultAsync(p => p.Id == command.Id, cancellationToken);
+        if (permission is null)
+        {
+            return Result.Failure<PermissionResponse>("Permission not found.");
+        }
         _context.Permissions.Remove(permission);
         await _context.SaveChangesAsync(cancellationToken);
 

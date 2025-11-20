@@ -22,7 +22,7 @@ public sealed class DeleteRolePermissionCommandHandler
             .FindAsync(new object[] { command.RoleId, command.PermissionId }, cancellationToken);
         if(rolePermission is null)
         {
-            return Result.Failure<Guid>("role Permission  not found.");
+            return Result.Failure("Role permission not found.");
         }
         _context.RolePermissions.Remove(rolePermission);
         await _context.SaveChangesAsync(cancellationToken);

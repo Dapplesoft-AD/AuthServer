@@ -1,6 +1,8 @@
 ﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Application.Applications.Get;
+using Application.RolePermissions.Get;
+using Domain.RolePermissions;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -30,7 +32,12 @@ public sealed class GetApplicationByIdQueryHandler
                 (int)a.Status,
                 a.Status.ToString()
             ))
-            .FirstOrDefaultAsync(cancellationToken) ?? throw new InvalidOperationException("Application not found.");
+            .FirstOrDefaultAsync(cancellationToken) ;
+        
+        if (application is null)
+        {
+            return Result.Failure<ApplicationResponse>("Role permission not found.");
+        }
 
         return Result.Success(application);
     }

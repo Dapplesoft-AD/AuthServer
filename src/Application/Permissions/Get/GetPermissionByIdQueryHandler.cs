@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Abstractions.Data;
+﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Application.Permissions.Get;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +21,11 @@ public sealed class GetPermissionByIdQueryHandler
         PermissionResponse permission = await _context.Permissions
             .Where(p => p.Id == query.Id)
             .Select(p => new PermissionResponse(p.Id, p.Code, p.Description))
-            .FirstOrDefaultAsync(cancellationToken) ?? throw new InvalidOperationException("Permission not found.");
+            .FirstOrDefaultAsync(cancellationToken);
+        if (permission is null)
+        {
+            return Result.Failure<PermissionResponse>("Permission not found.");
+        }
 
         return Result.Success(permission);
     }

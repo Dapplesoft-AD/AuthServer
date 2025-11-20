@@ -8,7 +8,7 @@ namespace Web.Api.Endpoints.RolePermissions;
 
 internal sealed class Update : IEndpoint
 {
-    public sealed record Request(Guid CurrentPermissionId, Guid NewPermissionId);
+    public sealed record Request(Guid NewPermissionId);
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {

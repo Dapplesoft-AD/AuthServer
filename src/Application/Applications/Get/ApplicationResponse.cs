@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.Applications.Get;
+﻿namespace Application.Applications.Get;
 public sealed record ApplicationResponse(
-  Guid Id,
+    Guid Id,
     string Name,
     string ClientId,
     string ClientSecret,
-    Uri RedirectUri,    // Change from Uri to string
-    Uri ApiBaseUrl,     // Change from Uri to string
+    Uri RedirectUri,   
+    Uri ApiBaseUrl,    
     int Status,
     string StatusName
 );

@@ -24,7 +24,10 @@ internal sealed class Create : IEndpoint
 
             Result<Guid> result = await handler.Handle(command, cancellationToken);
 
-            return result.Match(Results.Ok, CustomResults.Problem);
+            return result.Match(
+                id => Results.Ok(new { Id = id, Message = "Permission created successfully" }),
+                CustomResults.Problem
+            );
         })
         .WithTags("Permissions")
         .RequireAuthorization();

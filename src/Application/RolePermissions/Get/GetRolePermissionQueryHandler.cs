@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Abstractions.Data;
+﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Application.RolePermissions.Get;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +27,11 @@ public sealed class GetRolePermissionQueryHandler
                 rp.Permission.Code,
                 rp.Permission.Description
             ))
-            .FirstOrDefaultAsync(cancellationToken) ?? throw new InvalidOperationException("Role permission not found.");
+            .FirstOrDefaultAsync(cancellationToken) ;
+        if (rolePermission is null)
+        {
+            return Result.Failure<RolePermissionResponse>("Role permission not found.");
+        }
 
         return Result.Success(rolePermission);
     }

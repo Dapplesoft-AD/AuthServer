@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.Abstractions.Data;
+﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Permissions.Get;
 using Domain.Applications;
+using Domain.Permissions;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
@@ -24,7 +21,11 @@ public sealed class UpdateApplicationCommandHandler
     public async Task<Result<Guid>> Handle(UpdateApplicationCommand command, CancellationToken cancellationToken)
     {
         Applicationapply? application = await _context.Applications
-            .FirstOrDefaultAsync(a => a.Id == command.Id, cancellationToken) ?? throw new InvalidOperationException("Application not found.");
+            .FirstOrDefaultAsync(a => a.Id == command.Id, cancellationToken);
+        if (application is null)
+        {
+            return Result.Failure<Guid>("application not found.");
+        }
 
         // Check if ClientId is unique (excluding current application)
         bool clientIdExists = await _context.Applications
@@ -32,7 +33,7 @@ public sealed class UpdateApplicationCommandHandler
 
         if (clientIdExists)
         {
-            throw new InvalidOperationException("ClientId already exists.");
+            return Result.Failure<Guid>("ClientId already exists.");
         }
 
         application.Name = command.Name;

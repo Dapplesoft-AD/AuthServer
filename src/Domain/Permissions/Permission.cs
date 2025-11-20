@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.Applications;
-using Domain.RolePermissions;
-using SharedKernel;
+﻿using SharedKernel;
 
 namespace Domain.Permissions;
 public sealed class Permission : Entity

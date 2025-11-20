@@ -1,13 +1,10 @@
-﻿
-
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Applications.Get;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Applications;
-
 internal sealed class GetById : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -27,6 +24,3 @@ internal sealed class GetById : IEndpoint
         .RequireAuthorization();
     }
 }
-
-
-
