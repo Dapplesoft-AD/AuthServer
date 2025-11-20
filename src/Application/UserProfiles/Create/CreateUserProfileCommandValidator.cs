@@ -37,7 +37,7 @@ public class CreateUserProfileCommandValidator : AbstractValidator<CreateUserPro
 
     private bool BeAValidBirthDate(DateOnly date)
     {
-        return date < DateOnly.FromDateTime(DateTime.Today);  //.AddYears(-10); // Must be in the past and at least 10 years ago
+        return date < DateOnly.FromDateTime(DateTime.Today);    // Must be in the past and at least 10 years ago
     }
 
     private bool BeAValidUrl(string url)
