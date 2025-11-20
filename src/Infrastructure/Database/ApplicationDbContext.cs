@@ -24,8 +24,8 @@ public sealed class ApplicationDbContext(
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Applications> Applications { get; set; }
     public DbSet<EmailVerifications> EmailVerifications { get; set; }
-    public DbSet<PasswordReset> PasswordReset{ get; set; }
-    public DbSet<Tokens> Tokens{ get; set; }
+    public DbSet<PasswordReset> PasswordReset { get; set; }
+    public DbSet<Tokens> Tokens { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

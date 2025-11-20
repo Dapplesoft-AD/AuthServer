@@ -22,7 +22,7 @@ internal sealed class GetEmailVerificationQueryHandler(IApplicationDbContext con
             .Where(emailVerifications => emailVerifications.User_Id == query.UserId)
             .Select(emailVerifications => new EmailVerificationResponse
             {
-                Id = emailVerifications.Id,
+                EV_Id = emailVerifications.EV_Id,
                 User_Id = emailVerifications.User_Id,
                 Token = emailVerifications.Token,
                 Expires_at = emailVerifications.Expires_at,

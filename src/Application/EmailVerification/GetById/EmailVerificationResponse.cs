@@ -2,7 +2,7 @@
 
 public sealed class EmailVerificationResponse
 {
-    public Guid Id { get; set; }
+    public Guid EV_Id { get; set; }
     public Guid User_Id { get; set; }
     public string Token { get; set; }
     public DateTime Expires_at { get; set; }

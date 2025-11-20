@@ -25,10 +25,10 @@ internal class GetTokenByIdQueryHandler : IQueryHandler<GetTokenByIdQuery, Token
     public async Task<Result<TokenResponse>> Handle(GetTokenByIdQuery query, CancellationToken cancellationToken)
     {
         TokenResponse? token = await _context.Tokens
-            .Where(token => token.Id == query.Id && token.User_id == _userContext.UserId)
+            .Where(token => token.TokenId == query.TokenId && token.User_id == _userContext.UserId)
             .Select(token => new TokenResponse
             {
-                Id = token.Id,
+                TokenId = token.TokenId,
                 User_id = token.User_id,
                 App_id = token.App_id,
                 Access_token = token.Access_token,
@@ -39,7 +39,7 @@ internal class GetTokenByIdQueryHandler : IQueryHandler<GetTokenByIdQuery, Token
 
         if (token is null)
         {
-            return Result.Failure<TokenResponse>(TokenErrors.NotFound(query.Id));
+            return Result.Failure<TokenResponse>(TokenErrors.NotFound(query.TokenId));
         }
 
         return token;

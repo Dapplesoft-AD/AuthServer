@@ -13,10 +13,10 @@ internal sealed class GetEmailVerificationByIdQueryHandler(IApplicationDbContext
     public async Task<Result<EmailVerificationResponse>> Handle(GetEmailVerificationByIdQuery query, CancellationToken cancellationToken)
     {
         EmailVerificationResponse? emailVerification = await context.EmailVerifications
-            .Where(emailVerification => emailVerification.Id == query.Id && emailVerification.User_Id == userContext.UserId)
+            .Where(emailVerification => emailVerification.EV_Id == query.EV_Id && emailVerification.User_Id == userContext.UserId)
             .Select(emailVerification => new EmailVerificationResponse
             {
-                Id = emailVerification.Id,
+                EV_Id = emailVerification.EV_Id,
                 User_Id = emailVerification.User_Id,
                 Token = emailVerification.Token,
                 Expires_at = emailVerification.Expires_at,
@@ -26,7 +26,7 @@ internal sealed class GetEmailVerificationByIdQueryHandler(IApplicationDbContext
 
         if (emailVerification is null)
         {
-            return Result.Failure<EmailVerificationResponse>(EmailVerificationErrors.NotFound(query.Id));
+            return Result.Failure<EmailVerificationResponse>(EmailVerificationErrors.NotFound(query.EV_Id));
         }
 
         return emailVerification;

@@ -14,11 +14,11 @@ internal sealed class UpdateTokenCommandHandler(
     public async Task<Result> Handle(UpdateTokenCommand command, CancellationToken cancellationToken)
     {
         Tokens? token = await context.Tokens
-            .SingleOrDefaultAsync(t => t.Id == command.Id, cancellationToken);
+            .SingleOrDefaultAsync(t => t.TokenId == command.TokenId, cancellationToken);
 
         if (token is null)
         {
-            return Result.Failure(TokenErrors.NotFound(command.Id));
+            return Result.Failure(TokenErrors.NotFound(command.TokenId));
         }
 
         token.App_id = command.App_id;

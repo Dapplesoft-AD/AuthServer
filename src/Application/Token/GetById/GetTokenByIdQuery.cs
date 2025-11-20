@@ -3,4 +3,4 @@ using Application.Token.GetById;
 
 namespace Application.Token.GetById;
 
-public sealed record GetTokenByIdQuery(Guid Id) : IQuery<TokenResponse>;
+public sealed record GetTokenByIdQuery(Guid TokenId) : IQuery<TokenResponse>;

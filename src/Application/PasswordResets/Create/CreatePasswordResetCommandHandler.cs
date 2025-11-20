@@ -39,12 +39,12 @@ internal sealed class CreatePasswordResetCommandHandler(
             Used = command.Used
         };
 
-        passwordReset.Raise(new PasswordResetCreatedDomainEvent(passwordReset.Id));
+        passwordReset.Raise(new PasswordResetCreatedDomainEvent(passwordReset.PR_Id));
 
         context.PasswordReset.Add(passwordReset);
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return passwordReset.Id;
+        return passwordReset.PR_Id;
     }
 }

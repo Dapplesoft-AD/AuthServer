@@ -9,7 +9,7 @@ namespace Domain.PasswordResets;
 
 public class PasswordReset : Entity
 {
-    public Guid Id { get; set; }
+    public Guid PR_Id { get; set; }
     public Guid User_Id { get; set; }
     public string Token { get; set; }  
     public DateTime Expires_at { get; set; }

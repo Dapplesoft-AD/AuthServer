@@ -12,7 +12,7 @@ public class PasswordResetConfiguration : IEntityTypeConfiguration<PasswordReset
 {
     public void Configure(EntityTypeBuilder<PasswordReset> builder)
     {
-        builder.HasKey(c => c.Id);
+        builder.HasKey(c => c.PR_Id);
         builder.Property(c => c.User_Id).IsRequired();
         builder.Property(c => c.Expires_at).IsRequired();
         builder.Property(c => c.Used);

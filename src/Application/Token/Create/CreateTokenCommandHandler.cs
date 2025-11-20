@@ -35,10 +35,10 @@ public class CreateTokenCommandHandler : ICommandHandler<CreateTokenCommand, Gui
                 : command.Issued_at
         };
 
-        token.Raise(new TokenCreatedDomainEvent(token.Id));
+        token.Raise(new TokenCreatedDomainEvent(token.TokenId));
         await _context.Tokens.AddAsync(token, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return Result<Guid>.Success(token.Id);
+        return Result<Guid>.Success(token.TokenId);
     }
 }

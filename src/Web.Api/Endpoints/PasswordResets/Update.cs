@@ -12,7 +12,6 @@ public sealed class Update : IEndpoint
 {
     public sealed class Request
     {
-        public Guid Id { get; set; }
         public string Token { get; set; }
     }
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -23,7 +22,7 @@ public sealed class Update : IEndpoint
     ICommandHandler<UpdatePasswordResetCommand> handler,
     CancellationToken cancellationToken) =>
         {
-            var command = new UpdatePasswordResetCommand(request.Id, request.Token);
+            var command = new UpdatePasswordResetCommand(id, request.Token);
 
             Result result = await handler.Handle(command, cancellationToken);
 

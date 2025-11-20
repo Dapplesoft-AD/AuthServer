@@ -13,11 +13,11 @@ internal sealed class UpdatePasswordResetCommandHandler(
     public async Task<Result> Handle(UpdatePasswordResetCommand command, CancellationToken cancellationToken)
     {
         PasswordReset? passwordReset = await context.PasswordReset
-            .SingleOrDefaultAsync(t => t.Id == command.Id, cancellationToken);
+            .SingleOrDefaultAsync(t => t.PR_Id == command.PR_Id, cancellationToken);
 
         if (passwordReset is null)
         {
-            return Result.Failure(PasswordResetsErrors.NotFound(command.Id));
+            return Result.Failure(PasswordResetsErrors.NotFound(command.PR_Id));
         }
 
         passwordReset.Token = command.Token;

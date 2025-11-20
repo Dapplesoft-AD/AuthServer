@@ -13,7 +13,7 @@ public class TokenConfiguration : IEntityTypeConfiguration<Tokens>
 {
     public void Configure(EntityTypeBuilder<Tokens> builder)
     {
-        builder.HasKey(c => c.Id);
+        builder.HasKey(c => c.TokenId);
         builder.HasIndex(c => c.User_id);
         builder.Property(c => c.App_id).IsRequired();
         builder.Property(c => c.Access_token).IsRequired().HasColumnType("text");

@@ -3,5 +3,5 @@
 namespace Application.PasswordResets.Update;
 
 public sealed record UpdatePasswordResetCommand(
-    Guid Id,
+    Guid PR_Id,
     string Token) : ICommand;

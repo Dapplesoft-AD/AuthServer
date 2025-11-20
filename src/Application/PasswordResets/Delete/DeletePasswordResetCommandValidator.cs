@@ -7,7 +7,7 @@ internal sealed class DeletePasswordResetCommandValidator : AbstractValidator<De
 {
     public DeletePasswordResetCommandValidator()
     {
-        RuleFor(x => x.Id)
+        RuleFor(x => x.PR_Id)
             .NotEmpty().WithMessage("Password reset ID is required.");
     }
 }

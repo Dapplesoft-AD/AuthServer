@@ -23,7 +23,6 @@ builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 WebApplication app = builder.Build();
 
-app.UseDeveloperExceptionPage();
 
 app.MapEndpoints();
 
@@ -32,6 +31,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerWithUi();
 
     app.ApplyMigrations();
+
+    app.UseDeveloperExceptionPage();
+
 }
 
 app.MapHealthChecks("health", new HealthCheckOptions

@@ -2,4 +2,4 @@
 
 namespace Application.EmailVerification.GetById;
 
-public sealed record GetEmailVerificationByIdQuery(Guid Id) : IQuery<EmailVerificationResponse>;
+public sealed record GetEmailVerificationByIdQuery(Guid EV_Id) : IQuery<EmailVerificationResponse>;

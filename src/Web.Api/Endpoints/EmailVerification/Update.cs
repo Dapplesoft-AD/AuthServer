@@ -11,7 +11,6 @@ public sealed class Update : IEndpoint
 {
     public sealed class Request
     {
-        public Guid Id { get; set; }
         public string Token { get; set; }
     }
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -22,7 +21,7 @@ public sealed class Update : IEndpoint
     ICommandHandler<UpdateEmailVerificationCommand> handler,
     CancellationToken cancellationToken) =>
         {
-            var command = new UpdateEmailVerificationCommand(request.Id, request.Token);
+            var command = new UpdateEmailVerificationCommand(id, request.Token);
 
             Result result = await handler.Handle(command, cancellationToken);
 

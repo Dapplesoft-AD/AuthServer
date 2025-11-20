@@ -22,6 +22,7 @@ internal sealed class GetPasswordResetQueryHandler(IApplicationDbContext context
             .Where(passwordReset => passwordReset.User_Id == query.UserId)
             .Select(passwordReset => new PasswordResetResponse
             {
+                PR_Id = passwordReset.PR_Id,
                 User_Id = passwordReset.User_Id,
                 Token = passwordReset.Token,
                 Expires_at = passwordReset.Expires_at,

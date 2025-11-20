@@ -2,4 +2,4 @@
 
 namespace Application.PasswordResets.GetById;
 
-public sealed record GetPasswordResetByIdQuery(Guid Id) : IQuery<PasswordResetResponse>;
+public sealed record GetPasswordResetByIdQuery(Guid PR_Id) : IQuery<PasswordResetResponse>;

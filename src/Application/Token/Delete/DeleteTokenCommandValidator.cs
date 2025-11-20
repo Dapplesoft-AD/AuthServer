@@ -11,7 +11,7 @@ internal sealed class DeleteTokenCommandValidator : AbstractValidator<DeleteToke
 {
     public DeleteTokenCommandValidator()
     {
-        RuleFor(x => x.Id)
+        RuleFor(x => x.TokenId)
             .NotEmpty().WithMessage("Token ID is required.");
     }
 }

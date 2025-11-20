@@ -21,13 +21,13 @@ internal sealed class DeleteTokenCommandHandler : ICommandHandler<DeleteTokenCom
     public async Task<Result> Handle(DeleteTokenCommand command, CancellationToken cancellationToken)
     {
         Tokens? tokens = await _context.Tokens
-            .FirstOrDefaultAsync(t => t.Id == command.Id && t.User_id == _userContext.UserId, cancellationToken);
+            .FirstOrDefaultAsync(t => t.TokenId == command.TokenId && t.User_id == _userContext.UserId, cancellationToken);
         if(tokens is null)
         {
-            return Result.Failure(TokenErrors.NotFound(command.Id));
+            return Result.Failure(TokenErrors.NotFound(command.TokenId));
         }
         _context.Tokens.Remove(tokens);
-        tokens.Raise(new TokenDeletedDomainEvent(tokens.Id));
+        tokens.Raise(new TokenDeletedDomainEvent(tokens.TokenId));
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success();
     }

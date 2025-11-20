@@ -13,16 +13,16 @@ internal sealed class DeletePasswordResetCommandHandler(IApplicationDbContext co
     public async Task<Result> Handle(DeletePasswordResetCommand command, CancellationToken cancellationToken)
     {
         PasswordReset? passwordReset = await context.PasswordReset
-            .SingleOrDefaultAsync(t => t.Id == command.Id && t.User_Id == userContext.UserId, cancellationToken);
+            .SingleOrDefaultAsync(t => t.PR_Id == command.PR_Id && t.User_Id == userContext.UserId, cancellationToken);
 
         if (passwordReset is null)
         {
-            return Result.Failure(PasswordResetsErrors.NotFound(command.Id));
+            return Result.Failure(PasswordResetsErrors.NotFound(command.PR_Id));
         }
 
         context.PasswordReset.Remove(passwordReset);
 
-        passwordReset.Raise(new PasswordResetDeletedDomainEvent(passwordReset.Id));
+        passwordReset.Raise(new PasswordResetDeletedDomainEvent(passwordReset.PR_Id));
 
         await context.SaveChangesAsync(cancellationToken);
 

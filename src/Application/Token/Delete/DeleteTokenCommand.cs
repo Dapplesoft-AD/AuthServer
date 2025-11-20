@@ -2,4 +2,4 @@
 
 namespace Application.Token.Delete;
 
-public sealed record DeleteTokenCommand(Guid Id) : ICommand;
+public sealed record DeleteTokenCommand(Guid TokenId) : ICommand;

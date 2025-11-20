@@ -13,11 +13,11 @@ internal sealed class UpdateEmailVerificationCommandHandler(
     public async Task<Result> Handle(UpdateEmailVerificationCommand command, CancellationToken cancellationToken)
     {
         EmailVerifications? emailVerifications = await context.EmailVerifications
-            .SingleOrDefaultAsync(t => t.Id == command.Id, cancellationToken);
+            .SingleOrDefaultAsync(t => t.EV_Id == command.EV_Id, cancellationToken);
 
         if (emailVerifications is null)
         {
-            return Result.Failure(EmailVerificationErrors.NotFound(command.Id));
+            return Result.Failure(EmailVerificationErrors.NotFound(command.EV_Id));
         }
 
         emailVerifications.Token = command.Token;

@@ -3,5 +3,5 @@
 namespace Application.EmailVerification.Update;
 
 public sealed record UpdateEmailVerificationCommand(
-    Guid Id,
+    Guid EV_Id,
     string Token) : ICommand;

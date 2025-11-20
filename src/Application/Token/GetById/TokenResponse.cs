@@ -2,7 +2,7 @@
 
 public sealed class TokenResponse
 {
-    public Guid Id { get; set; }
+    public Guid TokenId { get; set; }
     public Guid User_id { get; set; }
     public Guid App_id { get; set; }
     public string Access_token { get; set; } //text

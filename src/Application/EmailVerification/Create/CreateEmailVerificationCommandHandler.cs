@@ -41,12 +41,12 @@ internal sealed class CreateEmailVerificationCommandHandler(
                 : command.Verified_at
         };
 
-        emailVerifications.Raise(new EmailVerificationCreatedDomainEvent(emailVerifications.Id));
+        emailVerifications.Raise(new EmailVerificationCreatedDomainEvent(emailVerifications.EV_Id));
 
         context.EmailVerifications.Add(emailVerifications);
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return emailVerifications.Id;
+        return emailVerifications.EV_Id;
     }
 }

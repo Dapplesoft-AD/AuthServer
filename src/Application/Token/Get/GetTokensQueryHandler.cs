@@ -28,7 +28,7 @@ internal sealed class GetTokensQueryHandler : IQueryHandler<GetTokensQuery, List
             .Where(tokens => tokens.User_id == query.User_id)
             .Select(tokens => new TokenResponse
             {
-                Id = tokens.Id,
+                TokenId = tokens.TokenId,
                 User_id = tokens.User_id,
                 App_id = tokens.App_id,
                 Access_token = tokens.Access_token,
