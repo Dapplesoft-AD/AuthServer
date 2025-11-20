@@ -23,7 +23,7 @@ public class Create : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("UserLoginHistory", async (
+        app.MapPost(ApiRoutes.UserLoginHistory.Create, async (
             Request request,
             ICommandHandler<CreateUserLoginHistoryCommand, Guid> handler,
             CancellationToken cancellationToken) =>

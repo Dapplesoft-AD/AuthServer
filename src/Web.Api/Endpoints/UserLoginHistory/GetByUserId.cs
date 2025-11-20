@@ -10,7 +10,7 @@ internal sealed class GetByUserId : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("UserLoginHistory={userId:guid}", async (
+        app.MapGet(ApiRoutes.UserLoginHistory.GetByUserID, async (
             Guid userId,
             IQueryHandler<GetUserLoginHistoryByUserIdQuery, List<UserLoginHistoryResponse>> handler,
             CancellationToken cancellationToken) =>

@@ -12,7 +12,7 @@ internal sealed class Get : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("user-profile/{id:guid}", async (
+        app.MapGet(ApiRoutes.UserProfile.Get, async (
             Guid id,
             IQueryHandler<GetUserProfileQuery, UserProfileResponse> handler,
             CancellationToken cancellationToken) =>

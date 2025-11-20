@@ -10,7 +10,7 @@ public class DeleteDelete : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("UserLoginHistory/delete-id={id:guid}", async (
+        app.MapDelete(ApiRoutes.UserLoginHistory.Create, async (
             Guid id,
             ICommandHandler<DeleteUserloginHistoryCommand> handler,
             CancellationToken cancellationToken) =>

@@ -20,7 +20,7 @@ internal sealed class Create : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("user-profile/update/{id:guid}", async (
+        app.MapPost(ApiRoutes.UserProfile.Create, async (
             Guid id,  // from route prameter
             Request request,
             ICommandHandler<CreateUserProfileCommand, Guid> handler,
