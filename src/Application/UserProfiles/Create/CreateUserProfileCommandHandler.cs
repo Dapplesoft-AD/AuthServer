@@ -69,12 +69,3 @@ internal sealed class CreateUserProfileCommandHandler(
     }
 }
 
-
-
-//UserProfile? existingProfile = await context.UserProfile.AsNoTracking()  // already exist check
-//    .SingleOrDefaultAsync(up => up.UserId == command.UserId, cancellationToken);
-
-//if (existingProfile is not null)
-//{
-//    throw new InvalidOperationException($"UserProfile for user {command.UserId} already exists.");
-//}

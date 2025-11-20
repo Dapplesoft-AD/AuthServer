@@ -2,15 +2,16 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.UserProfiles;
+
 public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
 {
     public void Configure(EntityTypeBuilder<UserProfile> builder)
     {
         // Configure 1:1 relationship with User
         builder.HasOne(n => n.User) // nav
-               .WithOne(u => u.Profile) // inverse nav
-               .HasForeignKey<UserProfile>(p => p.UserId)
-               .OnDelete(DeleteBehavior.Cascade);           // gets deteled as parent (User) is deleted.
+                .WithOne(u => u.Profile) // inverse nav
+                .HasForeignKey<UserProfile>(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);           // gets deleted as parent (User) is deleted.
 
         builder.HasKey(p => p.UserId);
 

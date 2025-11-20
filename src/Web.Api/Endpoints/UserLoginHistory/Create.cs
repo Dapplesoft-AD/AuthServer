@@ -18,8 +18,6 @@ public class Create : IEndpoint
         public string Browser { get; set; }
         public string OS { get; set; }
         public string Device { get; set; }
-        //public DateTime? LogInTime { get; set; }
-        //public DateTime? LogoutTime { get; set; }
         public int Status { get; set; } = 1; // Default value = login succeed
     }
 
@@ -39,8 +37,6 @@ public class Create : IEndpoint
                 Browser = request.Browser,
                 OS = request.OS,
                 Device = request.Device,
-                //LogInTime = request.LogInTime,
-                //LogoutTime = request.LogoutTime,
                 Status = (Status)request.Status
             };
 

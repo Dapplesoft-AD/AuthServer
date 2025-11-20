@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 
 namespace Application.UserLoginHistories.Create;
+
 public class CreateUserLoginHistoryCommandValidator : AbstractValidator<CreateUserLoginHistoryCommand>
 {
     public CreateUserLoginHistoryCommandValidator()
@@ -27,10 +28,6 @@ public class CreateUserLoginHistoryCommandValidator : AbstractValidator<CreateUs
 
         RuleFor(x => x.Device)
             .MaximumLength(50).WithMessage("Device cannot exceed 50 characters.");
-
-        //RuleFor(x => x.LogInTime)
-        //    .NotEmpty().WithMessage("Login time is required.");
-
 
         RuleFor(x => x.LogoutTime)
             .GreaterThanOrEqualTo(x => x.LogInTime)

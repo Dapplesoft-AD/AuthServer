@@ -15,12 +15,9 @@ public sealed class UserLoginHistoryConfiguration : IEntityTypeConfiguration<Use
 
         // Configure 1:N relationship with User
         builder.HasOne(h => h.User)   // ref nav
-               .WithMany(u => u.LoginHistories) // collection nav
-               .HasForeignKey(h => h.UserId)
-               .OnDelete(DeleteBehavior.Cascade);           // gets deteled as primary is deleted.
-
-        // alternatively
-        builder.HasOne<User>().WithMany().HasForeignKey(h => h.UserId).OnDelete(DeleteBehavior.Cascade);   // gets deteled as primary is deleted.
+                .WithMany(u => u.LoginHistories) // collection nav
+                .HasForeignKey(h => h.UserId)
+                .OnDelete(DeleteBehavior.Cascade);           // gets deleted as primary is deleted.
 
         builder.Property(u => u.UserId).IsRequired();
 
