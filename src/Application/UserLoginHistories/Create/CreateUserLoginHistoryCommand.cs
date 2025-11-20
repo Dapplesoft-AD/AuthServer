@@ -13,5 +13,4 @@ public sealed class CreateUserLoginHistoryCommand : ICommand<Guid>
     public string OS { get; set; }
     public string Device { get; set; }
     public DateTime? LogoutTime { get; set; }
-    public Status Status { get; set; }
 }

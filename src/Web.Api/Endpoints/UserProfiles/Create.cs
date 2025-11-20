@@ -21,7 +21,7 @@ internal sealed class Create : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost(ApiRoutes.UserProfile.Create, async (
-            Guid id,  // from route prameter
+            Guid id,  // from route parameter
             Request request,
             ICommandHandler<CreateUserProfileCommand, Guid> handler,
             CancellationToken cancellationToken
