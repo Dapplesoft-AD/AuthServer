@@ -22,21 +22,12 @@ internal class GetTokenByIdQueryHandler : IQueryHandler<GetTokenByIdQuery, Token
             .Where(token => token.TokenId == query.TokenId && token.UserId == _userContext.UserId)
             .Select(token => new TokenResponse
             {
-<<<<<<< Updated upstream
                 TokenId = token.TokenId,
                 UserId = token.UserId,
                 AppId = token.AppId,
                 Accesstoken = token.Accesstoken,
                 Refreshtoken = token.Refreshtoken,
                 IssuedAt = token.IssuedAt
-=======
-                Id = token.Id,
-                User_id = token.User_id,
-                App_id = token.App_id,
-                Access_token = token.Access_token,
-                Refresh_token = token.Refresh_token,
-                Issued_at = token.Issued_at
->>>>>>> Stashed changes
             })
             .SingleOrDefaultAsync(cancellationToken);
 

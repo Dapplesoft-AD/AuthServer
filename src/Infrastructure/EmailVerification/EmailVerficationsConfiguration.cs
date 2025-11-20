@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.EmailVerification;
 using Microsoft.EntityFrameworkCore;
-using Domain.EmailVerification;
 
 namespace Infrastructure.EmailVerification;
 
