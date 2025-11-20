@@ -41,7 +41,7 @@ internal sealed class CreateEmailVerificationCommandHandler(
                 : command.Verified_at
         };
 
-        emailVerifications.Raise(new EmailVerificationCompletedDomainEvent(emailVerifications.Id));
+        emailVerifications.Raise(new EmailVerificationCreatedDomainEvent(emailVerifications.Id));
 
         context.EmailVerifications.Add(emailVerifications);
 
