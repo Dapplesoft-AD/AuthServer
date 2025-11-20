@@ -12,7 +12,7 @@ internal sealed class Register : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("user/register", async (
+        app.MapPost(ApiRoutes.Users.Register, async (
             Request request,
             ICommandHandler<RegisterUserCommand, Guid> handler,
             CancellationToken cancellationToken) =>
@@ -25,7 +25,6 @@ internal sealed class Register : IEndpoint
                 );
 
             Result<Guid> result = await handler.Handle(command, cancellationToken);
-
             return result.Match(Results.Ok, CustomResults.Problem);
         })
         .WithTags(Tags.Users);

@@ -27,7 +27,7 @@ internal sealed class Update : IEndpoint
     }
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("user/update/{id:guid}", async (
+        app.MapPut(ApiRoutes.Users.Update, async (
             Guid id,
             Request request,
             ICommandHandler<UpdateUserCommand> handler,
@@ -45,9 +45,7 @@ internal sealed class Update : IEndpoint
                 );
 
                 Result result = await handler.Handle(command, cancellationToken);
-
                 return result.Match(Results.NoContent, CustomResults.Problem);
-
             })
             .WithTags(Tags.Users)
             .RequireAuthorization();
