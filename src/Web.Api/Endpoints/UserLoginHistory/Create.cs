@@ -18,7 +18,6 @@ internal sealed class Create : IEndpoint
         public string Browser { get; set; }
         public string OS { get; set; }
         public string Device { get; set; }
-        public int Status { get; set; } = 1; // Default value = login succeed
     }
 
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -37,7 +36,6 @@ internal sealed class Create : IEndpoint
                 Browser = request.Browser,
                 OS = request.OS,
                 Device = request.Device,
-                Status = (Status)request.Status
             };
 
             Result<Guid> result = await handler.Handle(command, cancellationToken);
