@@ -29,14 +29,22 @@ internal sealed class UpdateUserCommandHandler(
             return Result.Failure(UserErrors.NotFound(command.UserId));
         }
 
-        if (command.Fullname is not null)
-        {
-            userTuple.FullName = command.Fullname;
-        }
 
         if (command.Email is not null)
         {
+            // Check if the new email is already used by another user
+            bool emailExists = await context.Users
+                .AnyAsync(u => u.Email == command.Email && u.Id != command.UserId, cancellationToken);
+            if (emailExists)
+            {
+                return Result.Failure(UserErrors.EmailNotUnique);
+            }
             userTuple.Email = command.Email;
+        }
+
+        if (command.Fullname is not null)
+        {
+            userTuple.FullName = command.Fullname;
         }
 
         if (command.Password is not null)
