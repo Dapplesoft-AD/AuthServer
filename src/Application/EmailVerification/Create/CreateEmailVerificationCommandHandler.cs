@@ -33,7 +33,7 @@ internal sealed class CreateEmailVerificationCommandHandler(
         {
             User_Id = command.User_Id,
             Token = command.Token,
-            Expires_at = command.Verified_at == default
+            Expires_at = command.Expires_at == default
                 ? dateTimeProvider.UtcNow
                 : command.Expires_at,
             Verified_at = command.Verified_at == default
