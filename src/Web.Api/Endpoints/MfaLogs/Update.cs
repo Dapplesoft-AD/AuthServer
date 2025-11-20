@@ -34,10 +34,6 @@ public static class Update
                 return Results.BadRequest("Device is required.");
             }
 
-           
-
-
-
             mfaLog.LoginTime = request.LoginTime;
             mfaLog.IpAddress = request.IpAddress;
             mfaLog.Device = request.Device;

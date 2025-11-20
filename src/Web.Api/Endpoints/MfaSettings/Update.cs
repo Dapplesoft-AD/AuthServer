@@ -30,13 +30,11 @@ public static class Update
                 return Results.BadRequest("Method is required.");
             }
 
-
             bool parsed = Enum.TryParse<MfaMethod>(request.Method, true, out MfaMethod method);
             if (!parsed)
             {
                 return Results.BadRequest("Invalid MFA method. Allowed: TOTP, SMS, EMAIL.");
             }
-
 
             // Update values
             mfa.UserId = request.UserId;

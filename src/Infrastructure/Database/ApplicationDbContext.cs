@@ -17,18 +17,11 @@ public sealed class ApplicationDbContext(
     : DbContext(options), IApplicationDbContext
 {
     public DbSet<User> Users { get; set; }
-
     public DbSet<TodoItem> TodoItems { get; set; }
-
     public DbSet<Customer> Customers { get; set; }
-
     public DbSet<MfaSetting> MfaSettings { get; set; }
-
     public DbSet<MfaLog> MfaLogs { get; set; }
-
     public DbSet<AuditLog> AuditLogs { get; set; }
-
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
