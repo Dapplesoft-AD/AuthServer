@@ -29,11 +29,6 @@ public class CreateUserLoginHistoryCommandValidator : AbstractValidator<CreateUs
         RuleFor(x => x.Device)
             .MaximumLength(50).WithMessage("Device cannot exceed 50 characters.");
 
-        RuleFor(x => x.LogoutTime)
-            .GreaterThanOrEqualTo(x => x.LogInTime)
-            .When(x => x.LogoutTime.HasValue)
-            .WithMessage("Logout time cannot be earlier than login time.");
-
         RuleFor(x => x.Status)
             .IsInEnum().WithMessage("Invalid login status.");
     }
