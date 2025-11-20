@@ -41,7 +41,7 @@ public class Create : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
-        .WithTags(Tags.MfaSettings) // Make sure Tags.MfaSettings exists
+        .WithTags(Tags.MfaSettings) 
         .RequireAuthorization();
     }
 }
