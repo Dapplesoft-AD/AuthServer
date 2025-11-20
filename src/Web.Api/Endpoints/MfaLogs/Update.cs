@@ -28,7 +28,6 @@ public static class Update
                 return Results.BadRequest("IpAddress is required.");
             }
 
-
             if (string.IsNullOrWhiteSpace(request.Device))
             {
                 return Results.BadRequest("Device is required.");

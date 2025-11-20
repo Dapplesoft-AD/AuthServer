@@ -10,5 +10,5 @@ public sealed class DeleteMfaLogCommandValidator
         RuleFor(x => x.Id)
             .NotEmpty()
             .WithMessage("MfaLog Id is required.");
-    }
+    } 
 }

@@ -36,7 +36,6 @@ public static class Update
                 return Results.BadRequest("Invalid MFA method. Allowed: TOTP, SMS, EMAIL.");
             }
 
-            // Update values
             mfa.UserId = request.UserId;
             mfa.SecretKey = request.SecretKey ?? mfa.SecretKey;
             mfa.BackupCodes = request.BackupCodes ?? mfa.BackupCodes;
