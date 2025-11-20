@@ -38,7 +38,7 @@ public sealed class CreateBusinessMemberCommandHandler : ICommandHandler<CreateB
         }
 
         bool roleExists = await _context.Roles
-            .AnyAsync(r => r.Id == command.RoleId, cancellationToken);
+        .AnyAsync(r => r.Id == command.RoleId, cancellationToken);
 
         if (!roleExists)
         {
