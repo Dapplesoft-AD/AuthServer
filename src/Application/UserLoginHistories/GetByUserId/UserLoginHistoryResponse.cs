@@ -14,6 +14,6 @@ public sealed class UserLoginHistoryResponse
     public string Device { get; set; }
     public DateTime LogInTime { get; set; }
     public DateTime? LogoutTime { get; set; }
-    public Status Status { get; set; }
+    public LoginStatus Status { get; set; }
 }
 

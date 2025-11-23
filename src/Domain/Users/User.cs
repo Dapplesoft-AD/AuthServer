@@ -20,7 +20,7 @@ public sealed class User : Entity
 
     public bool IsMFAEnabled { get; set; }
 
-    public Status Status { get; set; }
+    public UserStatus Status { get; set; }
 
     public DateTime CreatedAt { get; set; }
 

@@ -29,7 +29,7 @@ internal sealed class RegisterUserCommandHandler(
             CreatedAt = dateTimeProvider.UtcNow,
             UpdatedAt = dateTimeProvider.UtcNow,
             Phone = command.Phone,
-            Status = Status.Active,
+            Status = UserStatus.Active,
             IsEmailVerified = false,
             IsMFAEnabled = false
         };

@@ -2,7 +2,7 @@
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Status = Domain.UserLoginHistories.Status;
+using LoginStatus = Domain.UserLoginHistories.LoginStatus;
 
 namespace Infrastructure.UserLoginHistories;
 
@@ -37,6 +37,6 @@ public sealed class UserLoginHistoryConfiguration : IEntityTypeConfiguration<Use
 
         builder.Property(u => u.LogoutTime);
 
-        builder.Property(u => u.Status).IsRequired().HasDefaultValue(Status.Succeed); // login successful by default
+        builder.Property(u => u.Status).IsRequired().HasDefaultValue(LoginStatus.Succeed); // login successful by default
     }
 }

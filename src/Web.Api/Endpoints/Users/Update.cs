@@ -19,7 +19,7 @@ internal sealed class Update : IEndpoint
 
         public string? Phone { get; set; }
 
-        public Status? Status { get; set; }
+        public UserStatus? Status { get; set; }
 
         public bool? IsMFAEnabled { get; set; }
 

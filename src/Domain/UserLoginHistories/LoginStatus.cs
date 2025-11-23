@@ -1,7 +1,7 @@
 ﻿
 namespace Domain.UserLoginHistories;
 
-public enum Status
+public enum LoginStatus
 {
     Succeed = 1,
     Failed = 0,

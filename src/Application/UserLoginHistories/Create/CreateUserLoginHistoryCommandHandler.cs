@@ -5,7 +5,7 @@ using Domain.UserLoginHistories;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
-using Status = Domain.UserLoginHistories.Status;
+using LoginStatus = Domain.UserLoginHistories.LoginStatus;
 
 namespace Application.UserLoginHistories.Create;
 
@@ -41,7 +41,7 @@ internal sealed class CreateUserLoginHistoryCommandHandler(
             Device = command.Device,
             LogInTime = dateTimeProvider.UtcNow,
             LogoutTime = command.LogoutTime,
-            Status = Status.Succeed
+            Status = LoginStatus.Succeed
         };
 
         await context.UserLoginHistory.AddAsync(history, cancellationToken);

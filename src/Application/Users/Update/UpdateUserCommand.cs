@@ -10,7 +10,7 @@ public sealed record UpdateUserCommand(
     string? Email,
     string? Password,
     string? Phone,
-    Status? Status,
+    UserStatus? Status,
     bool? IsMFAEnabled,
     bool? IsEmailVerified
     ) : ICommand;

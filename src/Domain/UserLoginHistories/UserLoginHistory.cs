@@ -15,6 +15,6 @@ public sealed class UserLoginHistory : Entity
     public string Device { get; set; }
     public DateTime LogInTime { get; set; }
     public DateTime? LogoutTime { get; set; }
-    public Status Status { get; set; }   // Default value = login succeed
+    public LoginStatus Status { get; set; }   // Default value = login succeed
     public User? User { get; set; }      // Navigation property to User (only used for configuring ER)
 }

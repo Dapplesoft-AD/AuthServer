@@ -16,7 +16,7 @@ public sealed record UserResponse
 
     public bool IsMFAEnabled { get; init; }
 
-    public Status Status { get; init; }
+    public UserStatus Status { get; init; }
 
     public DateTime? CreatedAt { get; init; }
 

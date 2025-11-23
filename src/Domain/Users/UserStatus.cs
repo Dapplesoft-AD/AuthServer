@@ -1,7 +1,7 @@
 ﻿
 namespace Domain.Users;
 
-public enum Status
+public enum UserStatus
 {
     Active = 1,
     Inactive = 2,
