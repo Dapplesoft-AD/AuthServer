@@ -9,7 +9,7 @@ public class Update : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("/business-members/{id:guid}", async (
+        app.MapPut("/business-members/{id:guid}",async(
         Guid id,
         UpdateBusinessMemberCommand request,
         ICommandHandler<UpdateBusinessMemberCommand, Guid> handler,
