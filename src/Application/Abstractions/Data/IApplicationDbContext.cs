@@ -1,4 +1,5 @@
-﻿using Domain.Customers;
+﻿using Domain.Applications;
+using Domain.Customers;
 using Domain.EmailVerification;
 using Domain.PasswordResets;
 using Domain.Todos;
@@ -16,6 +17,9 @@ public interface IApplicationDbContext
     DbSet<Tokens> Tokens { get; }
     DbSet<TodoItem> TodoItems { get; }
     DbSet<Customer> Customers { get; }
-
+    DbSet<Permission> Permissions { get; }
+    DbSet<Applicationapply> Applications { get; }  // ← ADD THIS
+    DbSet<RolePermission> RolePermissions { get; }
+    DbSet<Role> Roles { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

@@ -1,13 +1,14 @@
-﻿using Application.Abstractions.Data;
+﻿using Domain.Applications;
 using Domain.Customers;
 using Domain.EmailVerification;
 using Domain.PasswordResets;
 using Domain.Todos;
 using Domain.Token;
 using Domain.Users;
-using Infrastructure.DomainEvents;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.DomainEvents;
 using SharedKernel;
+using Application.Abstractions.Data;
 
 namespace Infrastructure.Database;
 
@@ -33,15 +34,7 @@ public sealed class ApplicationDbContext(
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        // When should you publish domain events?
-        //
-        // 1. BEFORE calling SaveChangesAsync
-        //     - domain events are part of the same transaction
-        //     - immediate consistency
-        // 2. AFTER calling SaveChangesAsync
-        //     - domain events are a separate transaction
-        //     - eventual consistency
-        //     - handlers can fail
+       
 
         int result = await base.SaveChangesAsync(cancellationToken);
 

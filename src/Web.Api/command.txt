@@ -5,6 +5,11 @@ dotnet ef database update --project src/Infrastructure/Infrastructure.csproj --s
 //Rollback Database Command:
 dotnet ef database update <PreviousMigrationName> --project src/Infrastructure/Infrastructure.csproj --startup-project src/Web.Api/Web.Api.csproj
 
+
+
+
 //Create Migration Command:
 dotnet ef migrations add <MigrationName> --project src/Infrastructure/Infrastructure.csproj --startup-project src/Web.Api/Web.Api.csproj
 
+//remove recent ADD migration
+dotnet ef migrations remove --project src/Infrastructure/Infrastructure.csproj --startup-project src/Web.Api/Web.Api.csproj
