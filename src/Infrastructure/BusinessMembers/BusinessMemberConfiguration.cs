@@ -1,4 +1,7 @@
-﻿using Domain.BusinessMembers;
+﻿using Domain.Businesses;
+using Domain.BusinessMembers;
+using Domain.Roles;
+using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,18 +11,21 @@ public class BusinessMemberConfiguration : IEntityTypeConfiguration<BusinessMemb
 {
     public void Configure(EntityTypeBuilder<BusinessMember> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.HasKey(bm => bm.Id);
 
-        builder.Property(x => x.BusinessId)
-            .IsRequired();
+        builder.HasOne<Business>()
+            .WithMany()
+            .HasForeignKey(bm => bm.BusinessId);
 
-        builder.Property(x => x.UserId)
-            .IsRequired();
+        builder.HasOne<User>()
+            .WithMany()
+            .HasForeignKey(bm => bm.UserId);
 
-        builder.Property(x => x.RoleId)
-            .IsRequired();
+        builder.HasOne<Role>()
+            .WithMany()
+            .HasForeignKey(bm => bm.RoleId);
 
-        builder.Property(x => x.JoinedAt)
+        builder.Property(bm => bm.JoinedAt)
             .IsRequired();
     }
 }
