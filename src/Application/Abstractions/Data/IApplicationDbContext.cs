@@ -18,5 +18,7 @@ public interface IApplicationDbContext
     DbSet<Applicationapply> Applications { get; }  // ← ADD THIS
     DbSet<RolePermission> RolePermissions { get; }
     DbSet<Role> Roles { get; }
+    DbSet<UserLoginHistory> UserLoginHistory { get; }
+    DbSet<UserProfile> UserProfile { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
