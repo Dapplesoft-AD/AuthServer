@@ -403,3 +403,4 @@ FodyWeavers.xsd
 appsettings.Development.json
 appsettings.*.json
 !appsettings.json
+/AuthServer.sln

@@ -1,4 +1,4 @@
-using Application.Abstractions.Data;
+﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Todos;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +23,7 @@ internal sealed class UpdateTodoCommandHandler(
         todoItem.Description = command.Description;
 
         await context.SaveChangesAsync(cancellationToken);
-        
+
         return Result.Success();
     }
 }
