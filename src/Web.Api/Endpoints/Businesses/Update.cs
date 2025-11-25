@@ -9,7 +9,6 @@ namespace Web.Api.Endpoints.Businesses;
 
 public class Update : IEndpoint
 {
-
     public sealed class Request
     {
         public Guid Id { get; set; }
