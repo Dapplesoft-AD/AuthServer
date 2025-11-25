@@ -1,6 +1,6 @@
 ﻿namespace Domain.Businesses;
 
-public enum Status
+public enum BusinessStatus
 {
      Inactive = 0,
      Active = 1,

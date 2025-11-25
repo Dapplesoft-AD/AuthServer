@@ -12,12 +12,12 @@ public class Get : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("/businesses", async (
-            IQueryHandler<GetBusinessesQuery, List<BusinessResponse>> handler,
+            IQueryHandler<GetBusinessesQuery, List<GetBusinessResponse>> handler,
             IUserContext userContext,
             CancellationToken cancellationToken) =>
         {
             var query = new GetBusinessesQuery();
-            Result<List<BusinessResponse>> result = await handler.Handle(query, cancellationToken);
+            Result<List<GetBusinessResponse>> result = await handler.Handle(query, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);
         })
         .WithTags(Tags.Businesses)

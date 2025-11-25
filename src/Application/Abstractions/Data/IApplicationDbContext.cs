@@ -1,4 +1,6 @@
 ﻿using Domain.Applications;
+using Domain.Businesses;
+using Domain.BusinessMembers;
 using Domain.Customers;
 using Domain.EmailVerification;
 using Domain.PasswordResets;
@@ -29,6 +31,9 @@ public interface IApplicationDbContext
     DbSet<Role> Roles { get; }
     DbSet<UserLoginHistory> UserLoginHistory { get; }
     DbSet<UserProfile> UserProfile { get; }
+    DbSet<Business> Businesses { get; }
+    DbSet<BusinessMember> BusinessMembers { get; }
+
     EntityEntry Entry(object entity);
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

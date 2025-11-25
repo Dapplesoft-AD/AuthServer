@@ -11,11 +11,11 @@ public class GetById : IEndpoint
     {
         app.MapGet("/businesses/{id:guid}", async (
         Guid id,
-        IQueryHandler<GetBusinessByIdQuery, BusinessResponse> handler,
+        IQueryHandler<GetBusinessByIdQuery, GetBusinessByIdResponse> handler,
         CancellationToken cancellationToken) =>
         {
             var query = new GetBusinessByIdQuery(id);
-            SharedKernel.Result<BusinessResponse> result = await handler.Handle(query, cancellationToken);
+            SharedKernel.Result<GetBusinessByIdResponse> result = await handler.Handle(query, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);
         })
         .WithTags(Tags.Businesses)

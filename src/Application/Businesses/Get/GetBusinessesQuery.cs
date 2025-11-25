@@ -3,4 +3,4 @@ using SharedKernel;
 
 namespace Application.Businesses.Get;
 
-public sealed record GetBusinessesQuery() : IQuery<List<BusinessResponse>>;
+public sealed record GetBusinessesQuery() : IQuery<List<GetBusinessResponse>>;

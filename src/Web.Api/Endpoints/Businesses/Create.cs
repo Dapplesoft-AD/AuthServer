@@ -15,7 +15,7 @@ public class Create : IEndpoint
         public string BusinessName { get; set; }
         public string IndustryType { get; set; }
         public string LogoUrl { get; set; }
-        public Status Status { get; set; }
+        public BusinessStatus Status { get; set; }
     }
 
     public void MapEndpoint(IEndpointRouteBuilder app)

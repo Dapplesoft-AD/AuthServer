@@ -2,4 +2,4 @@
 
 namespace Application.Businesses.GetById;
 
-public sealed record GetBusinessByIdQuery(Guid Id) : IQuery<BusinessResponse>;
+public sealed record GetBusinessByIdQuery(Guid Id) : IQuery<GetBusinessByIdResponse>;

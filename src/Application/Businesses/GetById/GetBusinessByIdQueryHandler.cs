@@ -5,7 +5,7 @@ using SharedKernel;
 
 namespace Application.Businesses.GetById;
 
-internal sealed class GetBusinessByIdQueryHandler : IQueryHandler<GetBusinessByIdQuery, BusinessResponse>
+internal sealed class GetBusinessByIdQueryHandler : IQueryHandler<GetBusinessByIdQuery, GetBusinessByIdResponse>
 {
     private readonly IApplicationDbContext _context;
     public GetBusinessByIdQueryHandler(IApplicationDbContext context)
@@ -13,11 +13,11 @@ internal sealed class GetBusinessByIdQueryHandler : IQueryHandler<GetBusinessByI
         _context = context;
     }
 
-    public async Task<Result<BusinessResponse>> Handle(GetBusinessByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<GetBusinessByIdResponse>> Handle(GetBusinessByIdQuery request, CancellationToken cancellationToken)
     {
-        BusinessResponse? business = await _context.Businesses
+        GetBusinessByIdResponse? business = await _context.Businesses
             .Where(b => b.Id == request.Id)
-            .Select(b => new BusinessResponse
+            .Select(b => new GetBusinessByIdResponse
             {
                 Id = b.Id,
                 OwnerUserId = b.OwnerUserId,
@@ -31,7 +31,7 @@ internal sealed class GetBusinessByIdQueryHandler : IQueryHandler<GetBusinessByI
 
         if (business is null)
         {
-            return Result.Failure<BusinessResponse>(
+            return Result.Failure<GetBusinessByIdResponse>(
                 Error.NotFound("Business.NotFound", $"Business with Id {request.Id} not found.")
             );
         }

@@ -7,5 +7,5 @@ public sealed record UpdateBusinessCommand(
     Guid Id,
     string BusinessName,
     string IndustryType,
-    Uri LogoUrl,
-    Status Status) : ICommand;
+    string LogoUrl,
+    BusinessStatus Status) : ICommand;

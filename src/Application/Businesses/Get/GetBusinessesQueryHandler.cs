@@ -6,7 +6,7 @@ using SharedKernel;
 
 namespace Application.Businesses.Get;
 
-internal sealed class GetBusinessesQueryHandler : IQueryHandler<GetBusinessesQuery, List<BusinessResponse>>
+internal sealed class GetBusinessesQueryHandler : IQueryHandler<GetBusinessesQuery, List<GetBusinessResponse>>
 {
     private readonly IApplicationDbContext _context;
     private readonly IUserContext _userContext;
@@ -17,15 +17,15 @@ internal sealed class GetBusinessesQueryHandler : IQueryHandler<GetBusinessesQue
         _userContext = userContext;
     }
 
-    public async Task<Result<List<BusinessResponse>>> Handle(
+    public async Task<Result<List<GetBusinessResponse>>> Handle(
         GetBusinessesQuery request,
         CancellationToken cancellationToken)
     {
         Guid userId = _userContext.UserId;
 
-        List<BusinessResponse> businesses = await _context.Businesses
+        List<GetBusinessResponse> businesses = await _context.Businesses
             .Where(b => b.OwnerUserId == userId)
-            .Select(b => new BusinessResponse
+            .Select(b => new GetBusinessResponse
             {
                 Id = b.Id,
                 OwnerUserId = b.OwnerUserId,

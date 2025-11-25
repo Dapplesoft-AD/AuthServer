@@ -1,12 +1,11 @@
 ﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Domain.Businesses;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
 namespace Application.Businesses.Update;
 
-internal sealed class UpdateBusinessCommandHandler : ICommandHandler<UpdateBusinessCommand, Guid>
+internal sealed class UpdateBusinessCommandHandler : ICommand
 {
     private readonly IApplicationDbContext _context;
 
