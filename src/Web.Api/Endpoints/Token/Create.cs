@@ -19,7 +19,7 @@ public sealed class Create : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("Token", async (
+        app.MapPost("Tokens", async (
             Request request,
             ICommandHandler<CreateTokenCommand, Guid> handler,
             CancellationToken cancellationToken) =>
