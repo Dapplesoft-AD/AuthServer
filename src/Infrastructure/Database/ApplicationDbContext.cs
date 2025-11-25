@@ -1,12 +1,19 @@
 ﻿using Application.Abstractions.Data;
-using Domain.AuditLogs;
+using Domain.Applications;
 using Domain.Customers;
-using Domain.MfaLogs;
-using Domain.MfaSettings;
+using Domain.EmailVerification;
+using Domain.PasswordResets;
+using Domain.Permissions;
+using Domain.RolePermissions;
+using Domain.Roles;
 using Domain.Todos;
+using Domain.Token;
+using Domain.UserLoginHistories;
+using Domain.UserProfiles;
 using Domain.Users;
 using Infrastructure.DomainEvents;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SharedKernel;
 
 namespace Infrastructure.Database;
@@ -17,11 +24,21 @@ public sealed class ApplicationDbContext(
     : DbContext(options), IApplicationDbContext
 {
     public DbSet<User> Users { get; set; }
-    public DbSet<TodoItem> TodoItems { get; set; }
+    public DbSet<EmailVerifications> EmailVerifications { get; set; }
+    public DbSet<PasswordReset> PasswordReset { get; set; }
+    public DbSet<Tokens> Tokens { get; set; }
     public DbSet<Customer> Customers { get; set; }
-    public DbSet<MfaSetting> MfaSettings { get; set; }
-    public DbSet<MfaLog> MfaLogs { get; set; }
-    public DbSet<AuditLog> AuditLogs { get; set; }
+    public DbSet<TodoItem> TodoItems { get; set; }
+    public DbSet<UserLoginHistory> UserLoginHistory { get; set; }
+    public DbSet<UserProfile> UserProfile { get; set; }
+    public DbSet<Permission> Permissions { get; set; }
+    public DbSet<Applicationapply> Applications { get; set; }
+    public DbSet<RolePermission> RolePermissions { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    
+
+
+    public new EntityEntry Entry(object entity) => base.Entry(entity);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,15 +49,7 @@ public sealed class ApplicationDbContext(
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        // When should you publish domain events?
-        //
-        // 1. BEFORE calling SaveChangesAsync
-        //     - domain events are part of the same transaction
-        //     - immediate consistency
-        // 2. AFTER calling SaveChangesAsync
-        //     - domain events are a separate transaction
-        //     - eventual consistency
-        //     - handlers can fail
+       
 
         int result = await base.SaveChangesAsync(cancellationToken);
 
