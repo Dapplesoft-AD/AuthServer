@@ -10,4 +10,5 @@ public static class Tags
     public const string Token = "Token";
     public const string UserLoginHistory = "UserLoginHistory";
     public const string UserProfile = "UserProfile";
+    public const string Businesses = "Businesses";
 }
