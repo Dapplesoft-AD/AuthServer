@@ -14,6 +14,6 @@ public class CreateEmailVerificationCommandValidator : AbstractValidator<CreateE
         RuleFor(x => x.ExpiresAt)
             .GreaterThan(DateTime.UtcNow).WithMessage("Expiration date must be in the future.");
         RuleFor(x => x.VerifiedAt)
-            .GreaterThan(DateTime.UtcNow).WithMessage("Verification date must be in the future.");
+            .LessThanOrEqualTo(DateTime.UtcNow).WithMessage("Verification date must not be in the future.");
     }
 }
