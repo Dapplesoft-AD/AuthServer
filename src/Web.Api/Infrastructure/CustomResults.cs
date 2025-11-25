@@ -70,4 +70,15 @@ public static class CustomResults
             };
         }
     }
+
+    internal static IResult Problem(string detail, int statusCode = StatusCodes.Status400BadRequest)
+    {
+        return Results.Problem(
+            detail: detail,
+            statusCode: statusCode,
+            title: "Server failure",
+            type: "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+        );
+
+    }
 }
