@@ -7,11 +7,11 @@ using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.MfaLogs;
 
-public sealed class Update : IEndpoint
+internal sealed class Update : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("mfalogs/{id:guid}", async (
+        app.MapPut("MfaLogs/{id:guid}", async (
             Guid id,
             Request request,
             ICommandHandler<UpdateMfaLogCommand> handler,

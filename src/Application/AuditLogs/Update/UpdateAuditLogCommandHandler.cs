@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
@@ -24,8 +25,10 @@ internal sealed class UpdateAuditLogCommandHandler(
                 $"AuditLog with Id {command.AuditLogId} not found."));
         }
 
+        
         auditLog.Action = command.Action;
         auditLog.Description = command.Description;
+        auditLog.UpdatedAt = DateTime.UtcNow;  
 
         await context.SaveChangesAsync(cancellationToken);
 

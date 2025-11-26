@@ -1,7 +1,8 @@
-﻿using Application.Abstractions.Data;
-using Domain.AuditLogs;
-using Microsoft.EntityFrameworkCore;
+﻿using Application.Abstractions.Messaging;
+using Application.AuditLogs.Delete;
 using SharedKernel;
+using Web.Api.Extensions;
+using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.AuditLogs;
 
@@ -11,21 +12,17 @@ internal sealed class Delete : IEndpoint
     {
         app.MapDelete("AuditLogs/{id:guid}", async (
             Guid id,
-            IApplicationDbContext context,
+            ICommandHandler<DeleteAuditLogCommand> handler,
             CancellationToken cancellationToken) =>
         {
-            AuditLog? auditLog = await context.AuditLogs
-                .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+            var command = new DeleteAuditLogCommand(id);
 
-            if (auditLog is null)
-            {
-                return Results.NotFound(Result.Failure(AuditLogErrors.NotFound(id)));
-            }
+            Result result = await handler.Handle(command, cancellationToken);
 
-            context.AuditLogs.Remove(auditLog);
-            await context.SaveChangesAsync(cancellationToken);
-
-            return Results.Ok(Result.Success());
+            return result.Match(
+                Results.NoContent,
+                error => CustomResults.Problem(error)
+            );
         })
         .WithTags(Tags.AuditLogs)
         .RequireAuthorization()

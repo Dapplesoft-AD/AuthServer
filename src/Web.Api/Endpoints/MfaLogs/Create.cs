@@ -22,7 +22,7 @@ public class Create : IEndpoint
                 LoginTime = request.LoginTime,
                 IpAddress = request.IpAddress,
                 Device = request.Device,
-                Status = request.Status // Direct assignment - no casting needed
+                Status = request.Status 
             };
 
             Result<Guid> result = await handler.Handle(command, cancellationToken);
@@ -37,6 +37,6 @@ public class Create : IEndpoint
         DateTime LoginTime,
         string IpAddress,
         string Device,
-        MfaLogStatus Status // Use enum directly in request
+        MfaLogStatus Status 
     );
 }

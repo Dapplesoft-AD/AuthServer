@@ -5,7 +5,7 @@ using Domain.MfaSettings;
 namespace Application.MfaSettings.Create;
 
 
-public class CreateMfaSettingValidator : AbstractValidator<CreateMfaSettingCommand>
+internal sealed class CreateMfaSettingValidator : AbstractValidator<CreateMfaSettingCommand>
 {
     public CreateMfaSettingValidator()
     {

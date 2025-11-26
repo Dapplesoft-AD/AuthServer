@@ -6,45 +6,29 @@ using SharedKernel;
 
 namespace Application.MfaLogs.Update;
 
-internal sealed class UpdateMfaLogCommandHandler : ICommandHandler<UpdateMfaLogCommand>
+internal sealed class UpdateMfaLogCommandHandler(IApplicationDbContext context)
+    : ICommandHandler<UpdateMfaLogCommand>
 {
-    private readonly IApplicationDbContext _context;
-
-    public UpdateMfaLogCommandHandler(IApplicationDbContext context)
-    {
-        _context = context;
-    }
-
     public async Task<Result> Handle(UpdateMfaLogCommand command, CancellationToken cancellationToken)
     {
-        try
+        MfaLog? mfaLog = await context.MfaLogs
+            .SingleOrDefaultAsync(l => l.Id == command.MfaLogId, cancellationToken);
+
+        if (mfaLog is null)
         {
-            MfaLog? mfaLog = await _context.MfaLogs
-                .SingleOrDefaultAsync(l => l.Id == command.MfaLogId, cancellationToken);
-
-            if (mfaLog is null)
-            {
-                return Result.Failure(Error.NotFound(
-                    "MfaLog.NotFound",
-                    $"MfaLog with Id {command.MfaLogId} not found."));
-            }
-
-            // Update fields
-            mfaLog.LoginTime = command.LoginTime;
-            mfaLog.IpAddress = command.IpAddress;
-            mfaLog.Device = command.Device;
-            mfaLog.Status = command.Status;
-            mfaLog.UpdatedAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return Result.Success();
+            return Result.Failure(Error.NotFound(
+                "MfaLog.NotFound",
+                $"MfaLog with Id {command.MfaLogId} not found."));
         }
-        catch (Exception ex)
-        {
-            return Result.Failure(Error.Failure(
-                "MfaLog.Update",
-                $"Failed to update MFA log: {ex.Message}"));
-        }
+
+        mfaLog.LoginTime = command.LoginTime;
+        mfaLog.IpAddress = command.IpAddress;
+        mfaLog.Device = command.Device;
+        mfaLog.Status = command.Status;
+        mfaLog.UpdatedAt = DateTime.UtcNow;
+
+        await context.SaveChangesAsync(cancellationToken);
+
+        return Result.Success();
     }
 }

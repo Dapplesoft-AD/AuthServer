@@ -6,48 +6,25 @@ using Application.Abstractions.Messaging;
 using Domain.MfaSettings;
 using SharedKernel;
 
-
 namespace Application.MfaSettings.Create;
 
-
-public class CreateMfaSettingCommandHandler : ICommandHandler<CreateMfaSettingCommand, Guid>
+internal sealed class CreateMfaSettingCommandHandler(IApplicationDbContext context)
+    : ICommandHandler<CreateMfaSettingCommand, Guid>
 {
-    private readonly IApplicationDbContext _context;
-
-
-    public CreateMfaSettingCommandHandler(IApplicationDbContext context)
-    {
-        _context = context;
-    }
-
-
     public async Task<Result<Guid>> Handle(CreateMfaSettingCommand command, CancellationToken cancellationToken)
     {
-        try
+        var mfaSetting = new MfaSetting
         {
-            var mfaSetting = new MfaSetting
-            {
-                UserId = command.UserId,
-                SecretKey = command.SecretKey,
-                BackupCodes = command.BackupCodes,
-                Method = command.Method,
-                Enabled = command.Enabled
-            };
+            UserId = command.UserId,
+            SecretKey = command.SecretKey,
+            BackupCodes = command.BackupCodes,
+            Method = command.Method,
+            Enabled = command.Enabled
+        };
 
+        await context.MfaSettings.AddAsync(mfaSetting, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
 
-            await _context.MfaSettings.AddAsync(mfaSetting, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
-
-
-            return Result<Guid>.Success(mfaSetting.Id);
-        }
-        catch (Exception ex)
-        {
-            return new Result<Guid>(
-            Guid.Empty,
-            false,
-            Error.Failure("MfaSettings.Create", $"Internal Server Error: {ex.Message}")
-            );
-        }
+        return Result<Guid>.Success(mfaSetting.Id);
     }
 }

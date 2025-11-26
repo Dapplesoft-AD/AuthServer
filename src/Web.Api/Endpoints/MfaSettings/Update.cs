@@ -11,27 +11,18 @@ internal sealed class Update : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("mfasettings/{id:guid}", async (
+        app.MapPut("MfaSettings/{id:guid}", async (
             Guid id,
             UpdateMfaSettingRequest request,
             ICommandHandler<UpdateMfaSettingCommand> handler,
             CancellationToken cancellationToken) =>
         {
-            // Validate that int matches enum values
-            if (!Enum.IsDefined(typeof(MfaMethod), request.Method))
-            {
-                return Results.BadRequest(new
-                {
-                    Error = "Invalid MFA method. Allowed values: 0=TOTP, 1=SMS, 2=EMAIL"
-                });
-            }
-
             var command = new UpdateMfaSettingCommand(
                 id,
                 request.UserId,
                 request.SecretKey,
                 request.BackupCodes,
-                (MfaMethod)request.Method,  // Cast int → enum
+                (MfaMethod)request.Method,  
                 request.Enabled
             );
 
@@ -48,6 +39,6 @@ public sealed record UpdateMfaSettingRequest(
     Guid UserId,
     string? SecretKey,
     string? BackupCodes,
-    int Method,   // int, not string
+    int Method,
     bool Enabled
 );

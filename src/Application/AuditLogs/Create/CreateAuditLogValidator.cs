@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using FluentValidation;
 
 namespace Application.AuditLogs.Create;
-public class CreateAuditLogValidator : AbstractValidator<CreateAuditLogCommand>
+public sealed class CreateAuditLogValidator : AbstractValidator<CreateAuditLogCommand>
 {
     public CreateAuditLogValidator()
     {

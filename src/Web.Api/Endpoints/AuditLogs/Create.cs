@@ -6,7 +6,7 @@ using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.AuditLogs;
 
-public class Create : IEndpoint
+internal sealed class Create : IEndpoint
 {
     public sealed class Request
     {
@@ -18,7 +18,7 @@ public class Create : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/AuditLogs/create", async (
+        app.MapPost("AuditLogs", async (
             Request request,
             ICommandHandler<CreateAuditLogCommand, Guid> handler,
             CancellationToken cancellationToken) =>

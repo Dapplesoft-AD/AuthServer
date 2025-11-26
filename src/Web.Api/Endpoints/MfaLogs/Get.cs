@@ -6,11 +6,11 @@ using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.MfaLogs;
 
-public sealed class Get : IEndpoint
+internal sealed class Get : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("mfalogs", async (
+        app.MapGet("MfaLogs", async (
             IQueryHandler<GetMfaLogQuery, List<MfaLogResponse>> handler,
             CancellationToken cancellationToken) =>
         {
@@ -19,14 +19,7 @@ public sealed class Get : IEndpoint
             Result<List<MfaLogResponse>> result = await handler.Handle(query, cancellationToken);
 
             return result.Match(
-                logs => Results.Ok(new
-                {
-                    Success = true,
-                    Data = logs,
-                    Message = logs.Count > 0
-                        ? $"{logs.Count} MFA log(s) found."
-                        : "No MFA logs found."
-                }),
+                logs => Results.Ok(logs),
                 error => CustomResults.Problem(error)
             );
         })

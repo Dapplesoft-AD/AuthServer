@@ -2,7 +2,7 @@
 
 namespace Application.MfaLogs.Create;
 
-public class CreateMfaLogValidator : AbstractValidator<CreateMfaLogCommand>
+internal sealed class CreateMfaLogValidator : AbstractValidator<CreateMfaLogCommand>
 {
     public CreateMfaLogValidator()
     {
