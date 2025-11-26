@@ -14,7 +14,7 @@ public class Update : IEndpoint
         public Guid Id { get; set; }
         public string BusinessName { get; set; }
         public string IndustryType { get; set; }
-        public string LogoUrl { get; set; }
+        public Uri LogoUrl { get; set; }
         public BusinessStatus Status { get; set; }
     }
 
@@ -37,7 +37,7 @@ public class Update : IEndpoint
             Result result = await handler.Handle(command, cancellationToken);
             return result.Match(Results.NoContent, CustomResults.Problem);
         })
-          .WithTags(Tags.Businesses)
-          .RequireAuthorization();
+        .WithTags(Tags.Businesses)
+        .RequireAuthorization();
     }
 }

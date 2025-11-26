@@ -31,7 +31,7 @@ internal sealed class UpdateBusinessCommandHandler : ICommandHandler<UpdateBusin
 
         business.BusinessName = command.BusinessName;
         business.IndustryType = command.IndustryType;
-        business.LogoUrl = command.LogoUrl;
+        business.LogoUrl = command.LogoUrl.ToString();
         business.Status = command.Status;
 
         await _context.SaveChangesAsync(cancellationToken);
