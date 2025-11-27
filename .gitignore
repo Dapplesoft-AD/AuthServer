@@ -404,3 +404,4 @@ appsettings.Development.json
 appsettings.*.json
 !appsettings.json
 /AuthServer.sln
+/src/Web.Api/appsettings.Development.json
