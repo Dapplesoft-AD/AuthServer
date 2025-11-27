@@ -13,4 +13,7 @@ public static class Tags
     public const string Businesses = "Businesses";
     public const string BusinessMembers = "BusinessMembers";
     public const string Roles = "Roles";
+    public const string MfaSettings = "MfaSettings";
+    public const string MfaLogs = "MfaLogs";
+    public const string AuditLogs = "AuditLogs";
 }

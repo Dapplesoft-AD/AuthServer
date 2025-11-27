@@ -1,9 +1,12 @@
 ﻿using Application.Abstractions.Data;
 using Domain.Applications;
+using Domain.AuditLogs;
 using Domain.Businesses;
 using Domain.BusinessMembers;
 using Domain.Customers;
 using Domain.EmailVerification;
+using Domain.MfaLogs;
+using Domain.MfaSettings;
 using Domain.PasswordResets;
 using Domain.Permissions;
 using Domain.RolePermissions;
@@ -52,6 +55,9 @@ public sealed class ApplicationDbContext(
     public DbSet<Business> Businesses { get; set; }
 
     public DbSet<BusinessMember> BusinessMembers { get; set; }
+    public DbSet<AuditLog> AuditLogs { get; set; }
+    public DbSet<MfaLog> MfaLogs { get; set; }
+    public DbSet<MfaSetting> MfaSettings { get; set; }
 
     public new EntityEntry Entry(object entity) => base.Entry(entity);
 
