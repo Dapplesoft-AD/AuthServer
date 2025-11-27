@@ -11,11 +11,11 @@ internal sealed class GetByUserId : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet(ApiRoutes.UserLoginHistory.GetByUserID, async (
-            Guid userId,
+            Guid id,
             IQueryHandler<GetUserLoginHistoryByUserIdQuery, List<UserLoginHistoryResponse>> handler,
             CancellationToken cancellationToken) =>
         {
-            var query = new GetUserLoginHistoryByUserIdQuery(userId);
+            var query = new GetUserLoginHistoryByUserIdQuery(id);
 
             Result<List<UserLoginHistoryResponse>> result = await handler.Handle(query, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);

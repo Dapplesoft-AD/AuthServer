@@ -1,6 +1,5 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.UserLoginHistories.Create;
-using Domain.UserLoginHistories;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
