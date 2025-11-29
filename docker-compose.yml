@@ -1,7 +1,36 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: auth-server-db
+    environment:
+      - POSTGRES_DB=authserver
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass1234
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - auth-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   auth-server:
-    image: ghcr.io/dapplesoft-ad/auth-server:latest
+    build:
+      context: .
+      dockerfile: src/Web.Api/Dockerfile
+      args:
+        BUILD_CONFIGURATION: Release
+      target: final
+    image: auth-server:latest
     container_name: auth-server
+    depends_on:
+      postgres:
+        condition: service_healthy
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -9,22 +38,25 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development # for Development
       # - ASPNETCORE_ENVIRONMENT=Production # for Production
       - ASPNETCORE_URLS=http://+:8080;http://+:8081
-      - ConnectionStrings__Database=Host=localhost;Port=5432;Database=authserver;Username=postgres;Password=pass1234
+      - ConnectionStrings__Database=Host=postgres;Port=5432;Database=authserver;Username=postgres;Password=pass1234
     networks:
       - auth-network
     restart: unless-stopped
 
-  auth-server-frontend:
-    image: ghcr.io/dapplesoft-ad/auth-server-frontend:latest
-    container_name: auth-server-frontend
-    ports:
-      - "40003:4200"
-    environment:
-      - NODE_ENV=production
-    networks:
-      - auth-network
-    restart: unless-stopped
+  # auth-server-frontend:
+  #   image: ghcr.io/dapplesoft-ad/auth-server-frontend:latest
+  #   container_name: auth-server-frontend
+  #   ports:
+  #     - "40003:4200"
+  #   environment:
+  #     - NODE_ENV=production
+  #   networks:
+  #     - auth-network
+  #   restart: unless-stopped
 
 networks:
   auth-network:
     driver: bridge
+
+volumes:
+  postgres_data:
