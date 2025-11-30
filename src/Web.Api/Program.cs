@@ -8,7 +8,9 @@ using Web.Api;
 using Web.Api.Extensions;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
+string[] allowedOrigins = builder.Configuration
+                                    .GetSection("Cors:AllowedOrigins")
+                                    .Get<string[]>() ?? [];
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
@@ -18,6 +20,12 @@ builder.Services
     .AddApplication()
     .AddPresentation()
     .AddInfrastructure(builder.Configuration);
+
+builder.Services.AddCors(options => options.AddPolicy("AllowAngular", builder => builder
+            .WithOrigins(allowedOrigins)
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()));
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 WebApplication app = builder.Build();
@@ -43,6 +51,8 @@ app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
 
 app.UseAuthentication();
+
+app.UseCors("AllowAngular");
 
 app.UseAuthorization();
 
