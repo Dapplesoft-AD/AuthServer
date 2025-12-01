@@ -5,16 +5,22 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    volumes:
-      - webapi:/app/
     ports:
       - 5000:8080
       - 5001:8081
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__Database=Host=postgres;Port=5432;Database=clean-architecture;Username=postgres;Password=1234
-      - ASPNETCORE_URLS=http://+:8080;http://+:8081
-      - Jwt__Secret=YOUR_SECURE_GENERATED_SECRET
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Database: Host=postgres;Port=5432;Database=clean-architecture;Username=postgres;Password=1234
+      ASPNETCORE_URLS: http://+:8080;http://+:8081
+      Jwt__Secret: YOUR_SECURE_GENERATED_SECRET
+      Cors__AllowedOrigins__0: "http://localhost:4200"
+      Cors__AllowedOrigins__1: "https://localhost:4200"
+      Cors__AllowedOrigins__2: "http://localhost:40033"
+      Cors__AllowedOrigins__3: "https://localhost:40003"
+      Cors__AllowedOrigins__4: "http://auth.dapplesoft.com"
+      Cors__AllowedOrigins__5: "https://auth.dapplesoft.com"
+      Cors__AllowedOrigins__6: "http://authapi.dapplesoft.com"
+      Cors__AllowedOrigins__7: "https://authapi.dapplesoft.com"
     restart: on-failure
     depends_on:
       postgres:
@@ -50,4 +56,3 @@ services:
 
 volumes:
   postgres_data: # Declares the named volume 'postgres_data'
-  webapi:

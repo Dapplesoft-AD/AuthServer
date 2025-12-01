@@ -21,10 +21,10 @@ builder.Services
     .AddPresentation()
     .AddInfrastructure(builder.Configuration);
 
-builder.Services.AddCors(options => options.AddPolicy("AllowAngular", builder => builder
+builder.Services.AddCors(options => options.AddPolicy("Allowed_Origins", builder => builder
             .WithOrigins(allowedOrigins)
-            .AllowAnyMethod()
-            .AllowAnyHeader()
+            .WithMethods("GET", "POST", "PUT", "DELETE")
+            .WithHeaders("Content-Type", "Authorization")
             .AllowCredentials()));
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
@@ -52,7 +52,7 @@ app.UseExceptionHandler();
 
 app.UseAuthentication();
 
-app.UseCors("AllowAngular");
+app.UseCors("Allowed_Origins");
 
 app.UseAuthorization();
 
