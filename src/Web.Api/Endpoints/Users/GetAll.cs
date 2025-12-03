@@ -21,6 +21,7 @@ internal sealed class GetAll : IEndpoint
             return result.Match(Results.Ok, CustomResults.Problem);
         })
         .WithTags(Tags.Users)
+        .HasPermission(Permissions.UsersAccess)
         .RequireAuthorization();
     }
 }
