@@ -10,9 +10,9 @@ namespace Application.Users.Login;
 internal sealed class LoginUserCommandHandler(
     IApplicationDbContext context,
     IPasswordHasher passwordHasher,
-    ITokenProvider tokenProvider) : ICommandHandler<LoginUserCommand, string>
+    ITokenProvider tokenProvider) : ICommandHandler<LoginUserCommand, LoginUserResponse>
 {
-    public async Task<Result<string>> Handle(LoginUserCommand command, CancellationToken cancellationToken)
+    public async Task<Result<LoginUserResponse>> Handle(LoginUserCommand command, CancellationToken cancellationToken)
     {
         User? user = await context.Users
             .AsNoTracking()
@@ -20,18 +20,22 @@ internal sealed class LoginUserCommandHandler(
 
         if (user is null)
         {
-            return Result.Failure<string>(UserErrors.NotFoundByEmail);
+            return Result.Failure<LoginUserResponse>(UserErrors.NotFoundByEmail);
         }
 
         bool verified = passwordHasher.Verify(command.Password, user.PasswordHash);
 
         if (!verified)
         {
-            return Result.Failure<string>(UserErrors.NotFoundByEmail);
+            return Result.Failure<LoginUserResponse>(UserErrors.NotFoundByEmail);
         }
 
-        string token = tokenProvider.Create(user);
+        var response = new LoginUserResponse(
+            Token: tokenProvider.Create(user),
+            RefreshToken: "Coming soon",
+            User: new LogInUserInfo(Id: user.Id)
+        );
 
-        return token;
+        return response;
     }
 }
