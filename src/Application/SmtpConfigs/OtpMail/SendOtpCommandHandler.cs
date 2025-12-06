@@ -52,28 +52,29 @@ internal sealed class SendOtpCommandHandler(
 
         try
         {
-            using var client = new SmtpClient();
+            using (var client = new SmtpClient())
+            {
+                SecureSocketOptions sslOption = smtpConfig.EnableSsl
+                    ? SecureSocketOptions.StartTls
+                    : SecureSocketOptions.None;
 
-            SecureSocketOptions sslOption = smtpConfig.EnableSsl
-                ? SecureSocketOptions.StartTls
-                : SecureSocketOptions.None;
+                await client.ConnectAsync(
+                    smtpConfig.Host,
+                    smtpConfig.Port,
+                    sslOption,
+                    cancellationToken);
 
-            await client.ConnectAsync(
-                smtpConfig.Host,
-                smtpConfig.Port,
-                sslOption,
-                cancellationToken);
+                await client.AuthenticateAsync(
+                    smtpConfig.Username,
+                    smtpConfig.Password,
+                    cancellationToken);
 
-            await client.AuthenticateAsync(
-                smtpConfig.Username,
-                smtpConfig.Password,
-                cancellationToken);
+                await client.SendAsync(message, cancellationToken);
 
-            await client.SendAsync(message, cancellationToken);
+                await client.DisconnectAsync(true, cancellationToken);
 
-            await client.DisconnectAsync(true, cancellationToken);
-
-            return Result.Success(otpId);
+                return Result.Success(otpId);
+            }
         }
         catch (Exception ex)
         {
