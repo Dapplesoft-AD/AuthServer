@@ -76,9 +76,9 @@ internal sealed class SendOtpCommandHandler(
                 return Result.Success(otpId);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return Result.Failure<Guid>($"Email sending failed: {ex.Message}");
+            return Result.Failure<Guid>("Email sending failed.");
         }
     }
 }
