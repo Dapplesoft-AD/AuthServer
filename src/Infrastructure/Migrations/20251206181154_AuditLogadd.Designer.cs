@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251128144358_finalUpdateDb")]
-    partial class finalUpdateDb
+    [Migration("20251206181154_AuditLogadd")]
+    partial class AuditLogadd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -83,7 +83,8 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("Action")
                         .IsRequired()
@@ -91,7 +92,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("action");
 
-                    b.Property<Guid>("BusinessId")
+                    b.Property<Guid?>("BusinessId")
                         .HasColumnType("uuid")
                         .HasColumnName("business_id");
 
@@ -108,9 +109,13 @@ namespace Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
+
+                    b.Property<Guid?>("UserId1")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id1");
 
                     b.HasKey("Id")
                         .HasName("pk_audit_logs");
@@ -118,8 +123,14 @@ namespace Infrastructure.Migrations
                     b.HasIndex("BusinessId")
                         .HasDatabaseName("ix_audit_logs_business_id");
 
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("ix_audit_logs_created_at");
+
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_audit_logs_user_id");
+
+                    b.HasIndex("UserId1")
+                        .HasDatabaseName("ix_audit_logs_user_id1");
 
                     b.ToTable("audit_logs", "public");
                 });
@@ -734,12 +745,16 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.AuditLogs.AuditLog", b =>
                 {
-                    b.HasOne("Domain.Users.User", "User")
+                    b.HasOne("Domain.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
+                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("fk_audit_logs_users_user_id");
+
+                    b.HasOne("Domain.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1")
+                        .HasConstraintName("fk_audit_logs_users_user_id1");
 
                     b.Navigation("User");
                 });

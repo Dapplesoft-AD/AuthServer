@@ -10,7 +10,7 @@ internal sealed class Update : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("AuditLogs/{id:guid}", async (
+        app.MapPut("api/AuditLogs/{id:guid}", async (
             Guid id,
             UpdateAuditLogRequest request,
             ICommandHandler<UpdateAuditLogCommand> handler,
@@ -35,7 +35,6 @@ internal sealed class Update : IEndpoint
         .WithDescription("Updates the Action and Description of an Audit Log");
     }
 }
-
 public sealed record UpdateAuditLogRequest(
     string Action,
     string Description

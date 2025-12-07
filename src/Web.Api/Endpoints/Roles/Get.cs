@@ -9,7 +9,7 @@ internal sealed class Get : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("roles", async (
+        app.MapGet("api/roles", async (
             IQueryHandler<GetRolesQuery, List<RoleResponse>> handler,
             CancellationToken cancellationToken) =>
         {

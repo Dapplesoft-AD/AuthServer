@@ -22,14 +22,14 @@ public class Create : IEndpoint
                 LoginTime = request.LoginTime,
                 IpAddress = request.IpAddress,
                 Device = request.Device,
-                Status = request.Status 
+                Status = request.Status
             };
 
             Result<Guid> result = await handler.Handle(command, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);
         })
-        .WithTags(Tags.MfaLogs)
-        .RequireAuthorization();
+        .WithTags(Tags.MfaLogs);
+        
     }
 
     public sealed record Request(

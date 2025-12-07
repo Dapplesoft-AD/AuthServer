@@ -19,7 +19,7 @@ internal sealed class Create : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("applications", async (
+        app.MapPost("api/applications", async (
             Request request,
             ICommandHandler<CreateApplicationCommand, Guid> handler,
             CancellationToken cancellationToken) =>
@@ -44,7 +44,9 @@ internal sealed class Create : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
-        .WithTags("Applications")
-        .RequireAuthorization();
+        .WithTags(Tags.Applications)
+         .RequireAuthorization();
+        
+
     }
 }

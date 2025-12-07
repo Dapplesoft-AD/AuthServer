@@ -28,7 +28,7 @@ internal sealed class Delete : IEndpoint
             return Results.Ok(Result.Success());
         })
         .WithTags(Tags.MfaLogs)
-        .RequireAuthorization()
+       
         .WithSummary("Delete an MFA Log entry")
         .WithDescription("Deletes an MFA Log entry by Id");
     }

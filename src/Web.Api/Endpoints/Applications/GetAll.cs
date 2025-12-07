@@ -11,7 +11,7 @@ internal sealed class GetAll : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("applications", async (
+        app.MapGet("api/applications", async (
             IQueryHandler<GetAllApplicationsQuery, List<ApplicationResponse>> handler,
             CancellationToken cancellationToken) =>
         {
@@ -19,7 +19,8 @@ internal sealed class GetAll : IEndpoint
             Result<List<ApplicationResponse>> result = await handler.Handle(query, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);
         })
-        .WithTags("Applications")
+        .WithTags(Tags.Applications)
         .RequireAuthorization();
+
     }
 }

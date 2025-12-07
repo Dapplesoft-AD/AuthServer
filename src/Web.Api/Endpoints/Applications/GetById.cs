@@ -9,7 +9,7 @@ internal sealed class GetById : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("applications/{id:guid}", async (
+        app.MapGet("api/applications/{id:guid}", async (
             Guid id,
             IQueryHandler<GetApplicationByIdQuery, ApplicationResponse> handler,
             CancellationToken cancellationToken) =>
@@ -20,7 +20,8 @@ internal sealed class GetById : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
-        .WithTags("Applications")
+        .WithTags(Tags.Applications)
         .RequireAuthorization();
+       
     }
 }

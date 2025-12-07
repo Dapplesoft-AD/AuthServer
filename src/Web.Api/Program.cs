@@ -6,9 +6,19 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using Web.Api;
 using Web.Api.Extensions;
+using Web.Api.Middleware;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
@@ -19,10 +29,15 @@ builder.Services
     .AddPresentation()
     .AddInfrastructure(builder.Configuration);
 
+
+
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 WebApplication app = builder.Build();
 
-app.MapEndpoints();
+
+app.UseRouting();
+
+app.UseCors("AllowFrontend");
 
 if (app.Environment.IsDevelopment())
 {
@@ -45,6 +60,7 @@ app.UseExceptionHandler();
 app.UseAuthentication();
 
 app.UseAuthorization();
+app.MapEndpoints();
 
 // REMARK: If you want to use Controllers, you'll need this.
 app.MapControllers();

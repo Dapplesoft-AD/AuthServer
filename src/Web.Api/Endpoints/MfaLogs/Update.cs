@@ -33,7 +33,7 @@ internal sealed class Update : IEndpoint
             );
         })
         .WithTags(Tags.MfaLogs)
-        .RequireAuthorization()
+        
         .WithSummary("Update an MFA Log entry")
         .WithDescription("Updates the LoginTime, IpAddress, Device and Status of an MFA Log");
     }

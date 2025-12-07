@@ -10,7 +10,7 @@ internal sealed class Delete : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("applications/{id:guid}", async (
+        app.MapDelete("api/applications/{id:guid}", async (
             Guid id,
             ICommandHandler<DeleteApplicationCommand> handler,
             CancellationToken cancellationToken) =>
@@ -23,7 +23,8 @@ internal sealed class Delete : IEndpoint
                 () => Results.Ok(new { Message = "Application deleted successfully." }),
                 CustomResults.Problem);
         })
-        .WithTags("Applications")
+        .WithTags(Tags.Applications)
         .RequireAuthorization();
+        
     }
 }

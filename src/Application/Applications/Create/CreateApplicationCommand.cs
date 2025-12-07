@@ -6,5 +6,4 @@ public sealed record CreateApplicationCommand(string Name,
     string ClientId,
     string ClientSecret,
    Uri RedirectUri, Uri ApiBaseUrl,
-    Applicationapply.ApplicationStatus Status
-) : ICommand<Guid>;
+    Applicationapply.ApplicationStatus Status ) : ICommand<Guid>;

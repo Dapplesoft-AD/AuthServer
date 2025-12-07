@@ -19,7 +19,7 @@ internal sealed class Update : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("applications/{id:guid}", async (
+        app.MapPut("api/applications/{id:guid}", async (
             Guid id,
             Request request,
             ICommandHandler<UpdateApplicationCommand, Guid> handler,
@@ -37,7 +37,7 @@ internal sealed class Update : IEndpoint
                 request.Name,
                 request.ClientId,
                 request.ClientSecret,
-                new Uri(request.RedirectUri), 
+                new Uri(request.RedirectUri),
                 new Uri(request.ApiBaseUrl),
                 status
             );
@@ -48,7 +48,8 @@ internal sealed class Update : IEndpoint
                 applicationId => Results.Ok(new { Id = applicationId, Message = "Application updated successfully." }),
                 CustomResults.Problem);
         })
-        .WithTags("Applications")
+        .WithTags(Tags.Applications)
         .RequireAuthorization();
+        
     }
 }

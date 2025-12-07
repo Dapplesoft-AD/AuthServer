@@ -24,7 +24,7 @@ internal sealed class Get : IEndpoint
             );
         })
         .WithTags(Tags.MfaLogs)
-        .RequireAuthorization()
+        
         .WithSummary("Get MFA logs for current user")
         .WithDescription("Retrieves all MFA authentication logs for the currently authenticated user, ordered by most recent login time.");
     }

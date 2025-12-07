@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class finalUpdateDb : Migration
+    public partial class AuditLogadd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -180,9 +180,10 @@ namespace Infrastructure.Migrations
                 schema: "public",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    business_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    business_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    user_id1 = table.Column<Guid>(type: "uuid", nullable: true),
                     action = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -197,7 +198,13 @@ namespace Infrastructure.Migrations
                         principalSchema: "public",
                         principalTable: "users",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "fk_audit_logs_users_user_id1",
+                        column: x => x.user_id1,
+                        principalSchema: "public",
+                        principalTable: "users",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -405,10 +412,22 @@ namespace Infrastructure.Migrations
                 column: "business_id");
 
             migrationBuilder.CreateIndex(
+                name: "ix_audit_logs_created_at",
+                schema: "public",
+                table: "audit_logs",
+                column: "created_at");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_audit_logs_user_id",
                 schema: "public",
                 table: "audit_logs",
                 column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_audit_logs_user_id1",
+                schema: "public",
+                table: "audit_logs",
+                column: "user_id1");
 
             migrationBuilder.CreateIndex(
                 name: "ix_business_members_business_id",
