@@ -14,12 +14,12 @@ internal sealed class Create : IEndpoint
         string ClientSecret,
         string RedirectUri,
         string ApiBaseUrl,
-        int Status 
+        int Status
     );
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("applications", async (
+        app.MapPost("api/applications", async (
             Request request,
             ICommandHandler<CreateApplicationCommand, Guid> handler,
             CancellationToken cancellationToken) =>
@@ -35,8 +35,8 @@ internal sealed class Create : IEndpoint
                 request.Name,
                 request.ClientId,
                 request.ClientSecret,
-                new Uri(request.RedirectUri), 
-                new Uri(request.ApiBaseUrl), 
+                new Uri(request.RedirectUri),
+                new Uri(request.ApiBaseUrl),
                 status
             );
 
@@ -44,7 +44,9 @@ internal sealed class Create : IEndpoint
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
-        .WithTags("Applications")
-        .RequireAuthorization();
+        .WithTags(Tags.Applications)
+         .RequireAuthorization();
+
+
     }
 }

@@ -2,6 +2,7 @@
 using FluentValidation;
 
 namespace Application.AuditLogs.Create;
+
 public sealed class CreateAuditLogValidator : AbstractValidator<CreateAuditLogCommand>
 {
     public CreateAuditLogValidator()

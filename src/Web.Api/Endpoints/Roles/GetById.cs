@@ -9,7 +9,7 @@ internal sealed class GetById : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("roles/{id:guid}", async (
+        app.MapGet("api/roles/{id:guid}", async (
             Guid id,
             IQueryHandler<GetRoleByIdQuery, Application.Roles.Get.RoleResponse> handler,
             CancellationToken cancellationToken) =>

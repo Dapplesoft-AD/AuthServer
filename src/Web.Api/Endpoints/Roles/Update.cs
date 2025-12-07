@@ -9,7 +9,7 @@ internal sealed class Update : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("roles/{id:guid}", async (
+        app.MapPut("api/roles/{id:guid}", async (
             Guid id,
             UpdateRoleCommand command,
             ICommandHandler<UpdateRoleCommand, Guid> handler,

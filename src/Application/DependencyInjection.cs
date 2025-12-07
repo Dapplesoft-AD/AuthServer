@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions.Behaviors;
 using Application.Abstractions.Messaging;
+using Application.AuditLogs;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using SharedKernel;
@@ -23,6 +24,7 @@ public static class DependencyInjection
 
         services.Decorate(typeof(ICommandHandler<,>), typeof(ValidationDecorator.CommandHandler<,>));
         services.Decorate(typeof(ICommandHandler<>), typeof(ValidationDecorator.CommandBaseHandler<>));
+        services.Decorate(typeof(ICommandHandler<,>), typeof(AuditLoggingDecorator<,>));
 
         services.Decorate(typeof(IQueryHandler<,>), typeof(LoggingDecorator.QueryHandler<,>));
         services.Decorate(typeof(ICommandHandler<,>), typeof(LoggingDecorator.CommandHandler<,>));
@@ -34,6 +36,7 @@ public static class DependencyInjection
             .WithScopedLifetime());
 
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly, includeInternalTypes: true);
+
 
         return services;
     }

@@ -10,7 +10,7 @@ internal sealed class Get : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("AuditLogs", async (
+        app.MapGet("api/AuditLogs", async (
             IQueryHandler<GetAuditLogQuery, List<AuditLogResponse>> handler,
             CancellationToken cancellationToken) =>
         {
@@ -22,6 +22,10 @@ internal sealed class Get : IEndpoint
             return result.Match(Results.Ok, CustomResults.Problem);
         })
         .WithTags(Tags.AuditLogs)
+        .AllowAnonymous()  // ← Explicitly allow anonymous access
         .RequireAuthorization();
+
+
     }
 }
+

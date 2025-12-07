@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions.Messaging;
 using Application.AuditLogs.Create;
+using Application.AuditLogs.Delete;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
@@ -18,7 +19,7 @@ internal sealed class Create : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("AuditLogs", async (
+        app.MapPost("api/AuditLogs", async (
             Request request,
             ICommandHandler<CreateAuditLogCommand, Guid> handler,
             CancellationToken cancellationToken) =>

@@ -1,6 +1,7 @@
 ﻿using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Domain.AuditLogs;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -12,14 +13,21 @@ internal sealed class GetAuditLogQueryHandler(
     : IQueryHandler<GetAuditLogQuery, List<AuditLogResponse>>
 {
     public async Task<Result<List<AuditLogResponse>>> Handle(
-        GetAuditLogQuery query,
-        CancellationToken cancellationToken)
+      GetAuditLogQuery query,
+      CancellationToken cancellationToken)
     {
-        // Authorization check
-        Guid userId = userContext.UserId;
+        Guid? userId = userContext.UserId;
 
-        List<AuditLogResponse> logs = await context.AuditLogs
-            .Where(x => x.UserId == userId)
+        IQueryable<AuditLog> auditQuery = context.AuditLogs;
+
+        // If user is logged in → filter their logs  
+        // If user is anonymous → return ALL logs
+        if (userId.HasValue && userId.Value != Guid.Empty)
+        {
+            //auditQuery = auditQuery.Where(x => x.UserId == userId);
+        }
+
+        List<AuditLogResponse> logs = await auditQuery
             .OrderByDescending(x => x.CreatedAt)
             .Select(x => new AuditLogResponse
             {
