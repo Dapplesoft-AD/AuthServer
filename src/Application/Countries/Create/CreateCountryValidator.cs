@@ -2,7 +2,7 @@
 
 namespace Application.Countries.Create;
 
-public class CreateCountryValidator : AbstractValidator<CreateCountryCommand>
+public sealed class CreateCountryValidator : AbstractValidator<CreateCountryCommand>
 {
     public CreateCountryValidator()
     {

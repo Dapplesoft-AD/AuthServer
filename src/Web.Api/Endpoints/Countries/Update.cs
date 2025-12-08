@@ -6,7 +6,7 @@ using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Countries;
 
-public class Update : IEndpoint
+internal sealed class Update : IEndpoint
 {
     public sealed class Request
     {

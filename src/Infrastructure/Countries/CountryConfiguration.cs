@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Countries;
 
-public class CountryConfiguration : IEntityTypeConfiguration<Country>
+internal sealed class CountryConfiguration : IEntityTypeConfiguration<Country>
 {
     public void Configure(EntityTypeBuilder<Country> builder)
     {

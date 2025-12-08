@@ -5,7 +5,7 @@ using SharedKernel;
 
 namespace Application.Countries.Create;
 
-public class CreateCountryCommandHandler
+internal sealed class CreateCountryCommandHandler
     : ICommandHandler<CreateCountryCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
