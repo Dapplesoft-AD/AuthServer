@@ -19,6 +19,8 @@ using Domain.Token;
 using Domain.UserLoginHistories;
 using Domain.UserProfiles;
 using Domain.Users;
+using Domain.Regions;
+using Domain.Districts;
 using Infrastructure.DomainEvents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -64,6 +66,9 @@ public sealed class ApplicationDbContext(
     public DbSet<Otp> Otp { get; set; }
     public DbSet<SmtpConfig> SmtpConfig { get; set; }
     public DbSet<Country> Countries { get; set; }
+    public DbSet<Region> Regions { get; set; }
+    public DbSet<District> Districts { get; set; }
+
 
     public new EntityEntry Entry(object entity) => base.Entry(entity);
 

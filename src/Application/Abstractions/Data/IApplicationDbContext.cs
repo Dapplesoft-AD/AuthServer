@@ -18,6 +18,8 @@ using Domain.Token;
 using Domain.UserLoginHistories;
 using Domain.UserProfiles;
 using Domain.Users;
+using Domain.Regions;
+using Domain.Districts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -45,6 +47,9 @@ public interface IApplicationDbContext
     DbSet<Otp> Otp { get; }
     DbSet<SmtpConfig> SmtpConfig { get; }
     DbSet<Country> Countries { get; }
+    DbSet<Region> Regions { get; }
+    DbSet<District> Districts { get; }
+
     EntityEntry Entry(object entity);
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
