@@ -1,16 +1,20 @@
 ﻿using Application.Abstractions.Data;
 using Domain.Applications;
+using Domain.Areas;
 using Domain.AuditLogs;
 using Domain.Businesses;
 using Domain.BusinessMembers;
 using Domain.Countries;
 using Domain.Customers;
+using Domain.Districts;
 using Domain.EmailVerification;
+using Domain.Localities;
 using Domain.MfaLogs;
 using Domain.MfaSettings;
 using Domain.Otps;
 using Domain.PasswordResets;
 using Domain.Permissions;
+using Domain.Regions;
 using Domain.RolePermissions;
 using Domain.Roles;
 using Domain.SmtpConfigs;
@@ -64,7 +68,11 @@ public sealed class ApplicationDbContext(
     public DbSet<Otp> Otp { get; set; }
     public DbSet<SmtpConfig> SmtpConfig { get; set; }
     public DbSet<Country> Countries { get; set; }
-
+    //my code
+    public DbSet<Region> Regions { get; set; }
+    public DbSet<District> Districts { get; set; }
+    public DbSet<Area> Areas { get; set; }
+    public DbSet<Locality> Localities { get; set; }
     public new EntityEntry Entry(object entity) => base.Entry(entity);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

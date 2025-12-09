@@ -1,5 +1,4 @@
-﻿
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Application.AuditLogs.Update;
 public sealed class UpdateAuditLogValidator : AbstractValidator<UpdateAuditLogCommand>

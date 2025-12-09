@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
 namespace Application.Applications.Delete;
+
 public sealed class DeleteApplicationCommandHandler
     : ICommandHandler<DeleteApplicationCommand>
 {

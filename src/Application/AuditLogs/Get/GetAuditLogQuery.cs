@@ -1,5 +1,4 @@
-﻿
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 
 namespace Application.AuditLogs.Get;
 public sealed record GetAuditLogQuery()

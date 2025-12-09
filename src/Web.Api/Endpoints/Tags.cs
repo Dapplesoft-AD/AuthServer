@@ -20,4 +20,7 @@ public static class Tags
     public const string Otp = "Otp";
     public const string SendMail = "Sent Email";
     public const string Countries = "Countries";
+    public const string Areas = "Areas";
+    public const string Localities = "Localities";
+
 }

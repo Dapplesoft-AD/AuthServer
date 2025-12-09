@@ -1,15 +1,20 @@
-﻿using Domain.Applications;
+﻿using Domain;
+using Domain.Applications;
+using Domain.Areas;
 using Domain.AuditLogs;
 using Domain.Businesses;
 using Domain.BusinessMembers;
 using Domain.Countries;
 using Domain.Customers;
+using Domain.Districts;
 using Domain.EmailVerification;
+using Domain.Localities;
 using Domain.MfaLogs;
 using Domain.MfaSettings;
 using Domain.Otps;
 using Domain.PasswordResets;
 using Domain.Permissions;
+using Domain.Regions;
 using Domain.RolePermissions;
 using Domain.Roles;
 using Domain.SmtpConfigs;
@@ -45,6 +50,10 @@ public interface IApplicationDbContext
     DbSet<Otp> Otp { get; }
     DbSet<SmtpConfig> SmtpConfig { get; }
     DbSet<Country> Countries { get; }
+    //my task
+   
+    DbSet<Area> Areas { get; }
+    DbSet<Locality> Localities { get; }
     EntityEntry Entry(object entity);
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

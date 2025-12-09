@@ -1,5 +1,4 @@
-﻿using System;
-using Domain.Users;
+﻿using Domain.Users;
 using SharedKernel;
 
 namespace Domain.AuditLogs;
