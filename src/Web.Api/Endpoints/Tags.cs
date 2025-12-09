@@ -22,4 +22,6 @@ public static class Tags
     public const string Countries = "Countries";
     public const string Regions = "Regions";
     public const string Districts = "Districts";
+    public const string Areas = "Areas";
+    public const string Localities = "Localities";
 }

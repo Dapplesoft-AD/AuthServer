@@ -1,16 +1,20 @@
 ﻿using Application.Abstractions.Data;
 using Domain.Applications;
+using Domain.Areas;
 using Domain.AuditLogs;
 using Domain.Businesses;
 using Domain.BusinessMembers;
 using Domain.Countries;
 using Domain.Customers;
+using Domain.Districts;
 using Domain.EmailVerification;
+using Domain.Localities;
 using Domain.MfaLogs;
 using Domain.MfaSettings;
 using Domain.Otps;
 using Domain.PasswordResets;
 using Domain.Permissions;
+using Domain.Regions;
 using Domain.RolePermissions;
 using Domain.Roles;
 using Domain.SmtpConfigs;
@@ -19,8 +23,6 @@ using Domain.Token;
 using Domain.UserLoginHistories;
 using Domain.UserProfiles;
 using Domain.Users;
-using Domain.Regions;
-using Domain.Districts;
 using Infrastructure.DomainEvents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -68,7 +70,8 @@ public sealed class ApplicationDbContext(
     public DbSet<Country> Countries { get; set; }
     public DbSet<Region> Regions { get; set; }
     public DbSet<District> Districts { get; set; }
-
+    public DbSet<Area> Areas { get; set; }
+    public DbSet<Locality> Localities { get; set; }
 
     public new EntityEntry Entry(object entity) => base.Entry(entity);
 

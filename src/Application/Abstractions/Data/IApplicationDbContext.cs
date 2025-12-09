@@ -1,15 +1,19 @@
 ﻿using Domain.Applications;
+using Domain.Areas;
 using Domain.AuditLogs;
 using Domain.Businesses;
 using Domain.BusinessMembers;
 using Domain.Countries;
 using Domain.Customers;
+using Domain.Districts;
 using Domain.EmailVerification;
+using Domain.Localities;
 using Domain.MfaLogs;
 using Domain.MfaSettings;
 using Domain.Otps;
 using Domain.PasswordResets;
 using Domain.Permissions;
+using Domain.Regions;
 using Domain.RolePermissions;
 using Domain.Roles;
 using Domain.SmtpConfigs;
@@ -18,8 +22,6 @@ using Domain.Token;
 using Domain.UserLoginHistories;
 using Domain.UserProfiles;
 using Domain.Users;
-using Domain.Regions;
-using Domain.Districts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -49,7 +51,8 @@ public interface IApplicationDbContext
     DbSet<Country> Countries { get; }
     DbSet<Region> Regions { get; }
     DbSet<District> Districts { get; }
-
+    DbSet<Area> Areas { get; }
+    DbSet<Locality> Localities { get; }
     EntityEntry Entry(object entity);
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
