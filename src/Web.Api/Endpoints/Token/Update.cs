@@ -10,7 +10,7 @@ public sealed class Update : IEndpoint
 {
     public sealed class Request
     {
-        public Guid App_id { get; set; }
+        public Guid AppId { get; set; }
     }
 
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -22,7 +22,7 @@ public sealed class Update : IEndpoint
             CancellationToken cancellationToken) =>
         {
             // Use the route ID
-            var command = new UpdateTokenCommand(id, request.App_id);
+            var command = new UpdateTokenCommand(id, request.AppId);
 
             Result result = await handler.Handle(command, cancellationToken);
 

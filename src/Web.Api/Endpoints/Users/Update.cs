@@ -27,7 +27,7 @@ internal sealed class Update : IEndpoint
     }
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut(ApiRoutes.Users.Update, async (
+        app.MapPut(ApiRoutes.User.Update, async (
             Guid id,
             Request request,
             ICommandHandler<UpdateUserCommand> handler,

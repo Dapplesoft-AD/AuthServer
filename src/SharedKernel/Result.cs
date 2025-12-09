@@ -30,6 +30,7 @@ public class Result
 
     public static Result Failure(string errorMessage) =>
         new(false, Error.Failure("General.Error", errorMessage));
+
 }
 
 public class Result<TValue> : Result

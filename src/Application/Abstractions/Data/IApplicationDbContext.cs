@@ -2,14 +2,17 @@
 using Domain.AuditLogs;
 using Domain.Businesses;
 using Domain.BusinessMembers;
+using Domain.Countries;
 using Domain.Customers;
 using Domain.EmailVerification;
 using Domain.MfaLogs;
 using Domain.MfaSettings;
+using Domain.Otps;
 using Domain.PasswordResets;
 using Domain.Permissions;
 using Domain.RolePermissions;
 using Domain.Roles;
+using Domain.SmtpConfigs;
 using Domain.Todos;
 using Domain.Token;
 using Domain.UserLoginHistories;
@@ -37,8 +40,11 @@ public interface IApplicationDbContext
     DbSet<Business> Businesses { get; }
     DbSet<BusinessMember> BusinessMembers { get; }
     DbSet<AuditLog> AuditLogs { get; }
-    DbSet<MfaLog> MfaLogs { get;}
+    DbSet<MfaLog> MfaLogs { get; }
     DbSet<MfaSetting> MfaSettings { get; }
+    DbSet<Otp> Otp { get; }
+    DbSet<SmtpConfig> SmtpConfig { get; }
+    DbSet<Country> Countries { get; }
     EntityEntry Entry(object entity);
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

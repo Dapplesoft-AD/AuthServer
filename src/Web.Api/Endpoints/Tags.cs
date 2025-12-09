@@ -16,4 +16,8 @@ public static class Tags
     public const string MfaSettings = "MfaSettings";
     public const string MfaLogs = "MfaLogs";
     public const string AuditLogs = "AuditLogs";
+    public const string SmtpConfig = "SmtpConfig";
+    public const string Otp = "Otp";
+    public const string SendMail = "Sent Email";
+    public const string Countries = "Countries";
 }

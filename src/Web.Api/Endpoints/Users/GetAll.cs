@@ -10,7 +10,7 @@ internal sealed class GetAll : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet(ApiRoutes.Users.GetAll, async (
+        app.MapGet(ApiRoutes.User.GetAll, async (
             IQueryHandler<GetAllUsersQuery, List<GetAllUsersQueryResponse>> handler,
             CancellationToken cancellationToken) =>
         {

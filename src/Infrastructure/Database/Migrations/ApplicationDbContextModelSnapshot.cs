@@ -207,6 +207,41 @@ namespace Infrastructure.Migrations
                     b.ToTable("businesses", "public");
                 });
 
+            modelBuilder.Entity("Domain.Countries.Country", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Capital")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
+                        .HasColumnName("capital");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("PhoneCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("phone_code");
+
+                    b.HasKey("Id")
+                        .HasName("pk_countries");
+
+                    b.ToTable("countries", "public");
+                });
+
             modelBuilder.Entity("Domain.Customers.Customer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -356,6 +391,43 @@ namespace Infrastructure.Migrations
                     b.ToTable("mfa_settings", "public");
                 });
 
+            modelBuilder.Entity("Domain.Otps.Otp", b =>
+                {
+                    b.Property<Guid>("OtpId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("otp_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<TimeSpan>("Delay")
+                        .HasColumnType("interval")
+                        .HasColumnName("delay");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("email");
+
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_expired");
+
+                    b.Property<string>("OtpToken")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("otp_token");
+
+                    b.HasKey("OtpId")
+                        .HasName("pk_otp");
+
+                    b.ToTable("otp", "public");
+                });
+
             modelBuilder.Entity("Domain.PasswordResets.PasswordReset", b =>
                 {
                     b.Property<Guid>("PrId")
@@ -463,6 +535,50 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("ix_roles_role_name");
 
                     b.ToTable("roles", "public");
+                });
+
+            modelBuilder.Entity("Domain.SmtpConfigs.SmtpConfig", b =>
+                {
+                    b.Property<Guid>("SmtpId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("smtp_id");
+
+                    b.Property<bool>("EnableSsl")
+                        .HasColumnType("boolean")
+                        .HasColumnName("enable_ssl");
+
+                    b.Property<string>("Host")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("host");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("password");
+
+                    b.Property<int>("Port")
+                        .HasColumnType("integer")
+                        .HasColumnName("port");
+
+                    b.Property<string>("SenderEmail")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("sender_email");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("username");
+
+                    b.HasKey("SmtpId")
+                        .HasName("pk_smtp_config");
+
+                    b.ToTable("smtp_config", "public");
                 });
 
             modelBuilder.Entity("Domain.Todos.TodoItem", b =>
