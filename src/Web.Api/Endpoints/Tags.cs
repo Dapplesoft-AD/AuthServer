@@ -17,9 +17,12 @@ public static class Tags
     public const string MfaLogs = "MfaLogs";
     public const string AuditLogs = "AuditLogs";
     public const string SmtpConfig = "SmtpConfig";
+    public const string SmsConfig = "SmsConfig";
     public const string Otp = "Otp";
     public const string SendMail = "Sent Email";
     public const string Countries = "Countries";
     public const string Regions = "Regions";
     public const string Districts = "Districts";
+    public const string CommonOtp = "CommonOtp";
+    public const string Verified = "Otp is Verified";
 }

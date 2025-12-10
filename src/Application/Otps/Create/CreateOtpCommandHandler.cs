@@ -15,10 +15,22 @@ internal sealed class CreateOtpCommandHandler(
     public async Task<Result<Guid>> Handle(CreateOtpCommand command, CancellationToken cancellationToken)
     {
 
-        var otp = new Otp
+        if (string.IsNullOrWhiteSpace(command.Email) && string.IsNullOrWhiteSpace(command.PhoneNumber))
+        {
+            return Result.Failure<Guid>("Either Email or PhoneNumber must be provided.");
+        }
+        Otp otp = !string.IsNullOrWhiteSpace(command.Email)
+        ? new Otp
         {
             OtpToken = GenerateOtp(),
             Email = command.Email,
+            CreatedAt = dateTimeProvider.UtcNow,
+            IsExpired = false
+        }
+        : new Otp
+        {
+            OtpToken = GenerateOtp(),
+            PhoneNumber = command.PhoneNumber,
             CreatedAt = dateTimeProvider.UtcNow,
             IsExpired = false
         };
@@ -26,7 +38,6 @@ internal sealed class CreateOtpCommandHandler(
         otp.Raise(new OtpCreatedDomainEvent(otp.OtpId));
 
         context.Otp.Add(otp);
-
         await context.SaveChangesAsync(cancellationToken);
 
         return otp.OtpId;

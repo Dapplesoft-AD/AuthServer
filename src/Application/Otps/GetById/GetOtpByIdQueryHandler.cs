@@ -16,6 +16,7 @@ internal sealed class GetOtpByIdQueryHandler(
             .Select(o => new OtpResponse
             {
                 OtpId = o.OtpId,
+                PhoneNumber = o.PhoneNumber,
                 Email = o.Email,
                 IsExpired = o.IsExpired,
                 OtpToken = o.OtpToken,

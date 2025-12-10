@@ -5,22 +5,23 @@ using Domain.Businesses;
 using Domain.BusinessMembers;
 using Domain.Countries;
 using Domain.Customers;
+using Domain.Districts;
 using Domain.EmailVerification;
 using Domain.MfaLogs;
 using Domain.MfaSettings;
 using Domain.Otps;
 using Domain.PasswordResets;
 using Domain.Permissions;
+using Domain.Regions;
 using Domain.RolePermissions;
 using Domain.Roles;
+using Domain.SmsConfigs;
 using Domain.SmtpConfigs;
 using Domain.Todos;
 using Domain.Token;
 using Domain.UserLoginHistories;
 using Domain.UserProfiles;
 using Domain.Users;
-using Domain.Regions;
-using Domain.Districts;
 using Infrastructure.DomainEvents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -65,6 +66,7 @@ public sealed class ApplicationDbContext(
     public DbSet<MfaSetting> MfaSettings { get; set; }
     public DbSet<Otp> Otp { get; set; }
     public DbSet<SmtpConfig> SmtpConfig { get; set; }
+    public DbSet<SmsConfig> SmsConfig { get; set; }
     public DbSet<Country> Countries { get; set; }
     public DbSet<Region> Regions { get; set; }
     public DbSet<District> Districts { get; set; }

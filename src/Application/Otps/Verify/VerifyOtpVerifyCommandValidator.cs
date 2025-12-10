@@ -7,8 +7,13 @@ internal sealed class VerifyOtpVerifyCommandValidator : AbstractValidator<Verify
     public VerifyOtpVerifyCommandValidator()
     {
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required.")
-            .EmailAddress().WithMessage("Invalid email format.");
+           .EmailAddress()
+           .When(x => !string.IsNullOrWhiteSpace(x.Email));
+
+        RuleFor(x => x.PhoneNumber)
+            .Matches(@"^\+?[1-9]\d{7,14}$") // E.164 international format
+            .When(x => !string.IsNullOrWhiteSpace(x.PhoneNumber));
+
         RuleFor(x => x.OtpToken)
             .NotEmpty().WithMessage("OTP token is required.")
             .Length(4).WithMessage("OTP token must be 4 characters long.");

@@ -6,8 +6,16 @@ internal sealed class CreateOtpCommandValidator : AbstractValidator<CreateOtpCom
 {
     public CreateOtpCommandValidator()
     {
-        RuleFor(c => c.Email)
-            .NotEmpty().WithMessage("Email is required.")
-            .EmailAddress().WithMessage("Invalid email format.");
+        RuleFor(x => x)
+             .Must(x => !string.IsNullOrWhiteSpace(x.Email) || !string.IsNullOrWhiteSpace(x.PhoneNumber))
+             .WithMessage("Either Email or PhoneNumber must be provided.");
+
+        RuleFor(x => x.Email)
+            .EmailAddress()
+            .When(x => !string.IsNullOrWhiteSpace(x.Email));
+
+        RuleFor(x => x.PhoneNumber)
+            .Matches(@"^\+?[1-9]\d{7,14}$") // E.164 international format
+            .When(x => !string.IsNullOrWhiteSpace(x.PhoneNumber));
     }
 }

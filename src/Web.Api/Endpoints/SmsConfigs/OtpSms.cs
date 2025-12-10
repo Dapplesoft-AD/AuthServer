@@ -1,32 +1,32 @@
 ﻿using Application.Abstractions.Messaging;
-using Application.SmtpConfigs.OtpMail;
+using Application.SmsConfigs.OtpSms;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
 
-namespace Web.Api.Endpoints.SmtpConfigs;
+namespace Web.Api.Endpoints.SmsConfigs;
 
-internal sealed class OtpMail : IEndpoint
+internal sealed class OtpSms : IEndpoint
 {
     public sealed class Request
     {
-        public string RecipientEmail { get; set; }
+        public string PhoneNumber { get; set; }
     }
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("SmtpConfig/SendMail", async (
+        app.MapPost("SmsConfig/SendSms", async (
     Request request,
-    ICommandHandler<SendOtpCommand, Guid> handler,
+    ICommandHandler<SmsOtpCommand, Guid> handler,
     CancellationToken cancellationToken) =>
         {
-            var command = new SendOtpCommand(request.RecipientEmail);
+            var command = new SmsOtpCommand(request.PhoneNumber);
 
             Result<Guid> result = await handler.Handle(command, cancellationToken);
 
             return result.Match(Results.Ok, CustomResults.Problem);
         })
-        .WithTags(Tags.SmtpConfig)
+        .WithTags(Tags.SmsConfig)
         .RequireAuthorization();
     }
 }

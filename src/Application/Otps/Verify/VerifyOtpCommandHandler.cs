@@ -13,8 +13,15 @@ internal sealed class VerifyOtpCommandHandler(
 {
     public async Task<Result<bool>> Handle(VerifyOtpCommand request, CancellationToken cancellationToken)
     {
-        Otp otp = await applicationDbContext.Otp
-            .FirstOrDefaultAsync(o => o.Email == request.Email && o.OtpToken == request.OtpToken, cancellationToken);
+        Otp? otp = await (!string.IsNullOrWhiteSpace(request.Email)
+        ? applicationDbContext.Otp.FirstOrDefaultAsync(
+        o => o.Email == request.Email && o.OtpToken == request.OtpToken,
+        cancellationToken)
+        : applicationDbContext.Otp.FirstOrDefaultAsync(
+        o => o.PhoneNumber == request.PhoneNumber && o.OtpToken == request.OtpToken,
+        cancellationToken));
+
+
         if (otp is null)
         {
             return Result.Failure<bool>("OTP not found.");

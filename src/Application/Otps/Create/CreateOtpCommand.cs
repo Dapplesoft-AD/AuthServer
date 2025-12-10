@@ -2,4 +2,4 @@
 
 namespace Application.Otps.Create;
 
-public sealed record CreateOtpCommand(string Email) : ICommand<Guid>;
+public sealed record CreateOtpCommand(string? Email, string? PhoneNumber) : ICommand<Guid>;
