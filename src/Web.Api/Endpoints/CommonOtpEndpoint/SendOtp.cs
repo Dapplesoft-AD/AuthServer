@@ -12,7 +12,7 @@ internal sealed class SendOtp : IEndpoint
 {
     public sealed class Request
     {
-        public string Input { get; set; }
+        public string Input { get; set; } = string.Empty;
     }
 
     public void MapEndpoint(IEndpointRouteBuilder app)

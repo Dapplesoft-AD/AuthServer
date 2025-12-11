@@ -10,7 +10,7 @@ internal sealed class Update : IEndpoint
 {
     public sealed class Request
     {
-        public string SmsToken { get; set; }
+        public string SmsToken { get; set; } = string.Empty;
     }
 
     public void MapEndpoint(IEndpointRouteBuilder app)

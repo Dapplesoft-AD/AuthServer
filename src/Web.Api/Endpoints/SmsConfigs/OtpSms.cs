@@ -10,7 +10,7 @@ internal sealed class OtpSms : IEndpoint
 {
     public sealed class Request
     {
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
     }
 
     public void MapEndpoint(IEndpointRouteBuilder app)
