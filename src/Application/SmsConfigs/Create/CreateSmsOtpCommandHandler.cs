@@ -12,6 +12,7 @@ internal class CreateSmsOtpCommandHandler(
     {
         var smsConfig = new SmsConfig
         {
+            SmsId = Guid.NewGuid(),
             SmsToken = request.SmsToken
         };
         smsConfig.Raise(new SmsConfigCreatedDomainEvent(smsConfig.SmsId));
