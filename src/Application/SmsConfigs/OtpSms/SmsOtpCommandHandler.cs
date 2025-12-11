@@ -7,15 +7,18 @@ using Domain.Otps;
 using Domain.SmsConfigs;
 using Flurl.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SharedKernel;
 
 namespace Application.SmsConfigs.OtpSms;
 
 internal class SmsOtpCommandHandler(
     IApplicationDbContext applicationDbContext,
-    ICommandHandler<CreateOtpCommand, Guid> handler
+    ICommandHandler<CreateOtpCommand, Guid> handler,
+    ILogger<SmsOtpCommandHandler> logger
 ) : ICommandHandler<SmsOtpCommand, Guid>
 {
+    private readonly ILogger<SmsOtpCommandHandler> _logger = logger;
     public async Task<Result<Guid>> Handle(SmsOtpCommand command, CancellationToken cancellationToken)
     {
         SmsConfig? smsConfig = await applicationDbContext.SmsConfig
@@ -44,22 +47,34 @@ internal class SmsOtpCommandHandler(
             return Result.Failure<Guid>("OTP not found.");
         }
 
-        string message = $"Your OTP is {otp.OtpToken}. It will expire in 5 minutes.";
+        string message = $"Your OTP is {otp.OtpToken}. It will expire in 3 minutes.";
 
-        string responseString = await "https://api.bdbulksms.net/api.php?"
-            .PostUrlEncodedAsync(new
-            {
-                token = smsConfig.SmsToken,
-                phone = otp.PhoneNumber,
-                message
-            }, cancellationToken: cancellationToken)
-            .ReceiveString();
+        string responseString;
 
-        if (responseString.Contains("OK", StringComparison.OrdinalIgnoreCase))
+        try
         {
-            return Result.Success(otpId); // return OTP ID (correct!)
+            responseString = await "https://api.bdbulksms.net/api.php?"
+                .PostUrlEncodedAsync(new
+                {
+                    token = smsConfig.SmsToken,
+                    phone = otp.PhoneNumber,
+                    message
+                }, cancellationToken: cancellationToken)
+                .ReceiveString();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "SMS sending exception");
+            return Result.Failure<Guid>($"SMS sending exception: {ex.Message}");
         }
 
+        // Safe OK check
+        if (responseString.Trim().StartsWith("OK", StringComparison.OrdinalIgnoreCase))
+        {
+            return Result.Success(otpId);
+        }
+
+        _logger.LogWarning("SMS sending failed. Response: {Response}", responseString);
         return Result.Failure<Guid>($"SMS sending failed: {responseString}");
     }
 }

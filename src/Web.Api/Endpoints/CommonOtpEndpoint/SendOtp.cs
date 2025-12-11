@@ -18,7 +18,7 @@ internal sealed class SendOtp : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("CommonOtpEndPoint/SendOtp", async (
+        app.MapPost("CommonOtp/SendOtp", async (
     Request request,
     ICommandHandler<SmsOtpCommand, Guid> handler,
     ICommandHandler<SendOtpCommand, Guid> mailHandler,

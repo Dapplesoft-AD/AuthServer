@@ -7,7 +7,7 @@ using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.OtpVerify;
 
-internal sealed class VerifyOtp : IEndpoint
+internal sealed class OtpVerification : IEndpoint
 {
     public sealed class Request
     {
@@ -38,7 +38,8 @@ internal sealed class VerifyOtp : IEndpoint
             }
             else
             {
-                return CustomResults.Problem("Input must be a valid email address or phone number.", 400);
+                return CustomResults.Problem("Input must be a valid email address (e.g., user@example.com) or " +
+                    "phone number in international format (e.g., +1234567890).", 400);
             }
         })
         .WithTags(Tags.VerifyOtp)
