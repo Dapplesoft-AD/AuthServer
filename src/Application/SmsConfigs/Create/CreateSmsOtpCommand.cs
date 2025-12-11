@@ -4,5 +4,5 @@ namespace Application.SmsConfigs.Create;
 
 public sealed class CreateSmsOtpCommand : ICommand<Guid>
 {
-    public string SmsToken { get; set; }
+    public string SmsToken { get; set; } = string.Empty;
 }
