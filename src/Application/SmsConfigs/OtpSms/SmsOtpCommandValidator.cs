@@ -8,6 +8,6 @@ internal class SmsOtpCommandValidator : AbstractValidator<SmsOtpCommand>
     {
         RuleFor(c => c.PhoneNumber)
             .NotEmpty().WithMessage("Phone number is required.")
-            .Matches(@"^\+\d{1,3}\d{4,14}(?:x.+)?$").WithMessage("Phone number must be in valid international format.");
+            .Matches(@"^\+?[1-9]\d{7,14}$").WithMessage("Phone number must be in valid international format.");
     }
 }
