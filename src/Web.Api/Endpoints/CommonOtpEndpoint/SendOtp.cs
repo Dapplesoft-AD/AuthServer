@@ -18,29 +18,33 @@ internal sealed class SendOtp : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("CommonOtp/SendOtp", async (
-    Request request,
-    ICommandHandler<SmsOtpCommand, Guid> handler,
-    ICommandHandler<SendOtpCommand, Guid> mailHandler,
-    CancellationToken cancellationToken) =>
+            Request request,
+            ICommandHandler<SmsOtpCommand, Guid> smsHandler,
+            ICommandHandler<SendOtpCommand, Guid> mailHandler,
+            CancellationToken cancellationToken) =>
         {
+            ICommandHandler<ICommand<Guid>, Guid> selectedHandler;
+            ICommand<Guid> command;
+
             if (CommonOtpInputValidator.IsPhone(request.Input))
             {
-                var command = new SmsOtpCommand(request.Input);
-
-                Result<Guid> result = await handler.Handle(command, cancellationToken);
-
-                return result.Match(Results.Ok, CustomResults.Problem);
+                selectedHandler = (ICommandHandler<ICommand<Guid>, Guid>)smsHandler;
+                command = new SmsOtpCommand(request.Input);
             }
             else if (CommonOtpInputValidator.IsEmail(request.Input))
             {
-                var command = new SendOtpCommand(request.Input);
-                Result<Guid> result = await mailHandler.Handle(command, cancellationToken);
-                return result.Match(Results.Ok, CustomResults.Problem);
+                selectedHandler = (ICommandHandler<ICommand<Guid>, Guid>)mailHandler;
+                command = new SendOtpCommand(request.Input);
             }
             else
             {
-                return CustomResults.Problem("Input must be a valid email address (e.g., user@example.com) or phone number in international format (e.g., +1234567890).", 400);
+                return CustomResults.Problem(
+                    "Input must be a valid email address (e.g., user@example.com) " +
+                    "or phone number in international format (e.g., +1234567890).", 400);
             }
+
+            Result<Guid> result = await selectedHandler.Handle(command, cancellationToken);
+            return result.Match(Results.Ok, CustomResults.Problem);
         })
         .WithTags(Tags.CommonOtp)
         .RequireAuthorization();
