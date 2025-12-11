@@ -1,8 +1,7 @@
-﻿using System.Text.RegularExpressions;
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
+using Application.CommonOtp;
 using Application.SmsConfigs.OtpSms;
 using Application.SmtpConfigs.OtpMail;
-using Application.CommonOtp;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
@@ -40,7 +39,7 @@ internal sealed class SendOtp : IEndpoint
             }
             else
             {
-                return CustomResults.Problem("Input must be a valid email address or phone number.", 400);
+                return CustomResults.Problem("Input must be a valid email address (e.g., user@example.com) or phone number in international format (e.g., +1234567890).", 400);
             }
         })
         .WithTags(Tags.CommonOtp)
