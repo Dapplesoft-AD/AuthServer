@@ -16,6 +16,7 @@ using Domain.Permissions;
 using Domain.Regions;
 using Domain.RolePermissions;
 using Domain.Roles;
+using Domain.SmsConfigs;
 using Domain.SmtpConfigs;
 using Domain.Todos;
 using Domain.Token;
@@ -48,6 +49,7 @@ public interface IApplicationDbContext
     DbSet<MfaSetting> MfaSettings { get; }
     DbSet<Otp> Otp { get; }
     DbSet<SmtpConfig> SmtpConfig { get; }
+    DbSet<SmsConfig> SmsConfig { get; }
     DbSet<Country> Countries { get; }
     DbSet<Region> Regions { get; }
     DbSet<District> Districts { get; }

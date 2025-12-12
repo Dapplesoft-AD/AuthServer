@@ -585,6 +585,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("character varying(16)")
                         .HasColumnName("otp_token");
 
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text")
+                        .HasColumnName("phone_number");
+
                     b.HasKey("OtpId")
                         .HasName("pk_otp");
 
@@ -746,6 +750,25 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("ix_roles_role_name");
 
                     b.ToTable("roles", "public");
+                });
+
+            modelBuilder.Entity("Domain.SmsConfigs.SmsConfig", b =>
+                {
+                    b.Property<Guid>("SmsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("sms_id");
+
+                    b.Property<string>("SmsToken")
+                        .IsRequired()
+                        .HasMaxLength(4)
+                        .HasColumnType("character varying(4)")
+                        .HasColumnName("sms_token");
+
+                    b.HasKey("SmsId")
+                        .HasName("pk_sms_config");
+
+                    b.ToTable("sms_config", "public");
                 });
 
             modelBuilder.Entity("Domain.SmtpConfigs.SmtpConfig", b =>

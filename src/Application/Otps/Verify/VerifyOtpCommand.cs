@@ -2,4 +2,4 @@
 
 namespace Application.Otps.Verify;
 
-public sealed record VerifyOtpCommand(string Email, string OtpToken) : ICommand<bool>;
+public sealed record VerifyOtpCommand(string? Email,string? PhoneNumber, string OtpToken) : ICommand<bool>;

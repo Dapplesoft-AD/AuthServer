@@ -25,7 +25,7 @@ internal sealed class SendOtpCommandHandler(
             return Result.Failure<Guid>("SMTP configuration not found.");
         }
 
-        var createOtpCommand = new CreateOtpCommand(command.RecipientEmail);
+        var createOtpCommand = new CreateOtpCommand(command.RecipientEmail,null);
         Result<Guid> otpResult = await handler.Handle(createOtpCommand, cancellationToken);
 
         if (otpResult.IsFailure)

@@ -17,6 +17,7 @@ using Domain.Permissions;
 using Domain.Regions;
 using Domain.RolePermissions;
 using Domain.Roles;
+using Domain.SmsConfigs;
 using Domain.SmtpConfigs;
 using Domain.Todos;
 using Domain.Token;
@@ -67,6 +68,7 @@ public sealed class ApplicationDbContext(
     public DbSet<MfaSetting> MfaSettings { get; set; }
     public DbSet<Otp> Otp { get; set; }
     public DbSet<SmtpConfig> SmtpConfig { get; set; }
+    public DbSet<SmsConfig> SmsConfig { get; set; }
     public DbSet<Country> Countries { get; set; }
     public DbSet<Region> Regions { get; set; }
     public DbSet<District> Districts { get; set; }

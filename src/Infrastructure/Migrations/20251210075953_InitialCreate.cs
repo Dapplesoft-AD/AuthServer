@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateInitial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,6 +31,22 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_applications", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "countries",
+                schema: "public",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    capital = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    phone_code = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_countries", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -84,6 +100,24 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "otp",
+                schema: "public",
+                columns: table => new
+                {
+                    otp_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    otp_token = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
+                    email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    phone_number = table.Column<string>(type: "text", nullable: true),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    delay = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    is_expired = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_otp", x => x.otp_id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "password_reset",
                 schema: "public",
                 columns: table => new
@@ -128,6 +162,37 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "sms_config",
+                schema: "public",
+                columns: table => new
+                {
+                    sms_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    sms_token = table.Column<string>(type: "character varying(4)", maxLength: 4, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_sms_config", x => x.sms_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "smtp_config",
+                schema: "public",
+                columns: table => new
+                {
+                    smtp_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    host = table.Column<string>(type: "text", nullable: false),
+                    port = table.Column<int>(type: "integer", nullable: false),
+                    username = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    password = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
+                    enable_ssl = table.Column<bool>(type: "boolean", nullable: false),
+                    sender_email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_smtp_config", x => x.smtp_id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "users",
                 schema: "public",
                 columns: table => new
@@ -146,6 +211,31 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_users", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "regions",
+                schema: "public",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    country_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    region_type = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()"),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_regions", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_regions_countries_country_id",
+                        column: x => x.country_id,
+                        principalSchema: "public",
+                        principalTable: "countries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -355,6 +445,38 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "districts",
+                schema: "public",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    country_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    region_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()"),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_districts", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_districts_countries_country_id",
+                        column: x => x.country_id,
+                        principalSchema: "public",
+                        principalTable: "countries",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_districts_regions_region_id",
+                        column: x => x.region_id,
+                        principalSchema: "public",
+                        principalTable: "regions",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "business_members",
                 schema: "public",
                 columns: table => new
@@ -435,6 +557,18 @@ namespace Infrastructure.Migrations
                 column: "owner_user_id");
 
             migrationBuilder.CreateIndex(
+                name: "ix_districts_country_id",
+                schema: "public",
+                table: "districts",
+                column: "country_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_districts_region_id",
+                schema: "public",
+                table: "districts",
+                column: "region_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_mfa_logs_user_id",
                 schema: "public",
                 table: "mfa_logs",
@@ -452,6 +586,12 @@ namespace Infrastructure.Migrations
                 table: "permissions",
                 column: "code",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_regions_country_id",
+                schema: "public",
+                table: "regions",
+                column: "country_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_role_permissions_permission_id",
@@ -518,6 +658,10 @@ namespace Infrastructure.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
+                name: "districts",
+                schema: "public");
+
+            migrationBuilder.DropTable(
                 name: "email_verifications",
                 schema: "public");
 
@@ -530,11 +674,23 @@ namespace Infrastructure.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
+                name: "otp",
+                schema: "public");
+
+            migrationBuilder.DropTable(
                 name: "password_reset",
                 schema: "public");
 
             migrationBuilder.DropTable(
                 name: "role_permissions",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "sms_config",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "smtp_config",
                 schema: "public");
 
             migrationBuilder.DropTable(
@@ -558,6 +714,10 @@ namespace Infrastructure.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
+                name: "regions",
+                schema: "public");
+
+            migrationBuilder.DropTable(
                 name: "permissions",
                 schema: "public");
 
@@ -567,6 +727,10 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "users",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "countries",
                 schema: "public");
         }
     }
