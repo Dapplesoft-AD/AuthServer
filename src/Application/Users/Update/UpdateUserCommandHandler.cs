@@ -10,15 +10,14 @@ namespace Application.Users.Update;
 internal sealed class UpdateUserCommandHandler(
     IApplicationDbContext context,
     IUserContext userContext,
-    IDateTimeProvider dateTimeProvider,
-    IPasswordHasher passwordHasher
-    ) : ICommandHandler<UpdateUserCommand>
+    IDateTimeProvider dateTimeProvider
+    ) : ICommandHandler<UpdateUserCommand, UpdateUserResponse>
 {
-    public async Task<Result> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
+    public async Task<Result<UpdateUserResponse>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
     {
         if (command.UserId != userContext.UserId)
         {
-            return Result.Failure<UpdateUserCommand>(UserErrors.Unauthorized());
+            return (Result<UpdateUserResponse>)Result.Failure(UserErrors.Unauthorized());
         }
 
         User? userTuple = await context.Users
@@ -26,7 +25,7 @@ internal sealed class UpdateUserCommandHandler(
 
         if (userTuple is null)
         {
-            return Result.Failure(UserErrors.NotFound(command.UserId));
+            return (Result<UpdateUserResponse>)Result.Failure(UserErrors.NotFound(command.UserId));
         }
 
 
@@ -37,7 +36,7 @@ internal sealed class UpdateUserCommandHandler(
                 .AnyAsync(u => u.Email == command.Email && u.Id != command.UserId, cancellationToken);
             if (emailExists)
             {
-                return Result.Failure(UserErrors.EmailNotUnique);
+                return (Result<UpdateUserResponse>)Result.Failure(UserErrors.EmailNotUnique);
             }
             userTuple.Email = command.Email;
         }
@@ -45,11 +44,6 @@ internal sealed class UpdateUserCommandHandler(
         if (command.Fullname is not null)
         {
             userTuple.FullName = command.Fullname;
-        }
-
-        if (command.Password is not null)
-        {
-            userTuple.PasswordHash = passwordHasher.Hash(command.Password);
         }
 
         if (command.Phone is not null)
@@ -78,6 +72,16 @@ internal sealed class UpdateUserCommandHandler(
             await context.SaveChangesAsync(cancellationToken);
         }
 
-        return Result.Success();
+        var response = new UpdateUserResponse
+        (
+            Fullname: userTuple.FullName,
+            Email: userTuple.Email,
+            Phone: userTuple.Phone,
+            Status: userTuple.Status,
+            IsMFAEnabled: userTuple.IsMFAEnabled,
+            IsEmailVerified: userTuple.IsEmailVerified
+        );
+
+        return response;
     }
 }
