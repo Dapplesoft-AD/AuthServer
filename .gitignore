@@ -405,3 +405,5 @@ appsettings.*.json
 !appsettings.json
 /AuthServer.sln
 /src/Web.Api/appsettings.Development.json
+/src/Infrastructure/Migrations/20251215100538_InitialCreate.cs
+/src/Infrastructure/Migrations/20251215100538_InitialCreate.Designer.cs
