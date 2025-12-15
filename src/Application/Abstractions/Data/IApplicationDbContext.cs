@@ -1,4 +1,4 @@
-using Domain.Applications;
+using Domain.Projects;
 using Domain.Areas;
 using Domain.AuditLogs;
 using Domain.Businesses;
@@ -37,7 +37,7 @@ public interface IApplicationDbContext
     DbSet<TodoItem> TodoItems { get; }
     DbSet<Customer> Customers { get; }
     DbSet<Permission> Permissions { get; }
-    DbSet<Applicationapply> Applications { get; }  // ← ADD THIS
+    DbSet<Project> Projects { get; }
     DbSet<RolePermission> RolePermissions { get; }
     DbSet<Role> Roles { get; }
     DbSet<UserLoginHistory> UserLoginHistory { get; }

@@ -1,5 +1,5 @@
 ﻿using Application.Abstractions.Data;
-using Domain.Applications;
+using Domain.Projects;
 using Domain.Areas;
 using Domain.AuditLogs;
 using Domain.Businesses;
@@ -54,7 +54,7 @@ public sealed class ApplicationDbContext(
 
     public DbSet<Permission> Permissions { get; set; }
 
-    public DbSet<Applicationapply> Applications { get; set; }
+    public DbSet<Project> Projects { get; set; }
 
     public DbSet<RolePermission> RolePermissions { get; set; }
 
