@@ -18,32 +18,33 @@ internal sealed class SendOtp : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapPost("CommonOtp/SendOtp", async (
-            Request request,
-            ICommandHandler<SmsOtpCommand, Guid> smsHandler,
-            ICommandHandler<SendOtpCommand, Guid> mailHandler,
-            CancellationToken cancellationToken) =>
+    Request request,
+    ICommandHandler<SmsOtpCommand, Guid> smsHandler,
+    ICommandHandler<SendOtpCommand, Guid> mailHandler,
+    CancellationToken cancellationToken) =>
         {
-            ICommandHandler<ICommand<Guid>, Guid> selectedHandler;
-            ICommand<Guid> command;
+            Result<Guid> result;
 
             if (CommonOtpInputValidator.IsPhone(request.Input))
             {
-                selectedHandler = (ICommandHandler<ICommand<Guid>, Guid>)smsHandler;
-                command = new SmsOtpCommand(request.Input);
+                result = await smsHandler.Handle(
+                    new SmsOtpCommand(request.Input),
+                    cancellationToken);
             }
             else if (CommonOtpInputValidator.IsEmail(request.Input))
             {
-                selectedHandler = (ICommandHandler<ICommand<Guid>, Guid>)mailHandler;
-                command = new SendOtpCommand(request.Input);
+                result = await mailHandler.Handle(
+                    new SendOtpCommand(request.Input),
+                    cancellationToken);
             }
             else
             {
                 return CustomResults.Problem(
                     "Input must be a valid email address (e.g., user@example.com) " +
-                    "or phone number in international format (e.g., +1234567890).", 400);
+                    "or phone number in international format (e.g., +1234567890).",
+                    400);
             }
 
-            Result<Guid> result = await selectedHandler.Handle(command, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);
         })
         .WithTags(Tags.CommonOtp)

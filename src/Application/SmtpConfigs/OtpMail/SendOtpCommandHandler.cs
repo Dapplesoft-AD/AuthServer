@@ -1,11 +1,13 @@
 ﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Application.Otps.Create;
+using Application.SmsConfigs.OtpSms;
 using Domain.Otps;
 using Domain.SmtpConfigs;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MimeKit;
 using SharedKernel;
 
@@ -13,14 +15,16 @@ namespace Application.SmtpConfigs.OtpMail;
 
 internal sealed class SendOtpCommandHandler(
     IApplicationDbContext context,
-    ICommandHandler<CreateOtpCommand, Guid> handler)
+    ICommandHandler<CreateOtpCommand, Guid> handler,
+    ILogger<SmsOtpCommandHandler> logger)
     : ICommandHandler<SendOtpCommand, Guid>
 {
+    private readonly ILogger<SmsOtpCommandHandler> _logger = logger;
     public async Task<Result<Guid>> Handle(SendOtpCommand command, CancellationToken cancellationToken)
     {
-        SmtpConfig? smtpConfig = await context.SmtpConfig.FirstOrDefaultAsync(cancellationToken);
+        List<SmtpConfig>? smtpConfig = await context.SmtpConfig.ToListAsync(cancellationToken);
 
-        if (smtpConfig is null)
+        if (smtpConfig.Count==0)
         {
             return Result.Failure<Guid>("SMTP configuration not found.");
         }
@@ -39,44 +43,49 @@ internal sealed class SendOtpCommandHandler(
         {
             return Result.Failure<Guid>("OTP not found");
         }
-        using var message = new MimeMessage();
-        message.From.Add(new MailboxAddress(smtpConfig.SenderEmail, smtpConfig.SenderEmail));
-        message.To.Add(new MailboxAddress(command.RecipientEmail, command.RecipientEmail));
-        message.Subject = "OTP Verification Mail";
-
-        var bodyBuilder = new BodyBuilder
+        foreach(SmtpConfig config in smtpConfig)
         {
-            HtmlBody = $"Your OTP is: {otp.OtpToken}"
-        };
-        message.Body = bodyBuilder.ToMessageBody();
+            using var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(config.SenderEmail, config.SenderEmail));
+            message.To.Add(new MailboxAddress(command.RecipientEmail, command.RecipientEmail));
+            message.Subject = "OTP Verification Mail";
 
-        try
-        {
-            using var client = new SmtpClient();
-            SecureSocketOptions sslOption = smtpConfig.EnableSsl
-                ? SecureSocketOptions.StartTls
-                : SecureSocketOptions.None;
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = $"Your OTP is: {otp.OtpToken}"
+            };
+            message.Body = bodyBuilder.ToMessageBody();
 
-            await client.ConnectAsync(
-                smtpConfig.Host,
-                smtpConfig.Port,
-                sslOption,
-                cancellationToken);
+            try
+            {
+                using var client = new SmtpClient();
+                SecureSocketOptions sslOption = config.EnableSsl
+                    ? SecureSocketOptions.StartTls
+                    : SecureSocketOptions.None;
 
-            await client.AuthenticateAsync(
-                smtpConfig.Username,
-                smtpConfig.Password,
-                cancellationToken);
+                await client.ConnectAsync(
+                    config.Host,
+                    config.Port,
+                    sslOption,
+                    cancellationToken);
 
-            await client.SendAsync(message, cancellationToken);
+                await client.AuthenticateAsync(
+                    config.Username,
+                    config.Password,
+                    cancellationToken);
 
-            await client.DisconnectAsync(true, cancellationToken);
+                await client.SendAsync(message, cancellationToken);
 
-            return Result.Success(otpId);
+                await client.DisconnectAsync(true, cancellationToken);
+
+                return Result.Success(otpId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                   "SMS sending failed for provider {ProviderId}", config.SmtpId);
+            }
         }
-        catch (Exception)
-        {
-            return Result.Failure<Guid>("Email sending failed.");
-        }
+        return Result.Failure<Guid>("No SMTP configuration available to send email.");
     }
 }

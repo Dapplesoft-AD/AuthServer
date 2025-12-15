@@ -19,10 +19,10 @@ internal class SmsOtpCommandHandler(
     private readonly ILogger<SmsOtpCommandHandler> _logger = logger;
     public async Task<Result<Guid>> Handle(SmsOtpCommand command, CancellationToken cancellationToken)
     {
-        SmsConfig? smsConfig = await applicationDbContext.SmsConfig
-            .FirstOrDefaultAsync(cancellationToken);
+        List<SmsConfig> smsConfigs = await applicationDbContext.SmsConfig
+            .ToListAsync(cancellationToken);
 
-        if (smsConfig is null)
+        if (smsConfigs.Count == 0)
         {
             return Result.Failure<Guid>(SmsConfigErrors.NotFound(Guid.Empty));
         }
@@ -37,7 +37,7 @@ internal class SmsOtpCommandHandler(
 
         Guid otpId = otpResult.Value;
 
-        Otp? otp = await applicationDbContext.Otp
+        Otp otp = await applicationDbContext.Otp
             .FirstOrDefaultAsync(t => t.OtpId == otpId, cancellationToken);
 
         if (otp is null)
@@ -46,33 +46,35 @@ internal class SmsOtpCommandHandler(
         }
 
         string message = $"Your OTP is {otp.OtpToken}. It will expire in 3 minutes.";
+        string responseString = string.Empty;
 
-        string responseString;
-
-        try
+        foreach (SmsConfig config in smsConfigs)
         {
-            responseString = await "https://api.bdbulksms.net/api.php?"
-                .PostUrlEncodedAsync(new
+            try
+            {
+                responseString = await "https://api.bdbulksms.net/api.php?"
+                    .PostUrlEncodedAsync(new
+                    {
+                        token = config.SmsToken,
+                        phone = otp.PhoneNumber,
+                        message
+                    }, cancellationToken: cancellationToken)
+                    .ReceiveString();
+
+                if (responseString.Trim()
+                    .StartsWith("OK", StringComparison.OrdinalIgnoreCase))
                 {
-                    token = smsConfig.SmsToken,
-                    phone = otp.PhoneNumber,
-                    message
-                }, cancellationToken: cancellationToken)
-                .ReceiveString();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "SMS sending exception");
-            return Result.Failure<Guid>($"SMS sending exception: {ex.Message}");
+                    return Result.Success(otpId);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "SMS sending failed for provider {ProviderId}", config.SmsId);
+            }
         }
 
-        // Safe OK check
-        if (responseString.Trim().StartsWith("OK", StringComparison.OrdinalIgnoreCase))
-        {
-            return Result.Success(otpId);
-        }
-
-        _logger.LogWarning("SMS sending failed. Response: {Response}", responseString);
-        return Result.Failure<Guid>($"SMS sending failed: {responseString}");
+        _logger.LogWarning("SMS sending failed. Last response: {Response}", responseString);
+        return Result.Failure<Guid>("SMS sending failed for all providers.");
     }
 }

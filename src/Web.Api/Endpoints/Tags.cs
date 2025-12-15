@@ -25,6 +25,6 @@ public static class Tags
     public const string Districts = "Districts";
     public const string Areas = "Areas";
     public const string Localities = "Localities";
-    public const string CommonOtp = "CommonOtp";
+    public const string CommonOtp = "OtpRequest";
     public const string VerifyOtp = "VerifyOtp";
 }
