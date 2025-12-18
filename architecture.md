@@ -4,13 +4,12 @@
 
 The Authentication Server is a comprehensive, secure authentication and authorization system designed to provide enterprise-grade identity management capabilities for multiple applications. The system implements JWT-based authentication, application-specific role-based access control, multi-factor authentication, and comprehensive security monitoring using fully customized components without third-party OAuth dependencies. The server acts as a centralized identity provider that can manage users, roles, and permissions across multiple client applications with fine-grained access control.
 
-The architecture follows a layered approach with clear separation of concerns:
-- **API Layer**: RESTful endpoints for authentication and authorization operations
-- **Service Layer**: Business logic and orchestration for multi-application support
-- **Repository Layer**: Data access and persistence with application isolation
-- **Security Layer**: Token management, encryption, and validation with application context
-- **Authorization Layer**: Application-specific permission management and enforcement
-- **Notification Layer**: Internal email and notification services
+The architecture follows Clean Architecture principles with clear separation of concerns and dependency inversion:
+- **Entities Layer**: Core business entities and domain logic
+- **Use Cases Layer**: Application-specific business rules and orchestration
+- **Interface Adapters Layer**: Controllers, presenters, and gateways
+- **Frameworks & Drivers Layer**: External frameworks, databases, and web servers
+- **Cross-Cutting Concerns**: Security, logging, validation, and caching
 
 ## Architecture
 
@@ -92,121 +91,873 @@ graph TB
     AuthServerN --> Monitoring
 ```
 
-### Detailed Application Architecture
+### Clean Architecture Visualization
+
+#### 1. Clean Architecture Layers Overview
 
 ```mermaid
 graph TB
-    subgraph "API Layer"
-        AuthCtrl[Auth Controller]
-        UserCtrl[User Controller]
-        TokenCtrl[Token Controller]
-        AppCtrl[Application Controller]
-        AdminCtrl[Admin Controller]
+    subgraph "Clean Architecture Layers"
+        subgraph "Layer 4: Frameworks & Drivers"
+            F1[Web Server<br/>Express.js]
+            F2[Database<br/>PostgreSQL]
+            F3[Cache<br/>Redis]
+            F4[Email Service<br/>SMTP]
+            F5[File System<br/>Storage]
+        end
+        
+        subgraph "Layer 3: Interface Adapters"
+            I1[Controllers<br/>HTTP Handlers]
+            I2[Presenters<br/>Response Formatters]
+            I3[Gateways<br/>Data Access]
+            I4[Repositories<br/>Persistence]
+        end
+        
+        subgraph "Layer 2: Use Cases"
+            U1[Authentication<br/>Business Rules]
+            U2[Authorization<br/>Business Rules]
+            U3[User Management<br/>Business Rules]
+            U4[Application Management<br/>Business Rules]
+        end
+        
+        subgraph "Layer 1: Entities"
+            E1[Domain Entities<br/>Core Business Logic]
+            E2[Value Objects<br/>Data Validation]
+            E3[Domain Services<br/>Complex Business Rules]
+        end
     end
     
-    subgraph "Middleware Layer"
-        AuthMW[Authentication Middleware]
-        AuthzMW[Authorization Middleware]
-        RateMW[Rate Limiting Middleware]
-        LogMW[Logging Middleware]
-        ValidMW[Validation Middleware]
+    %% Dependency Direction (Inward)
+    F1 -.-> I1
+    F2 -.-> I3
+    F3 -.-> I3
+    F4 -.-> I4
+    F5 -.-> I4
+    
+    I1 -.-> U1
+    I2 -.-> U2
+    I3 -.-> U3
+    I4 -.-> U4
+    
+    U1 -.-> E1
+    U2 -.-> E2
+    U3 -.-> E3
+    U4 -.-> E1
+    
+    style E1 fill:#ff9999
+    style E2 fill:#ff9999
+    style E3 fill:#ff9999
+    style U1 fill:#99ccff
+    style U2 fill:#99ccff
+    style U3 fill:#99ccff
+    style U4 fill:#99ccff
+    style I1 fill:#99ff99
+    style I2 fill:#99ff99
+    style I3 fill:#99ff99
+    style I4 fill:#99ff99
+    style F1 fill:#ffcc99
+    style F2 fill:#ffcc99
+    style F3 fill:#ffcc99
+    style F4 fill:#ffcc99
+    style F5 fill:#ffcc99
+```
+
+#### 2. Component Interaction Flow
+
+```mermaid
+graph LR
+    subgraph "External World"
+        Client[Client Application]
+        Database[(Database)]
+        Cache[(Cache)]
+        Email[Email Service]
     end
     
-    subgraph "Service Layer"
-        AuthSvc[Auth Service]
-        UserSvc[User Service]
-        TokenSvc[Token Service]
-        AppSvc[Application Service]
-        RoleSvc[Role Service]
-        PermSvc[Permission Service]
-        MFASvc[MFA Service]
-        EmailSvc[Email Service]
-        AuditSvc[Audit Service]
+    subgraph "Auth Server - Clean Architecture"
+        subgraph "Frameworks Layer"
+            WebServer[Web Server]
+            DBDriver[DB Driver]
+            CacheDriver[Cache Driver]
+            EmailDriver[Email Driver]
+        end
+        
+        subgraph "Adapters Layer"
+            Controller[Controller]
+            Presenter[Presenter]
+            Repository[Repository]
+            Gateway[Gateway]
+        end
+        
+        subgraph "Use Cases Layer"
+            UseCase[Use Case]
+        end
+        
+        subgraph "Entities Layer"
+            Entity[Entity]
+            ValueObject[Value Object]
+            DomainService[Domain Service]
+        end
     end
     
-    subgraph "Security Layer"
-        JWTMgr[JWT Manager]
-        Hasher[Password Hasher]
-        Encryptor[Encryptor]
-        RateLimiter[Rate Limiter]
-        Validator[Input Validator]
+    Client --> WebServer
+    WebServer --> Controller
+    Controller --> UseCase
+    UseCase --> Entity
+    UseCase --> DomainService
+    UseCase --> Repository
+    UseCase --> Gateway
+    Repository --> DBDriver
+    Gateway --> EmailDriver
+    Gateway --> CacheDriver
+    DBDriver --> Database
+    EmailDriver --> Email
+    CacheDriver --> Cache
+    UseCase --> Presenter
+    Presenter --> Controller
+    Controller --> WebServer
+    WebServer --> Client
+    
+    style Entity fill:#ff9999
+    style ValueObject fill:#ff9999
+    style DomainService fill:#ff9999
+    style UseCase fill:#99ccff
+    style Controller fill:#99ff99
+    style Presenter fill:#99ff99
+    style Repository fill:#99ff99
+    style Gateway fill:#99ff99
+    style WebServer fill:#ffcc99
+    style DBDriver fill:#ffcc99
+    style CacheDriver fill:#ffcc99
+    style EmailDriver fill:#ffcc99
+```
+
+#### 3. Authentication Flow Visualization
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant WebServer as Web Server<br/>(Framework)
+    participant Controller as Auth Controller<br/>(Adapter)
+    participant UseCase as Register UseCase<br/>(Use Case)
+    participant Entity as User Entity<br/>(Entity)
+    participant Repository as User Repository<br/>(Adapter)
+    participant Database as Database<br/>(Framework)
+    participant EmailGateway as Email Gateway<br/>(Adapter)
+    participant EmailService as Email Service<br/>(Framework)
+    
+    Client->>WebServer: POST /auth/register
+    WebServer->>Controller: HTTP Request
+    Controller->>UseCase: RegisterUserRequest
+    UseCase->>Entity: Create User
+    Entity-->>UseCase: User Created
+    UseCase->>Repository: Save User
+    Repository->>Database: INSERT User
+    Database-->>Repository: Success
+    Repository-->>UseCase: User Saved
+    UseCase->>EmailGateway: Send Verification
+    EmailGateway->>EmailService: Send Email
+    EmailService-->>EmailGateway: Email Sent
+    EmailGateway-->>UseCase: Success
+    UseCase-->>Controller: RegisterUserResponse
+    Controller-->>WebServer: HTTP Response
+    WebServer-->>Client: 201 Created
+    
+    rect rgb(255, 153, 153)
+        note over Entity: Entities Layer<br/>Pure Business Logic
     end
     
-    subgraph "Repository Layer"
-        UserRepo[User Repository]
-        AppRepo[Application Repository]
-        TokenRepo[Token Repository]
-        SessionRepo[Session Repository]
-        RoleRepo[Role Repository]
-        PermRepo[Permission Repository]
-        UserAppRoleRepo[User-App-Role Repository]
-        AuditRepo[Audit Repository]
+    rect rgb(153, 204, 255)
+        note over UseCase: Use Cases Layer<br/>Application Rules
     end
     
-    subgraph "Data Access Layer"
-        DBConn[Database Connection Pool]
-        CacheConn[Cache Connection Pool]
-        TxMgr[Transaction Manager]
+    rect rgb(153, 255, 153)
+        note over Controller, EmailGateway: Interface Adapters<br/>Convert & Present
     end
     
-    AuthCtrl --> AuthMW
-    UserCtrl --> AuthMW
-    TokenCtrl --> AuthMW
-    AppCtrl --> AuthMW
-    AdminCtrl --> AuthMW
+    rect rgb(255, 204, 153)
+        note over WebServer, EmailService: Frameworks & Drivers<br/>External Tools
+    end
+```
+
+#### 4. Permission System Architecture
+
+```mermaid
+graph TB
+    subgraph "Permission Architecture Layers"
+        subgraph "Presentation Layer"
+            API[REST API Endpoints]
+            GraphQL[GraphQL Interface]
+            CLI[Command Line Interface]
+        end
+        
+        subgraph "Application Layer"
+            PermissionUseCase[Permission Use Cases]
+            RoleUseCase[Role Use Cases]
+            AuthorizationUseCase[Authorization Use Cases]
+        end
+        
+        subgraph "Domain Layer"
+            PermissionEntity[Permission Entity]
+            RoleEntity[Role Entity]
+            UserEntity[User Entity]
+            ApplicationEntity[Application Entity]
+            PermissionService[Permission Domain Service]
+        end
+        
+        subgraph "Infrastructure Layer"
+            PermissionRepo[Permission Repository]
+            RoleRepo[Role Repository]
+            CacheService[Permission Cache]
+            AuditService[Audit Service]
+        end
+        
+        subgraph "Data Layer"
+            PermissionDB[(Permission Tables)]
+            RoleDB[(Role Tables)]
+            UserRoleDB[(User-Role Relations)]
+            CacheDB[(Redis Cache)]
+        end
+    end
     
-    AuthMW --> AuthzMW
-    AuthzMW --> RateMW
-    RateMW --> LogMW
-    LogMW --> ValidMW
+    API --> PermissionUseCase
+    GraphQL --> RoleUseCase
+    CLI --> AuthorizationUseCase
     
-    ValidMW --> AuthSvc
-    ValidMW --> UserSvc
-    ValidMW --> TokenSvc
-    ValidMW --> AppSvc
+    PermissionUseCase --> PermissionEntity
+    RoleUseCase --> RoleEntity
+    AuthorizationUseCase --> PermissionService
     
-    AuthSvc --> JWTMgr
-    AuthSvc --> Hasher
-    AuthSvc --> UserRepo
-    AuthSvc --> SessionRepo
-    AuthSvc --> AuditSvc
+    PermissionEntity --> PermissionService
+    RoleEntity --> PermissionService
+    UserEntity --> PermissionService
+    ApplicationEntity --> PermissionService
     
-    UserSvc --> UserRepo
-    UserSvc --> RoleSvc
-    UserSvc --> AuditSvc
+    PermissionService --> PermissionRepo
+    PermissionService --> RoleRepo
+    PermissionService --> CacheService
+    PermissionService --> AuditService
     
-    TokenSvc --> JWTMgr
-    TokenSvc --> TokenRepo
-    TokenSvc --> Encryptor
+    PermissionRepo --> PermissionDB
+    RoleRepo --> RoleDB
+    RoleRepo --> UserRoleDB
+    CacheService --> CacheDB
     
-    AppSvc --> AppRepo
-    AppSvc --> PermSvc
-    AppSvc --> AuditSvc
+    style PermissionEntity fill:#ff9999
+    style RoleEntity fill:#ff9999
+    style UserEntity fill:#ff9999
+    style ApplicationEntity fill:#ff9999
+    style PermissionService fill:#ff9999
+    style PermissionUseCase fill:#99ccff
+    style RoleUseCase fill:#99ccff
+    style AuthorizationUseCase fill:#99ccff
+    style API fill:#99ff99
+    style GraphQL fill:#99ff99
+    style CLI fill:#99ff99
+    style PermissionRepo fill:#99ff99
+    style RoleRepo fill:#99ff99
+    style CacheService fill:#99ff99
+    style AuditService fill:#99ff99
+```
+
+#### 5. Multi-Application Context Visualization
+
+```mermaid
+graph TB
+    subgraph "Multi-Application Auth Server"
+        subgraph "Shared Identity Layer"
+            GlobalUser[Global User Identity]
+            GlobalRoles[System-Wide Roles]
+            GlobalPermissions[Global Permissions]
+        end
+        
+        subgraph "Application A Context"
+            AppA[Application A]
+            AppAUsers[App A Users]
+            AppARoles[App A Roles]
+            AppAPerms[App A Permissions]
+        end
+        
+        subgraph "Application B Context"
+            AppB[Application B]
+            AppBUsers[App B Users]
+            AppBRoles[App B Roles]
+            AppBPerms[App B Permissions]
+        end
+        
+        subgraph "Application C Context"
+            AppC[Application C]
+            AppCUsers[App C Users]
+            AppCRoles[App C Roles]
+            AppCPerms[App C Permissions]
+        end
+        
+        subgraph "Cross-Application Services"
+            IdentityService[Identity Service]
+            PermissionResolver[Permission Resolver]
+            TokenService[Token Service]
+            AuditService[Audit Service]
+        end
+    end
     
-    RoleSvc --> RoleRepo
-    RoleSvc --> UserAppRoleRepo
-    RoleSvc --> PermSvc
+    GlobalUser --> AppAUsers
+    GlobalUser --> AppBUsers
+    GlobalUser --> AppCUsers
     
-    PermSvc --> PermRepo
-    PermSvc --> UserAppRoleRepo
+    GlobalRoles --> AppARoles
+    GlobalRoles --> AppBRoles
+    GlobalRoles --> AppCRoles
     
-    MFASvc --> Encryptor
-    MFASvc --> UserRepo
+    AppA --> AppAUsers
+    AppA --> AppARoles
+    AppA --> AppAPerms
     
-    EmailSvc --> AuditSvc
+    AppB --> AppBUsers
+    AppB --> AppBRoles
+    AppB --> AppBPerms
     
-    AuditSvc --> AuditRepo
+    AppC --> AppCUsers
+    AppC --> AppCRoles
+    AppC --> AppCPerms
     
-    UserRepo --> DBConn
-    AppRepo --> DBConn
-    TokenRepo --> CacheConn
-    SessionRepo --> CacheConn
-    RoleRepo --> DBConn
-    PermRepo --> DBConn
-    UserAppRoleRepo --> DBConn
-    AuditRepo --> DBConn
+    IdentityService --> GlobalUser
+    PermissionResolver --> GlobalPermissions
+    PermissionResolver --> AppAPerms
+    PermissionResolver --> AppBPerms
+    PermissionResolver --> AppCPerms
     
-    DBConn --> TxMgr
+    TokenService --> IdentityService
+    TokenService --> PermissionResolver
+    
+    AuditService --> IdentityService
+    AuditService --> PermissionResolver
+    
+    style GlobalUser fill:#ff6666
+    style GlobalRoles fill:#ff6666
+    style GlobalPermissions fill:#ff6666
+    style AppA fill:#66ccff
+    style AppB fill:#66ccff
+    style AppC fill:#66ccff
+    style IdentityService fill:#66ff66
+    style PermissionResolver fill:#66ff66
+    style TokenService fill:#66ff66
+    style AuditService fill:#66ff66
+```
+
+#### 6. Data Flow Through Clean Architecture
+
+```mermaid
+flowchart TD
+    Start([HTTP Request]) --> WebFramework[Web Framework<br/>Express.js]
+    WebFramework --> Middleware[Middleware Pipeline<br/>Auth, Validation, Rate Limiting]
+    Middleware --> Controller[Controller<br/>Parse Request]
+    
+    Controller --> UseCaseInput[Use Case Input<br/>Request DTO]
+    UseCaseInput --> UseCase[Use Case<br/>Business Logic]
+    
+    UseCase --> EntityValidation{Entity Validation}
+    EntityValidation -->|Valid| DomainLogic[Domain Logic<br/>Entity Methods]
+    EntityValidation -->|Invalid| DomainError[Domain Error]
+    
+    DomainLogic --> RepositoryCall[Repository Interface<br/>Data Access]
+    RepositoryCall --> DatabaseOperation[Database Operation<br/>SQL/NoSQL]
+    
+    DatabaseOperation --> RepositoryResult[Repository Result]
+    RepositoryResult --> UseCaseResult[Use Case Result<br/>Response DTO]
+    
+    UseCaseResult --> Presenter[Presenter<br/>Format Response]
+    Presenter --> HTTPResponse[HTTP Response<br/>JSON/XML]
+    
+    DomainError --> ErrorPresenter[Error Presenter<br/>Format Error]
+    ErrorPresenter --> ErrorResponse[Error Response<br/>HTTP Error]
+    
+    HTTPResponse --> End([Client Response])
+    ErrorResponse --> End
+    
+    style WebFramework fill:#ffcc99
+    style Middleware fill:#ffcc99
+    style Controller fill:#99ff99
+    style Presenter fill:#99ff99
+    style ErrorPresenter fill:#99ff99
+    style UseCase fill:#99ccff
+    style DomainLogic fill:#ff9999
+    style EntityValidation fill:#ff9999
+    style DomainError fill:#ff9999
+```
+
+#### 7. Dependency Inversion Principle Visualization
+
+```mermaid
+graph TB
+    subgraph "High-Level Modules (Stable)"
+        UseCase[Use Case<br/>Business Logic]
+        Entity[Entity<br/>Domain Logic]
+    end
+    
+    subgraph "Abstractions (Interfaces)"
+        IRepository[Repository Interface]
+        IEmailService[Email Service Interface]
+        ITokenService[Token Service Interface]
+    end
+    
+    subgraph "Low-Level Modules (Volatile)"
+        PostgreSQLRepo[PostgreSQL Repository]
+        SMTPEmail[SMTP Email Service]
+        JWTToken[JWT Token Service]
+        MongoRepo[MongoDB Repository]
+        SendGridEmail[SendGrid Email Service]
+        Auth0Token[Auth0 Token Service]
+    end
+    
+    UseCase --> IRepository
+    UseCase --> IEmailService
+    UseCase --> ITokenService
+    
+    Entity --> IRepository
+    
+    IRepository <|.. PostgreSQLRepo
+    IRepository <|.. MongoRepo
+    
+    IEmailService <|.. SMTPEmail
+    IEmailService <|.. SendGridEmail
+    
+    ITokenService <|.. JWTToken
+    ITokenService <|.. Auth0Token
+    
+    style UseCase fill:#99ccff
+    style Entity fill:#ff9999
+    style IRepository fill:#ffff99
+    style IEmailService fill:#ffff99
+    style ITokenService fill:#ffff99
+    style PostgreSQLRepo fill:#ffcc99
+    style SMTPEmail fill:#ffcc99
+    style JWTToken fill:#ffcc99
+    style MongoRepo fill:#ffcc99
+    style SendGridEmail fill:#ffcc99
+    style Auth0Token fill:#ffcc99
+```
+
+### Clean Architecture Layers Detail
+
+#### 1. Entities Layer (Core Domain)
+
+**Core Business Entities:**
+```typescript
+// Pure business logic, no external dependencies
+class User {
+  private constructor(
+    private readonly id: UserId,
+    private readonly email: Email,
+    private password: Password,
+    private readonly profile: UserProfile
+  ) {}
+  
+  static create(email: Email, password: Password): User {
+    // Domain validation logic
+    return new User(UserId.generate(), email, password, UserProfile.empty());
+  }
+  
+  changePassword(currentPassword: string, newPassword: Password): void {
+    if (!this.password.verify(currentPassword)) {
+      throw new InvalidPasswordError();
+    }
+    this.password = newPassword;
+  }
+  
+  hasPermission(permission: Permission, context: PermissionContext): boolean {
+    // Core permission logic
+    return this.permissions.includes(permission) || 
+           this.roles.some(role => role.hasPermission(permission, context));
+  }
+}
+
+class Application {
+  private constructor(
+    private readonly id: ApplicationId,
+    private readonly name: string,
+    private readonly permissions: Permission[],
+    private readonly roles: Role[]
+  ) {}
+  
+  static create(name: string, owner: User): Application {
+    return new Application(
+      ApplicationId.generate(),
+      name,
+      Permission.defaultPermissions(),
+      Role.defaultRoles()
+    );
+  }
+  
+  addPermission(permission: Permission): void {
+    if (this.permissions.some(p => p.equals(permission))) {
+      throw new DuplicatePermissionError();
+    }
+    this.permissions.push(permission);
+  }
+}
+```
+
+**Value Objects:**
+```typescript
+class Email {
+  private constructor(private readonly value: string) {}
+  
+  static create(email: string): Email {
+    if (!this.isValid(email)) {
+      throw new InvalidEmailError(email);
+    }
+    return new Email(email);
+  }
+  
+  private static isValid(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+  
+  toString(): string {
+    return this.value;
+  }
+}
+
+class Permission {
+  private constructor(
+    private readonly resource: string,
+    private readonly action: string,
+    private readonly conditions: PermissionCondition[]
+  ) {}
+  
+  static create(resource: string, action: string): Permission {
+    return new Permission(resource, action, []);
+  }
+  
+  matches(resource: string, action: string, context: PermissionContext): boolean {
+    return this.resource === resource && 
+           this.action === action &&
+           this.conditions.every(condition => condition.evaluate(context));
+  }
+}
+```
+
+#### 2. Use Cases Layer (Application Business Rules)
+
+**Use Case Interfaces:**
+```typescript
+interface RegisterUserUseCase {
+  execute(request: RegisterUserRequest): Promise<RegisterUserResponse>;
+}
+
+interface AuthenticateUserUseCase {
+  execute(request: AuthenticateUserRequest): Promise<AuthenticateUserResponse>;
+}
+
+interface CheckPermissionUseCase {
+  execute(request: CheckPermissionRequest): Promise<CheckPermissionResponse>;
+}
+```
+
+**Use Case Implementations:**
+```typescript
+class RegisterUserUseCaseImpl implements RegisterUserUseCase {
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly emailService: EmailService,
+    private readonly passwordService: PasswordService,
+    private readonly auditService: AuditService
+  ) {}
+  
+  async execute(request: RegisterUserRequest): Promise<RegisterUserResponse> {
+    // 1. Validate input
+    const email = Email.create(request.email);
+    const password = await this.passwordService.hash(request.password);
+    
+    // 2. Check if user exists
+    const existingUser = await this.userRepository.findByEmail(email);
+    if (existingUser) {
+      throw new UserAlreadyExistsError(email);
+    }
+    
+    // 3. Create user entity
+    const user = User.create(email, password);
+    
+    // 4. Save user
+    await this.userRepository.save(user);
+    
+    // 5. Send verification email
+    await this.emailService.sendVerificationEmail(user);
+    
+    // 6. Audit log
+    await this.auditService.log(new UserRegisteredEvent(user));
+    
+    return RegisterUserResponse.success(user.getId());
+  }
+}
+
+class CheckPermissionUseCaseImpl implements CheckPermissionUseCase {
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly permissionService: PermissionService,
+    private readonly auditService: AuditService
+  ) {}
+  
+  async execute(request: CheckPermissionRequest): Promise<CheckPermissionResponse> {
+    // 1. Get user
+    const user = await this.userRepository.findById(request.userId);
+    if (!user) {
+      throw new UserNotFoundError(request.userId);
+    }
+    
+    // 2. Create permission context
+    const context = PermissionContext.create(
+      request.applicationId,
+      request.resource,
+      request.ipAddress,
+      request.timestamp
+    );
+    
+    // 3. Check permission using domain logic
+    const permission = Permission.create(request.resource, request.action);
+    const hasPermission = await this.permissionService.checkPermission(
+      user, 
+      permission, 
+      context
+    );
+    
+    // 4. Audit log
+    await this.auditService.log(new PermissionCheckedEvent(
+      user.getId(),
+      permission,
+      hasPermission,
+      context
+    ));
+    
+    return CheckPermissionResponse.create(hasPermission);
+  }
+}
+```
+
+#### 3. Interface Adapters Layer
+
+**Controllers:**
+```typescript
+class AuthController {
+  constructor(
+    private readonly registerUserUseCase: RegisterUserUseCase,
+    private readonly authenticateUserUseCase: AuthenticateUserUseCase,
+    private readonly authPresenter: AuthPresenter
+  ) {}
+  
+  async register(req: Request, res: Response): Promise<void> {
+    try {
+      const request = RegisterUserRequest.fromHttp(req);
+      const response = await this.registerUserUseCase.execute(request);
+      const httpResponse = this.authPresenter.presentRegistration(response);
+      res.status(201).json(httpResponse);
+    } catch (error) {
+      const errorResponse = this.authPresenter.presentError(error);
+      res.status(errorResponse.status).json(errorResponse);
+    }
+  }
+}
+```
+
+**Gateways (Repository Implementations):**
+```typescript
+class PostgreSQLUserRepository implements UserRepository {
+  constructor(private readonly db: DatabaseConnection) {}
+  
+  async save(user: User): Promise<void> {
+    const userData = UserMapper.toDatabase(user);
+    await this.db.query(
+      'INSERT INTO users (id, email, password_hash, ...) VALUES ($1, $2, $3, ...)',
+      [userData.id, userData.email, userData.passwordHash, ...]
+    );
+  }
+  
+  async findByEmail(email: Email): Promise<User | null> {
+    const result = await this.db.query(
+      'SELECT * FROM users WHERE email = $1',
+      [email.toString()]
+    );
+    
+    if (result.rows.length === 0) {
+      return null;
+    }
+    
+    return UserMapper.fromDatabase(result.rows[0]);
+  }
+}
+```
+
+#### 4. Frameworks & Drivers Layer
+
+**Web Framework Setup:**
+```typescript
+// Express.js setup with dependency injection
+const container = new Container();
+
+// Register dependencies
+container.bind<UserRepository>('UserRepository').to(PostgreSQLUserRepository);
+container.bind<EmailService>('EmailService').to(SMTPEmailService);
+container.bind<RegisterUserUseCase>('RegisterUserUseCase').to(RegisterUserUseCaseImpl);
+
+// Setup routes
+const authController = container.get<AuthController>('AuthController');
+app.post('/auth/register', authController.register.bind(authController));
+```
+
+### Dependency Inversion Examples
+
+**Repository Interfaces (defined in Use Cases layer):**
+```typescript
+interface UserRepository {
+  save(user: User): Promise<void>;
+  findById(id: UserId): Promise<User | null>;
+  findByEmail(email: Email): Promise<User | null>;
+}
+
+interface EmailService {
+  sendVerificationEmail(user: User): Promise<void>;
+  sendPasswordResetEmail(user: User, token: string): Promise<void>;
+}
+```
+
+**Implementations (in Interface Adapters layer):**
+```typescript
+class PostgreSQLUserRepository implements UserRepository {
+  // Implementation details
+}
+
+class SMTPEmailService implements EmailService {
+  // Implementation details
+}
+```
+
+### Clean Architecture Benefits
+
+#### 1. Independence
+- **Framework Independence**: Business logic doesn't depend on Express.js or any web framework
+- **Database Independence**: Can switch from PostgreSQL to MongoDB without changing business logic
+- **UI Independence**: Same business logic can serve REST API, GraphQL, or CLI
+- **External Service Independence**: Can switch email providers without affecting core logic
+
+#### 2. Testability
+- **Unit Testing**: Entities and Use Cases can be tested in isolation
+- **Integration Testing**: Interface Adapters can be tested with mock implementations
+- **End-to-End Testing**: Full system testing through the web interface
+
+#### 3. Maintainability
+- **Clear Boundaries**: Each layer has well-defined responsibilities
+- **Dependency Inversion**: High-level modules don't depend on low-level modules
+- **Single Responsibility**: Each component has one reason to change
+
+### Dependency Injection Container
+
+```typescript
+// Container setup for Clean Architecture
+class DIContainer {
+  private bindings = new Map<string, any>();
+  
+  bind<T>(token: string): BindingBuilder<T> {
+    return new BindingBuilder<T>(token, this.bindings);
+  }
+  
+  get<T>(token: string): T {
+    return this.bindings.get(token);
+  }
+}
+
+// Registration
+container.bind<UserRepository>('UserRepository').to(PostgreSQLUserRepository);
+container.bind<EmailGateway>('EmailGateway').to(SMTPEmailService);
+container.bind<RegisterUserUseCase>('RegisterUserUseCase').to(RegisterUserUseCaseImpl);
+container.bind<AuthController>('AuthController').to(AuthControllerImpl);
+
+// Usage in route setup
+const authController = container.get<AuthController>('AuthController');
+app.post('/auth/register', authController.register.bind(authController));
+```
+
+### Error Handling in Clean Architecture
+
+```typescript
+// Domain Errors (Entities layer)
+abstract class DomainError extends Error {
+  abstract readonly code: string;
+}
+
+class InvalidEmailError extends DomainError {
+  readonly code = 'INVALID_EMAIL';
+  constructor(email: string) {
+    super(`Invalid email format: ${email}`);
+  }
+}
+
+class UserAlreadyExistsError extends DomainError {
+  readonly code = 'USER_ALREADY_EXISTS';
+  constructor(email: Email) {
+    super(`User with email ${email} already exists`);
+  }
+}
+
+// Application Errors (Use Cases layer)
+class ApplicationError extends Error {
+  constructor(
+    public readonly code: string,
+    message: string,
+    public readonly cause?: Error
+  ) {
+    super(message);
+  }
+}
+
+// Infrastructure Errors (Frameworks layer)
+class InfrastructureError extends Error {
+  constructor(
+    public readonly code: string,
+    message: string,
+    public readonly cause?: Error
+  ) {
+    super(message);
+  }
+}
+
+// Error Presenter (Interface Adapters layer)
+class ErrorPresenter {
+  presentError(error: Error): HttpResponse {
+    if (error instanceof DomainError) {
+      return {
+        status: 400,
+        body: {
+          error: {
+            code: error.code,
+            message: error.message
+          }
+        }
+      };
+    }
+    
+    if (error instanceof ApplicationError) {
+      return {
+        status: 422,
+        body: {
+          error: {
+            code: error.code,
+            message: error.message
+          }
+        }
+      };
+    }
+    
+    // Infrastructure errors should not expose internal details
+    return {
+      status: 500,
+      body: {
+        error: {
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'An unexpected error occurred'
+        }
+      }
+    };
+  }
+}
 ```
 
 ### Data Flow Architecture
@@ -450,91 +1201,382 @@ erDiagram
     APPLICATIONS ||--o{ AUDIT_EVENTS : "context for"
 ```
 
-### Deployment Architecture
+### System Integration Architecture
+
+#### 1. Client Integration Patterns
 
 ```mermaid
 graph TB
-    subgraph "Production Environment"
-        subgraph "Load Balancer Tier"
-            ALB[Application Load Balancer]
-            WAF[Web Application Firewall]
+    subgraph "Client Applications"
+        WebApp[Web Application<br/>React/Vue/Angular]
+        MobileApp[Mobile Application<br/>iOS/Android]
+        BackendAPI[Backend API<br/>Microservices]
+        ThirdPartyApp[Third-Party Application<br/>External Integration]
+    end
+    
+    subgraph "Integration Methods"
+        RESTAPI[REST API<br/>HTTP/HTTPS]
+        GraphQLAPI[GraphQL API<br/>Query Language]
+        WebhookAPI[Webhook API<br/>Event Notifications]
+        SDKAPI[SDK Integration<br/>Language Libraries]
+    end
+    
+    subgraph "Auth Server Core"
+        AuthCore[Authentication Server<br/>Clean Architecture]
+    end
+    
+    subgraph "Security Layers"
+        TLS[TLS Encryption]
+        JWT[JWT Tokens]
+        OAuth[OAuth 2.0 Flow]
+        RateLimit[Rate Limiting]
+    end
+    
+    WebApp --> RESTAPI
+    MobileApp --> SDKAPI
+    BackendAPI --> GraphQLAPI
+    ThirdPartyApp --> WebhookAPI
+    
+    RESTAPI --> TLS
+    SDKAPI --> JWT
+    GraphQLAPI --> OAuth
+    WebhookAPI --> RateLimit
+    
+    TLS --> AuthCore
+    JWT --> AuthCore
+    OAuth --> AuthCore
+    RateLimit --> AuthCore
+    
+    style WebApp fill:#e1f5fe
+    style MobileApp fill:#e1f5fe
+    style BackendAPI fill:#e1f5fe
+    style ThirdPartyApp fill:#e1f5fe
+    style AuthCore fill:#ff9999
+    style TLS fill:#c8e6c9
+    style JWT fill:#c8e6c9
+    style OAuth fill:#c8e6c9
+    style RateLimit fill:#c8e6c9
+```
+
+#### 2. Microservices Ecosystem
+
+```mermaid
+graph TB
+    subgraph "External World"
+        Users[End Users]
+        AdminPanel[Admin Panel]
+        Monitoring[Monitoring Systems]
+    end
+    
+    subgraph "API Gateway Layer"
+        Gateway[API Gateway<br/>Kong/Nginx]
+        LoadBalancer[Load Balancer<br/>HAProxy]
+    end
+    
+    subgraph "Auth Server Cluster"
+        AuthServer1[Auth Server Instance 1<br/>Clean Architecture]
+        AuthServer2[Auth Server Instance 2<br/>Clean Architecture]
+        AuthServer3[Auth Server Instance 3<br/>Clean Architecture]
+    end
+    
+    subgraph "Supporting Services"
+        EmailService[Email Service<br/>Notification System]
+        AuditService[Audit Service<br/>Security Logging]
+        MetricsService[Metrics Service<br/>Performance Monitoring]
+    end
+    
+    subgraph "Data Layer"
+        PrimaryDB[(Primary Database<br/>PostgreSQL)]
+        ReplicaDB[(Read Replica<br/>PostgreSQL)]
+        CacheDB[(Cache Layer<br/>Redis Cluster)]
+        BackupStorage[(Backup Storage<br/>S3/GCS)]
+    end
+    
+    Users --> Gateway
+    AdminPanel --> Gateway
+    Monitoring --> MetricsService
+    
+    Gateway --> LoadBalancer
+    LoadBalancer --> AuthServer1
+    LoadBalancer --> AuthServer2
+    LoadBalancer --> AuthServer3
+    
+    AuthServer1 --> EmailService
+    AuthServer1 --> AuditService
+    AuthServer1 --> MetricsService
+    
+    AuthServer2 --> EmailService
+    AuthServer2 --> AuditService
+    AuthServer2 --> MetricsService
+    
+    AuthServer3 --> EmailService
+    AuthServer3 --> AuditService
+    AuthServer3 --> MetricsService
+    
+    AuthServer1 --> PrimaryDB
+    AuthServer1 --> ReplicaDB
+    AuthServer1 --> CacheDB
+    
+    AuthServer2 --> PrimaryDB
+    AuthServer2 --> ReplicaDB
+    AuthServer2 --> CacheDB
+    
+    AuthServer3 --> PrimaryDB
+    AuthServer3 --> ReplicaDB
+    AuthServer3 --> CacheDB
+    
+    PrimaryDB --> BackupStorage
+    CacheDB --> BackupStorage
+    
+    style AuthServer1 fill:#ff9999
+    style AuthServer2 fill:#ff9999
+    style AuthServer3 fill:#ff9999
+    style Gateway fill:#99ccff
+    style LoadBalancer fill:#99ccff
+    style EmailService fill:#99ff99
+    style AuditService fill:#99ff99
+    style MetricsService fill:#99ff99
+```
+
+#### 3. Deployment Architecture Visualization
+
+```mermaid
+graph TB
+    subgraph "Cloud Infrastructure"
+        subgraph "CDN Layer"
+            CloudFlare[CloudFlare CDN<br/>Global Distribution]
+            EdgeCache[Edge Caching<br/>Static Assets]
         end
         
-        subgraph "Application Tier"
-            subgraph "Auth Server Cluster"
-                AS1[Auth Server 1]
-                AS2[Auth Server 2]
-                AS3[Auth Server 3]
-            end
+        subgraph "Load Balancing Layer"
+            ALB[Application Load Balancer<br/>AWS ALB/GCP LB]
+            WAF[Web Application Firewall<br/>Security Rules]
+            SSL[SSL Termination<br/>Certificate Management]
         end
         
-        subgraph "Data Tier"
-            subgraph "Database Cluster"
-                PDB[Primary DB]
-                RDB1[Read Replica 1]
-                RDB2[Read Replica 2]
-            end
-            
-            subgraph "Cache Cluster"
-                Redis1[Redis Master]
-                Redis2[Redis Replica]
-            end
+        subgraph "Container Orchestration"
+            K8sCluster[Kubernetes Cluster<br/>Container Management]
+            AuthPods[Auth Server Pods<br/>Auto-scaling]
+            ServiceMesh[Service Mesh<br/>Istio/Linkerd]
         end
         
-        subgraph "Monitoring Tier"
-            Metrics[Metrics Collection]
-            Logs[Log Aggregation]
-            Alerts[Alert Manager]
+        subgraph "Data Persistence"
+            DBCluster[Database Cluster<br/>High Availability]
+            CacheCluster[Redis Cluster<br/>Distributed Cache]
+            StorageVolumes[Persistent Volumes<br/>Data Storage]
+        end
+        
+        subgraph "Observability"
+            LogAggregation[Log Aggregation<br/>ELK/Fluentd]
+            MetricsCollection[Metrics Collection<br/>Prometheus]
+            Tracing[Distributed Tracing<br/>Jaeger/Zipkin]
+            Alerting[Alerting System<br/>AlertManager]
+        end
+        
+        subgraph "Security & Compliance"
+            SecretManagement[Secret Management<br/>Vault/K8s Secrets]
+            NetworkPolicies[Network Policies<br/>Firewall Rules]
+            Compliance[Compliance Monitoring<br/>SOC2/GDPR]
         end
     end
     
-    subgraph "External Services"
-        DNS[DNS Service]
-        CDN[Content Delivery Network]
-        EmailProvider[Email Provider]
-        Backup[Backup Storage]
-    end
-    
-    DNS --> ALB
-    CDN --> ALB
+    CloudFlare --> ALB
+    EdgeCache --> ALB
     ALB --> WAF
-    WAF --> AS1
-    WAF --> AS2
-    WAF --> AS3
+    WAF --> SSL
+    SSL --> K8sCluster
     
-    AS1 --> PDB
-    AS1 --> RDB1
-    AS1 --> Redis1
+    K8sCluster --> AuthPods
+    K8sCluster --> ServiceMesh
+    ServiceMesh --> AuthPods
     
-    AS2 --> PDB
-    AS2 --> RDB2
-    AS2 --> Redis1
+    AuthPods --> DBCluster
+    AuthPods --> CacheCluster
+    AuthPods --> StorageVolumes
     
-    AS3 --> PDB
-    AS3 --> RDB1
-    AS3 --> Redis2
+    AuthPods --> LogAggregation
+    AuthPods --> MetricsCollection
+    AuthPods --> Tracing
     
-    PDB --> RDB1
-    PDB --> RDB2
-    Redis1 --> Redis2
+    MetricsCollection --> Alerting
+    LogAggregation --> Alerting
     
-    AS1 --> Metrics
-    AS2 --> Metrics
-    AS3 --> Metrics
+    AuthPods --> SecretManagement
+    K8sCluster --> NetworkPolicies
+    AuthPods --> Compliance
     
-    AS1 --> Logs
-    AS2 --> Logs
-    AS3 --> Logs
+    style AuthPods fill:#ff9999
+    style K8sCluster fill:#99ccff
+    style DBCluster fill:#99ff99
+    style CacheCluster fill:#99ff99
+    style LogAggregation fill:#ffcc99
+    style MetricsCollection fill:#ffcc99
+    style SecretManagement fill:#ff99cc
+```
+
+#### 4. Security Architecture Layers
+
+```mermaid
+graph TB
+    subgraph "Defense in Depth Security Model"
+        subgraph "Perimeter Security"
+            DDoSProtection[DDoS Protection<br/>CloudFlare/AWS Shield]
+            WAFRules[WAF Rules<br/>OWASP Top 10]
+            GeoBlocking[Geo-blocking<br/>Country Restrictions]
+        end
+        
+        subgraph "Network Security"
+            VPC[Virtual Private Cloud<br/>Network Isolation]
+            Subnets[Private Subnets<br/>Database Isolation]
+            SecurityGroups[Security Groups<br/>Firewall Rules]
+            NACLs[Network ACLs<br/>Subnet Level Security]
+        end
+        
+        subgraph "Application Security"
+            InputValidation[Input Validation<br/>Schema Validation]
+            SQLInjectionPrevention[SQL Injection Prevention<br/>Parameterized Queries]
+            XSSProtection[XSS Protection<br/>Content Security Policy]
+            CSRFProtection[CSRF Protection<br/>Token Validation]
+        end
+        
+        subgraph "Authentication Security"
+            MFAEnforcement[MFA Enforcement<br/>TOTP/SMS/Email]
+            PasswordPolicy[Password Policy<br/>Complexity Rules]
+            AccountLockout[Account Lockout<br/>Brute Force Protection]
+            SessionManagement[Session Management<br/>Secure Cookies]
+        end
+        
+        subgraph "Authorization Security"
+            RBACEnforcement[RBAC Enforcement<br/>Role-Based Access]
+            PermissionValidation[Permission Validation<br/>Fine-grained Control]
+            TokenValidation[Token Validation<br/>JWT Verification]
+            APIRateLimiting[API Rate Limiting<br/>Abuse Prevention]
+        end
+        
+        subgraph "Data Security"
+            EncryptionAtRest[Encryption at Rest<br/>Database Encryption]
+            EncryptionInTransit[Encryption in Transit<br/>TLS 1.3]
+            KeyManagement[Key Management<br/>Rotation & Storage]
+            DataMasking[Data Masking<br/>PII Protection]
+        end
+        
+        subgraph "Monitoring & Compliance"
+            SecurityMonitoring[Security Monitoring<br/>SIEM Integration]
+            AuditLogging[Audit Logging<br/>Compliance Trails]
+            ThreatDetection[Threat Detection<br/>Anomaly Detection]
+            IncidentResponse[Incident Response<br/>Automated Alerts]
+        end
+    end
     
-    Metrics --> Alerts
-    Logs --> Alerts
+    DDoSProtection --> WAFRules
+    WAFRules --> GeoBlocking
+    GeoBlocking --> VPC
     
-    AS1 --> EmailProvider
-    AS2 --> EmailProvider
-    AS3 --> EmailProvider
+    VPC --> Subnets
+    Subnets --> SecurityGroups
+    SecurityGroups --> NACLs
+    NACLs --> InputValidation
     
-    PDB --> Backup
-    Redis1 --> Backup
+    InputValidation --> SQLInjectionPrevention
+    SQLInjectionPrevention --> XSSProtection
+    XSSProtection --> CSRFProtection
+    CSRFProtection --> MFAEnforcement
+    
+    MFAEnforcement --> PasswordPolicy
+    PasswordPolicy --> AccountLockout
+    AccountLockout --> SessionManagement
+    SessionManagement --> RBACEnforcement
+    
+    RBACEnforcement --> PermissionValidation
+    PermissionValidation --> TokenValidation
+    TokenValidation --> APIRateLimiting
+    APIRateLimiting --> EncryptionAtRest
+    
+    EncryptionAtRest --> EncryptionInTransit
+    EncryptionInTransit --> KeyManagement
+    KeyManagement --> DataMasking
+    DataMasking --> SecurityMonitoring
+    
+    SecurityMonitoring --> AuditLogging
+    AuditLogging --> ThreatDetection
+    ThreatDetection --> IncidentResponse
+    
+    style DDoSProtection fill:#ff6b6b
+    style WAFRules fill:#ff6b6b
+    style VPC fill:#4ecdc4
+    style Subnets fill:#4ecdc4
+    style InputValidation fill:#45b7d1
+    style SQLInjectionPrevention fill:#45b7d1
+    style MFAEnforcement fill:#96ceb4
+    style PasswordPolicy fill:#96ceb4
+    style RBACEnforcement fill:#feca57
+    style PermissionValidation fill:#feca57
+    style EncryptionAtRest fill:#ff9ff3
+    style EncryptionInTransit fill:#ff9ff3
+    style SecurityMonitoring fill:#54a0ff
+    style AuditLogging fill:#54a0ff
+```
+
+#### 5. Scalability Architecture
+
+```mermaid
+graph TB
+    subgraph "Horizontal Scaling Strategy"
+        subgraph "Auto-Scaling Groups"
+            ASG[Auto Scaling Group<br/>Dynamic Scaling]
+            ScalingPolicies[Scaling Policies<br/>CPU/Memory Based]
+            HealthChecks[Health Checks<br/>Application Monitoring]
+        end
+        
+        subgraph "Load Distribution"
+            GlobalLB[Global Load Balancer<br/>Geographic Distribution]
+            RegionalLB[Regional Load Balancer<br/>Zone Distribution]
+            ServiceLB[Service Load Balancer<br/>Pod Distribution]
+        end
+        
+        subgraph "Database Scaling"
+            ReadReplicas[Read Replicas<br/>Query Distribution]
+            Sharding[Database Sharding<br/>Horizontal Partitioning]
+            ConnectionPooling[Connection Pooling<br/>Resource Optimization]
+        end
+        
+        subgraph "Cache Scaling"
+            CacheCluster[Redis Cluster<br/>Distributed Caching]
+            CachePartitioning[Cache Partitioning<br/>Data Distribution]
+            CacheReplication[Cache Replication<br/>High Availability]
+        end
+        
+        subgraph "Performance Optimization"
+            CDNDistribution[CDN Distribution<br/>Global Edge Caching]
+            CompressionOptimization[Compression<br/>Response Optimization]
+            DatabaseIndexing[Database Indexing<br/>Query Optimization]
+        end
+    end
+    
+    ASG --> ScalingPolicies
+    ScalingPolicies --> HealthChecks
+    HealthChecks --> GlobalLB
+    
+    GlobalLB --> RegionalLB
+    RegionalLB --> ServiceLB
+    ServiceLB --> ReadReplicas
+    
+    ReadReplicas --> Sharding
+    Sharding --> ConnectionPooling
+    ConnectionPooling --> CacheCluster
+    
+    CacheCluster --> CachePartitioning
+    CachePartitioning --> CacheReplication
+    CacheReplication --> CDNDistribution
+    
+    CDNDistribution --> CompressionOptimization
+    CompressionOptimization --> DatabaseIndexing
+    
+    style ASG fill:#ff9999
+    style GlobalLB fill:#99ccff
+    style ReadReplicas fill:#99ff99
+    style CacheCluster fill:#ffcc99
+    style CDNDistribution fill:#ff99cc
 ```
 
 ### Technology Stack
@@ -1402,60 +2444,227 @@ graph TB
 
 ## Components and Interfaces
 
-### 1. Controllers
+### Clean Architecture Component Organization
 
-#### AuthController
-Handles authentication-related HTTP requests.
+#### Dependency Flow Rules
+1. **Entities** have no dependencies on outer layers
+2. **Use Cases** depend only on Entities and interfaces
+3. **Interface Adapters** depend on Use Cases and Entities
+4. **Frameworks & Drivers** depend on Interface Adapters
 
+### 1. Entities Layer Components
+
+#### Core Domain Entities
+
+```typescript
+// Core business entities with pure domain logic
+interface User {
+  readonly id: UserId
+  readonly email: Email
+  readonly profile: UserProfile
+  
+  changePassword(currentPassword: string, newPassword: Password): void
+  enableMFA(secret: TOTPSecret): void
+  hasPermission(permission: Permission, context: PermissionContext): boolean
+  assignRole(role: Role, application: Application): void
+}
+
+interface Application {
+  readonly id: ApplicationId
+  readonly name: string
+  readonly owner: User
+  
+  addPermission(permission: Permission): void
+  createRole(name: string, permissions: Permission[]): Role
+  hasUser(user: User): boolean
+}
+
+interface Permission {
+  readonly resource: string
+  readonly action: string
+  readonly conditions: PermissionCondition[]
+  
+  matches(resource: string, action: string, context: PermissionContext): boolean
+  isGrantedTo(user: User, application: Application): boolean
+}
+
+interface Role {
+  readonly id: RoleId
+  readonly name: string
+  readonly permissions: Permission[]
+  readonly application: Application
+  
+  hasPermission(permission: Permission): boolean
+  addPermission(permission: Permission): void
+}
+```
+
+#### Domain Services
+```typescript
+interface PasswordService {
+  hash(plainPassword: string): Promise<Password>
+  verify(plainPassword: string, hashedPassword: Password): Promise<boolean>
+  generateResetToken(): string
+}
+
+interface TokenService {
+  generateAccessToken(user: User, application?: Application): Token
+  generateRefreshToken(user: User): Token
+  validateToken(token: string): TokenPayload
+}
+
+interface PermissionService {
+  checkPermission(user: User, permission: Permission, context: PermissionContext): Promise<boolean>
+  resolveUserPermissions(user: User, application: Application): Permission[]
+  evaluatePermissionHierarchy(permissions: Permission[]): Permission[]
+}
+```
+
+### 2. Use Cases Layer Components
+
+#### Authentication Use Cases
+```typescript
+interface RegisterUserUseCase {
+  execute(request: RegisterUserRequest): Promise<RegisterUserResponse>
+}
+
+interface AuthenticateUserUseCase {
+  execute(request: AuthenticateUserRequest): Promise<AuthenticateUserResponse>
+}
+
+interface RefreshTokenUseCase {
+  execute(request: RefreshTokenRequest): Promise<RefreshTokenResponse>
+}
+
+interface ResetPasswordUseCase {
+  execute(request: ResetPasswordRequest): Promise<ResetPasswordResponse>
+}
+```
+
+#### Authorization Use Cases
+```typescript
+interface CheckPermissionUseCase {
+  execute(request: CheckPermissionRequest): Promise<CheckPermissionResponse>
+}
+
+interface AssignRoleUseCase {
+  execute(request: AssignRoleRequest): Promise<AssignRoleResponse>
+}
+
+interface CreateApplicationUseCase {
+  execute(request: CreateApplicationRequest): Promise<CreateApplicationResponse>
+}
+
+interface ManagePermissionsUseCase {
+  execute(request: ManagePermissionsRequest): Promise<ManagePermissionsResponse>
+}
+```
+
+#### User Management Use Cases
+```typescript
+interface UpdateProfileUseCase {
+  execute(request: UpdateProfileRequest): Promise<UpdateProfileResponse>
+}
+
+interface EnableMFAUseCase {
+  execute(request: EnableMFARequest): Promise<EnableMFAResponse>
+}
+
+interface ViewActivityUseCase {
+  execute(request: ViewActivityRequest): Promise<ViewActivityResponse>
+}
+```
+
+### 3. Interface Adapters Layer Components
+
+#### Controllers (HTTP Adapters)
 ```typescript
 interface AuthController {
-  register(req: RegisterRequest): Promise<RegisterResponse>
-  login(req: LoginRequest): Promise<LoginResponse>
-  logout(req: LogoutRequest): Promise<void>
-  verifyEmail(token: string): Promise<void>
-  forgotPassword(email: string): Promise<void>
-  resetPassword(token: string, newPassword: string): Promise<void>
+  register(req: HttpRequest): Promise<HttpResponse>
+  login(req: HttpRequest): Promise<HttpResponse>
+  logout(req: HttpRequest): Promise<HttpResponse>
+  verifyEmail(req: HttpRequest): Promise<HttpResponse>
+  forgotPassword(req: HttpRequest): Promise<HttpResponse>
+  resetPassword(req: HttpRequest): Promise<HttpResponse>
 }
-```
 
-#### UserController
-Manages user account operations.
-
-```typescript
 interface UserController {
-  getProfile(userId: string): Promise<UserProfile>
-  updateProfile(userId: string, data: UpdateProfileRequest): Promise<UserProfile>
-  changePassword(userId: string, req: ChangePasswordRequest): Promise<void>
-  enableMFA(userId: string): Promise<MFASetupResponse>
-  verifyMFA(userId: string, token: string): Promise<void>
-  getAccountActivity(userId: string): Promise<ActivityLog[]>
+  getProfile(req: HttpRequest): Promise<HttpResponse>
+  updateProfile(req: HttpRequest): Promise<HttpResponse>
+  changePassword(req: HttpRequest): Promise<HttpResponse>
+  enableMFA(req: HttpRequest): Promise<HttpResponse>
+  verifyMFA(req: HttpRequest): Promise<HttpResponse>
+  getAccountActivity(req: HttpRequest): Promise<HttpResponse>
 }
-```
 
-#### TokenController
-Handles token operations.
-
-```typescript
-interface TokenController {
-  refresh(refreshToken: string): Promise<TokenResponse>
-  validate(accessToken: string, applicationId?: string): Promise<TokenValidationResponse>
-  revoke(token: string): Promise<void>
-}
-```
-
-#### ApplicationController
-Manages application registration and configuration.
-
-```typescript
 interface ApplicationController {
-  registerApplication(req: RegisterApplicationRequest): Promise<Application>
-  getApplication(applicationId: string): Promise<Application>
-  updateApplication(applicationId: string, req: UpdateApplicationRequest): Promise<Application>
-  deleteApplication(applicationId: string): Promise<void>
-  getApplicationPermissions(applicationId: string): Promise<Permission[]>
-  assignUserRole(applicationId: string, userId: string, roleId: string): Promise<void>
-  removeUserRole(applicationId: string, userId: string, roleId: string): Promise<void>
-  getUserPermissions(applicationId: string, userId: string): Promise<Permission[]>
+  createApplication(req: HttpRequest): Promise<HttpResponse>
+  getApplication(req: HttpRequest): Promise<HttpResponse>
+  updateApplication(req: HttpRequest): Promise<HttpResponse>
+  deleteApplication(req: HttpRequest): Promise<HttpResponse>
+  managePermissions(req: HttpRequest): Promise<HttpResponse>
+}
+```
+
+#### Presenters (Response Formatters)
+```typescript
+interface AuthPresenter {
+  presentRegistration(response: RegisterUserResponse): HttpResponse
+  presentLogin(response: AuthenticateUserResponse): HttpResponse
+  presentError(error: DomainError): HttpResponse
+}
+
+interface UserPresenter {
+  presentProfile(response: UpdateProfileResponse): HttpResponse
+  presentActivity(response: ViewActivityResponse): HttpResponse
+  presentMFASetup(response: EnableMFAResponse): HttpResponse
+}
+```
+
+#### Repository Interfaces (defined in Use Cases, implemented in Interface Adapters)
+```typescript
+interface UserRepository {
+  save(user: User): Promise<void>
+  findById(id: UserId): Promise<User | null>
+  findByEmail(email: Email): Promise<User | null>
+  findByApplication(application: Application): Promise<User[]>
+  delete(id: UserId): Promise<void>
+}
+
+interface ApplicationRepository {
+  save(application: Application): Promise<void>
+  findById(id: ApplicationId): Promise<Application | null>
+  findByOwner(owner: User): Promise<Application[]>
+  findAll(): Promise<Application[]>
+  delete(id: ApplicationId): Promise<void>
+}
+
+interface PermissionRepository {
+  save(permission: Permission): Promise<void>
+  findByApplication(application: Application): Promise<Permission[]>
+  findByRole(role: Role): Promise<Permission[]>
+  findByUser(user: User, application: Application): Promise<Permission[]>
+}
+```
+
+#### Gateway Interfaces (External Service Adapters)
+```typescript
+interface EmailGateway {
+  sendVerificationEmail(user: User, token: string): Promise<void>
+  sendPasswordResetEmail(user: User, token: string): Promise<void>
+  sendSecurityAlert(user: User, event: SecurityEvent): Promise<void>
+}
+
+interface CacheGateway {
+  set(key: string, value: any, ttl: number): Promise<void>
+  get(key: string): Promise<any | null>
+  delete(key: string): Promise<void>
+  exists(key: string): Promise<boolean>
+}
+
+interface AuditGateway {
+  log(event: AuditEvent): Promise<void>
+  query(criteria: AuditCriteria): Promise<AuditEvent[]>
 }
 ```
 
