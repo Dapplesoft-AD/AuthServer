@@ -412,9 +412,15 @@ dotnet_diagnostic.S6781.severity = none
 
 ### Hasan-custom setings
 # EF Core migration files - ignore file-scoped namespace rule
+[**/Migrations/**/*.cs]
+csharp_style_namespace_declarations = block_scoped:none
+dotnet_diagnostic.IDE0053.severity = none
+dotnet_diagnostic.CA1861.severity = none
+
 [**/Migrations/*.cs]
 csharp_style_namespace_declarations = block_scoped:none
 dotnet_diagnostic.IDE0053.severity = none
+dotnet_diagnostic.CA1861.severity = none
 
 # no more forcing to use Uri
 [*.{cs,vb}]
