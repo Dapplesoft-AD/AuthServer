@@ -13,9 +13,17 @@ internal sealed class UserContext : IUserContext
     }
 
     public Guid UserId =>
+            (!IsAuthenticated) ?
+                throw new ApplicationException("User is not authenticated") 
+            : _httpContextAccessor
+                .HttpContext!
+                .User
+                .GetUserId();
+
+    public bool IsAuthenticated =>
         _httpContextAccessor
             .HttpContext?
-            .User
-            .GetUserId() ??
-        throw new ApplicationException("User context is unavailable");
+            .User?
+            .Identity?
+            .IsAuthenticated?? false;
 }
