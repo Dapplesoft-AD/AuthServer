@@ -10,7 +10,9 @@ namespace Application.Users.Login;
 internal sealed class LoginUserCommandHandler(
     IApplicationDbContext context,
     IPasswordHasher passwordHasher,
-    ITokenProvider tokenProvider) : ICommandHandler<LoginUserCommand, LoginUserResponse>
+    //ITokenProvider tokenProvider,
+    IUserSession userSession
+    ) : ICommandHandler<LoginUserCommand, LoginUserResponse>
 {
     public async Task<Result<LoginUserResponse>> Handle(LoginUserCommand command, CancellationToken cancellationToken)
     {
@@ -27,15 +29,17 @@ internal sealed class LoginUserCommandHandler(
 
         if (!verified)
         {
-            return Result.Failure<LoginUserResponse>(UserErrors.NotFoundByEmail);
+            return Result.Failure<LoginUserResponse>("Wrong Credentials");
         }
 
+        // Sign in the user (cookie session)
+        await userSession.SignInAsync(user, cancellationToken);
+
         var response = new LoginUserResponse(
-            Token: tokenProvider.Create(user),
+            Token: "",                // tokenProvider.Create(user),
             RefreshToken: "Coming soon",
             User: new LogInUserInfo(Id: user.Id)
         );
-
         return response;
     }
 }
