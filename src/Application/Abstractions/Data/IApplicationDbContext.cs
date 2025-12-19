@@ -1,4 +1,3 @@
-using Domain.Projects;
 using Domain.Areas;
 using Domain.AuditLogs;
 using Domain.Businesses;
@@ -19,7 +18,6 @@ using Domain.Roles;
 using Domain.SmsConfigs;
 using Domain.SmtpConfigs;
 using Domain.Todos;
-using Domain.Token;
 using Domain.UserLoginHistories;
 using Domain.UserProfiles;
 using Domain.Users;
@@ -33,11 +31,9 @@ public interface IApplicationDbContext
     DbSet<User> Users { get; }
     DbSet<EmailVerifications> EmailVerifications { get; }
     DbSet<PasswordReset> PasswordReset { get; }
-    DbSet<Tokens> Tokens { get; }
     DbSet<TodoItem> TodoItems { get; }
     DbSet<Customer> Customers { get; }
     DbSet<Permission> Permissions { get; }
-    DbSet<Project> Projects { get; }
     DbSet<RolePermission> RolePermissions { get; }
     DbSet<Role> Roles { get; }
     DbSet<UserLoginHistory> UserLoginHistory { get; }
