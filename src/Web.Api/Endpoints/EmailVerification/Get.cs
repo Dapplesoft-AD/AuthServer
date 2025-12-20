@@ -10,7 +10,7 @@ public sealed class Get : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("EmailVerifications", async (
+        app.MapGet(ApiRoutes.GetAll(Base.EmailVerifications), async (
             Guid userId,
             IQueryHandler<GetEmailVerificationsQuery, List<EmailVerificationResponse>> handler,
             CancellationToken cancellationToken) =>

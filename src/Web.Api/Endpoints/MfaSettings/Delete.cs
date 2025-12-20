@@ -10,7 +10,7 @@ internal sealed class Delete : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("MfaSettings/{id:guid}", async (
+        app.MapDelete(ApiRoutes.Delete(Base.MfaSettings), async (
             Guid id,
             ICommandHandler<DeleteMfaSettingCommand> handler,
             CancellationToken cancellationToken) =>

@@ -10,7 +10,7 @@ public sealed class Delete : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("EmailVerifications/{id:guid}", async (
+        app.MapDelete(ApiRoutes.Delete(Base.EmailVerifications), async (
             Guid id,
             ICommandHandler<DeleteEmailVerificationCommand> handler,
             CancellationToken cancellationToken) =>

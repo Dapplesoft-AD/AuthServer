@@ -11,7 +11,7 @@ internal sealed class GetAll : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("permissions", async (
+        app.MapGet(ApiRoutes.GetAll(Base.Permissions), async (
             IQueryHandler<GetAllPermissionsQuery, List<PermissionResponse>> handler,
             CancellationToken cancellationToken) =>
         {

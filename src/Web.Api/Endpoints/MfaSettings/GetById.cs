@@ -10,7 +10,7 @@ internal sealed class GetById : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("MfaSettings/{id:guid}", async (
+        app.MapGet(ApiRoutes.GetById(Base.MfaSettings), async (
             Guid id,
             IQueryHandler<GetMfaSettingByIdQuery, MfaSettingResponse> handler,
             CancellationToken cancellationToken) =>

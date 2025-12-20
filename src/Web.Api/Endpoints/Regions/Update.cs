@@ -10,7 +10,7 @@ internal sealed class Update : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("Regions/{id:guid}", async (
+        app.MapPut(ApiRoutes.Update(Base.Regions), async (
             Guid id,
             UpdateRegionRequest request,
             ICommandHandler<UpdateRegionCommand> handler,

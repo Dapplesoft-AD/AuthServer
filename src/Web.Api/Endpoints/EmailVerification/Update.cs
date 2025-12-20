@@ -14,7 +14,7 @@ public sealed class Update : IEndpoint
     }
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("EmailVerifications/update/{id:guid}", async (
+        app.MapPut(ApiRoutes.Update(Base.EmailVerifications), async (
     Guid id,
     Request request,
     ICommandHandler<UpdateEmailVerificationCommand> handler,

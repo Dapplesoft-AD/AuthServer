@@ -11,7 +11,7 @@ internal sealed class Update : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("MfaLogs/{id:guid}", async (
+        app.MapPut(ApiRoutes.Update(Base.Mfalogs), async (
             Guid id,
             Request request,
             ICommandHandler<UpdateMfaLogCommand> handler,

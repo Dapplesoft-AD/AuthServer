@@ -18,7 +18,7 @@ internal sealed class Update : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("/countries/{id:guid}", static async (
+        app.MapPut(ApiRoutes.Update(Base.Countries), static async (
             Guid id,
             Request request,
             ICommandHandler<UpdateCountryCommand> handler,

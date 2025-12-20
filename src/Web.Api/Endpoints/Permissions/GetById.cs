@@ -11,7 +11,7 @@ internal sealed class GetById : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("permissions/{id:guid}", async (
+        app.MapGet(ApiRoutes.GetById(Base.Permissions), async (
             Guid id,
             IQueryHandler<GetPermissionByIdQuery, PermissionResponse> handler,
             CancellationToken cancellationToken) =>

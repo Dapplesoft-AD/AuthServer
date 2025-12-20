@@ -12,7 +12,7 @@ internal sealed class Update : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("permissions/{id:guid}", async (
+        app.MapPut(ApiRoutes.Update(Base.Permissions), async (
             Guid id,
             Request request,
             ICommandHandler<UpdatePermissionCommand, Guid> handler,

@@ -10,7 +10,7 @@ internal sealed class Get : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("MfaSettings", async (
+        app.MapGet(ApiRoutes.GetAll(Base.MfaSettings), async (
             IQueryHandler<GetMfaSettingQuery, List<MfaSettingResponse>> handler,
             CancellationToken cancellationToken) =>
         {
