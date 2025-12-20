@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Application.Abstractions.Authentication;
 using Application.Abstractions.Messaging;
 using Application.Businesses.Create;
 using Domain.Businesses;
@@ -10,19 +11,18 @@ public class Me : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("auth/me", (HttpContext context) =>
+        app.MapGet("auth/me", (IUserContext context, ClaimsPrincipal user) =>
         {
-            if (!context.User.Identity?.IsAuthenticated ?? true)
+            if (!context.IsAuthenticated)
             {
                 return Results.Unauthorized();
             }
 
             return Results.Ok(new
             {
-                id = context.User.FindFirstValue(OpenIddictConstants.Claims.Subject),
-                email = context.User.FindFirstValue(OpenIddictConstants.Claims.Email)
+                id = user.FindFirstValue(OpenIddictConstants.Claims.Subject),
+                email = user.FindFirstValue(OpenIddictConstants.Claims.Email)
             });
-        })
-            .RequireAuthorization();
+        });
     }
 }
