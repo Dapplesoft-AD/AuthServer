@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251210160405_AddSMSOTP")]
-    partial class AddSMSOTP
+    [Migration("20251216125918_SeedRolesAndUsers")]
+    partial class SeedRolesAndUsers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -573,7 +573,6 @@ namespace Infrastructure.Migrations
                         .HasColumnName("delay");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
                         .HasColumnName("email");
@@ -589,7 +588,8 @@ namespace Infrastructure.Migrations
                         .HasColumnName("otp_token");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("text")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("phone_number");
 
                     b.HasKey("OtpId")
@@ -753,6 +753,38 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("ix_roles_role_name");
 
                     b.ToTable("roles", "public");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            Description = "System Administrator with full access",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            Id = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
+                            Description = "Support Engineers",
+                            RoleName = "Support"
+                        },
+                        new
+                        {
+                            Id = new Guid("cccccccc-cccc-cccc-cccc-cccccccccccc"),
+                            Description = "Helps in Analysis",
+                            RoleName = "Analytics"
+                        },
+                        new
+                        {
+                            Id = new Guid("dddddddd-dddd-dddd-dddd-dddddddddddd"),
+                            Description = "Asses the payments",
+                            RoleName = "PaymentAdmin"
+                        },
+                        new
+                        {
+                            Id = new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"),
+                            Description = "Common User",
+                            RoleName = "Client"
+                        });
                 });
 
             modelBuilder.Entity("Domain.SmsConfigs.SmsConfig", b =>
@@ -1080,6 +1112,44 @@ namespace Infrastructure.Migrations
                         .HasDatabaseName("ix_users_email");
 
                     b.ToTable("users", "public");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                            CreatedAt = new DateTime(2025, 12, 16, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "user1@gmail.com",
+                            FullName = "System Admin",
+                            IsEmailVerified = false,
+                            IsMFAEnabled = false,
+                            PasswordHash = "0CB47CF84CA0824A48EB7CDAD0B13AC83D6742E85A21B8A0FF58A235C2050DE9-ED1FD94795D453D2320B0A5444D4B31E",
+                            Status = 0,
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
+                            CreatedAt = new DateTime(2025, 12, 16, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "user2@gmail.com",
+                            FullName = "Normal User",
+                            IsEmailVerified = false,
+                            IsMFAEnabled = false,
+                            PasswordHash = "CDFCF4E8D89841B7A49EC50581EC9F5CA3AB0A93A9F23B78C69839B18BE43752-C4F0917170B9972DDE5015CBCFE31786",
+                            Status = 0,
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
+                            CreatedAt = new DateTime(2025, 12, 16, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "user3@gmail.com",
+                            FullName = "Demo User",
+                            IsEmailVerified = false,
+                            IsMFAEnabled = false,
+                            PasswordHash = "D3A38C51393060353567AF0865FC91B4E435AB433D177AF056F79BA1AEEADA0B-852250D8F97163710CF73F51EF6EE70D",
+                            Status = 0,
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Domain.Areas.Area", b =>

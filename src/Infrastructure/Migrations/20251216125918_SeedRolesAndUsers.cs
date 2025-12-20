@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class SeedRolesAndUsers : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -106,8 +108,8 @@ namespace Infrastructure.Migrations
                 {
                     otp_id = table.Column<Guid>(type: "uuid", nullable: false),
                     otp_token = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
-                    email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    phone_number = table.Column<string>(type: "text", nullable: true),
+                    email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    phone_number = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     delay = table.Column<TimeSpan>(type: "interval", nullable: false),
                     is_expired = table.Column<bool>(type: "boolean", nullable: false)
@@ -513,12 +515,108 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "areas",
+                schema: "public",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    country_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    district_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    type = table.Column<int>(type: "integer", nullable: false),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_areas", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_areas_districts_district_id",
+                        column: x => x.district_id,
+                        principalSchema: "public",
+                        principalTable: "districts",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "localities",
+                schema: "public",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    country_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    area_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    type = table.Column<int>(type: "integer", nullable: false),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_localities", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_localities_areas_area_id",
+                        column: x => x.area_id,
+                        principalSchema: "public",
+                        principalTable: "areas",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                schema: "public",
+                table: "roles",
+                columns: ["id", "description", "role_name"],
+                values: new object[,]
+                {
+                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), "System Administrator with full access", "Administrator" },
+                    { new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), "Support Engineers", "Support" },
+                    { new Guid("cccccccc-cccc-cccc-cccc-cccccccccccc"), "Helps in Analysis", "Analytics" },
+                    { new Guid("dddddddd-dddd-dddd-dddd-dddddddddddd"), "Asses the payments", "PaymentAdmin" },
+                    { new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"), "Common User", "Client" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "public",
+                table: "users",
+                columns: ["id", "created_at", "email", "full_name", "is_email_verified", "is_mfa_enabled", "password_hash", "phone", "status", "updated_at"],
+                values: new object[,]
+                {
+                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2025, 12, 16, 0, 0, 0, 0, DateTimeKind.Utc), "user1@gmail.com", "System Admin", false, false, "0CB47CF84CA0824A48EB7CDAD0B13AC83D6742E85A21B8A0FF58A235C2050DE9-ED1FD94795D453D2320B0A5444D4B31E", null, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2025, 12, 16, 0, 0, 0, 0, DateTimeKind.Utc), "user2@gmail.com", "Normal User", false, false, "CDFCF4E8D89841B7A49EC50581EC9F5CA3AB0A93A9F23B78C69839B18BE43752-C4F0917170B9972DDE5015CBCFE31786", null, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2025, 12, 16, 0, 0, 0, 0, DateTimeKind.Utc), "user3@gmail.com", "Demo User", false, false, "D3A38C51393060353567AF0865FC91B4E435AB433D177AF056F79BA1AEEADA0B-852250D8F97163710CF73F51EF6EE70D", null, 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "ix_applications_client_id",
                 schema: "public",
                 table: "applications",
                 column: "client_id",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_areas_country_id",
+                schema: "public",
+                table: "areas",
+                column: "country_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_areas_district_id",
+                schema: "public",
+                table: "areas",
+                column: "district_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_areas_name",
+                schema: "public",
+                table: "areas",
+                column: "name");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_areas_type",
+                schema: "public",
+                table: "areas",
+                column: "type");
 
             migrationBuilder.CreateIndex(
                 name: "ix_audit_logs_business_id",
@@ -567,6 +665,61 @@ namespace Infrastructure.Migrations
                 schema: "public",
                 table: "districts",
                 column: "region_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_localities_area_id",
+                schema: "public",
+                table: "localities",
+                column: "area_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_localities_area_id_is_active",
+                schema: "public",
+                table: "localities",
+                columns: ["area_id", "is_active"]);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_localities_area_id_name",
+                schema: "public",
+                table: "localities",
+                columns: ["area_id", "name"],
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_localities_area_id_type_is_active",
+                schema: "public",
+                table: "localities",
+                columns: ["area_id", "type", "is_active"]);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_localities_country_id",
+                schema: "public",
+                table: "localities",
+                column: "country_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_localities_country_id_area_id_is_active",
+                schema: "public",
+                table: "localities",
+                columns: ["country_id", "area_id", "is_active"]);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_localities_is_active",
+                schema: "public",
+                table: "localities",
+                column: "is_active");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_localities_name",
+                schema: "public",
+                table: "localities",
+                column: "name");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_localities_type",
+                schema: "public",
+                table: "localities",
+                column: "type");
 
             migrationBuilder.CreateIndex(
                 name: "ix_mfa_logs_user_id",
@@ -658,11 +811,11 @@ namespace Infrastructure.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "districts",
+                name: "email_verifications",
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "email_verifications",
+                name: "localities",
                 schema: "public");
 
             migrationBuilder.DropTable(
@@ -714,7 +867,7 @@ namespace Infrastructure.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "regions",
+                name: "areas",
                 schema: "public");
 
             migrationBuilder.DropTable(
@@ -727,6 +880,14 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "users",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "districts",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "regions",
                 schema: "public");
 
             migrationBuilder.DropTable(
