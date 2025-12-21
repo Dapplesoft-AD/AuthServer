@@ -1,4 +1,5 @@
-﻿using Application.Abstractions.Data;
+﻿using Application.Abstractions.Authentication;
+using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -27,6 +28,6 @@ internal sealed class GetAllUsersQueryHandler(
             })
             .ToListAsync(cancellationToken: cancellationToken);
 
-        return Result.Success(users);
+        return Result<Result<List<GetAllUsersQueryResponse>>>.Success(users);
     }
 }
