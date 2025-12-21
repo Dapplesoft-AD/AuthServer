@@ -27,10 +27,10 @@ public sealed class UserSession : IUserSession
             ClaimTypes.Name,
             ClaimTypes.Role);
 
-
         identity.AddClaim(OpenIddictConstants.Claims.Subject, user.Id.ToString());
         identity.AddClaim(OpenIddictConstants.Claims.Email, user.Email);
-
+        identity.AddClaim(ClaimTypes.NameIdentifier, user.Id.ToString());
+        
         var principal = new ClaimsPrincipal(identity);
 
         await _httpContextAccessor.HttpContext!.SignInAsync("AuthCookie", principal);
