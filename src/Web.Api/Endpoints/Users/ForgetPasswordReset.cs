@@ -1,11 +1,11 @@
 ﻿using Application.Abstractions.Messaging;
-using Application.Users.ForgetPasswordReset;
+using Application.Users.ForgotPasswordReset;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
 
 namespace Web.Api.Endpoints.Users;
-internal sealed class ForgetPasswordReset : IEndpoint
+internal sealed class ForgotPasswordReset : IEndpoint
 {
     public sealed record Request(
         string Email,
@@ -14,20 +14,20 @@ internal sealed class ForgetPasswordReset : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("users/forget-password-reset", async (
+        app.MapPost("users/forgot-password-reset", async (
             Request request,
-            ICommandHandler<ForgetPasswordResetCommand, ForgetPasswordResetResponse> handler,
+            ICommandHandler<ForgotPasswordResetCommand, ForgotPasswordResetResponse> handler,
             CancellationToken cancellationToken) =>
         {
-            var command = new ForgetPasswordResetCommand(
+            var command = new ForgotPasswordResetCommand(
                 request.Email,
                 request.NewPassword,
                 request.ConfirmPassword);
 
-            Result<ForgetPasswordResetResponse> result = await handler.Handle(command, cancellationToken);
+            Result<ForgotPasswordResetResponse> result = await handler.Handle(command, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);
         })
-        .WithTags(Tags.Users)
-        .AllowAnonymous();
+        .WithTags(Tags.Users);
+        
     }
 }
