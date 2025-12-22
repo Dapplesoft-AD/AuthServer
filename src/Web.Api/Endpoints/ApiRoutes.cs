@@ -44,4 +44,8 @@ public static class Base
     public const string PasswordResets = "password-resets";
     public const string Permissions = "permissions";
     public const string Regions = "regions";
+    public const string OtpRequest = "otp-request";
+    public const string PasswordReset = "password-reset";
+    public const string Roles = "roles";
+    public const string OtpVerify = "otp-verify";
 }

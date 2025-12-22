@@ -17,7 +17,7 @@ internal sealed class OtpVerification : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("Otp/Verify", async (
+        app.MapPost(ApiRoutes.Create(Base.OtpVerify), async (
     Request request,
     ICommandHandler<VerifyOtpCommand, bool> handler,
     CancellationToken cancellationToken) =>

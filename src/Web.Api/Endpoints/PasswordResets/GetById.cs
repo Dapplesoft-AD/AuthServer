@@ -10,7 +10,7 @@ public sealed class GetById : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("PasswordResets/{id:guid}", async (
+        app.MapGet(ApiRoutes.GetById(Base.PasswordReset), async (
             Guid id,
             IQueryHandler<GetPasswordResetByIdQuery, PasswordResetResponse> handler,
             CancellationToken cancellationToken) =>

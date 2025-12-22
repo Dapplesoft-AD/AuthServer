@@ -9,7 +9,7 @@ internal sealed class Create : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("roles", async (
+        app.MapPost(ApiRoutes.Create(Base.Roles), async (
             CreateRoleCommand request,
             ICommandHandler<CreateRoleCommand, Guid> handler,
             CancellationToken cancellationToken) =>
