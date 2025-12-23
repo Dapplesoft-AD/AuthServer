@@ -10,7 +10,7 @@ public sealed class Delete : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("Tokens/{id}", async (
+        app.MapDelete("api/tokens/{id}", async (
             string id,
             ICommandHandler<DeleteTokenCommand> handler,
             CancellationToken cancellationToken) =>
