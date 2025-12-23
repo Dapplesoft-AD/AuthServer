@@ -12,6 +12,8 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__Database: Host=postgres;Port=5432;Database=clean-architecture;Username=postgres;Password=1234
       ASPNETCORE_URLS: http://+:8080;http://+:8081
+      FrontendLoginUrl: https://localhost:4200/login  # Login page of auth server
+      IssuerUrl: http://localhost:5001 # Auth server Backend Url
       Jwt__Secret: YOUR_SECURE_GENERATED_SECRET
       Cors__AllowedOrigins__0: "http://localhost:4200"
       Cors__AllowedOrigins__1: "https://localhost:4200"

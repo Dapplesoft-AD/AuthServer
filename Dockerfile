@@ -13,7 +13,6 @@ RUN apk add --no-cache \
     krb5 \
     krb5-libs \
     icu-libs
-# Switch backing to appuser :)
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
@@ -29,6 +28,8 @@ COPY ["src/SharedKernel/SharedKernel.csproj", "src/SharedKernel/"]
 RUN dotnet restore "./src/Web.Api/Web.Api.csproj"
 COPY . .
 WORKDIR "/src/src/Web.Api"
+RUN dotnet dev-certs https --clean
+RUN dotnet dev-certs https
 RUN dotnet build "./Web.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
