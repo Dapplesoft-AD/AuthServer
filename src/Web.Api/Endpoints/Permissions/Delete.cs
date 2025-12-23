@@ -10,7 +10,7 @@ internal sealed class Delete : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("permissions/{id:guid}", async (
+        app.MapDelete(ApiRoutes.Delete(Base.Permissions), async (
             Guid id,
             ICommandHandler<DeletePermissionCommand> handler,
             CancellationToken cancellationToken) =>

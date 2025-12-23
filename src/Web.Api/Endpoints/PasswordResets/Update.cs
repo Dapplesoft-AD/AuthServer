@@ -14,7 +14,7 @@ public sealed class Update : IEndpoint
     }
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("PasswordResets/update/{id:guid}", async (
+        app.MapPut(ApiRoutes.Update(Base.PasswordReset), async (
     Guid id,
     Request request,
     ICommandHandler<UpdatePasswordResetCommand> handler,

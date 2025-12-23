@@ -20,14 +20,6 @@ internal sealed class UpdateUserCommandValidator : AbstractValidator<UpdateUserC
             .WithMessage("Email cannot exceed 150 characters.")
             .When(c => c.Email is not null);
 
-        // Password — optional, validate only if included
-        RuleFor(c => c.Password)
-            .MinimumLength(8)
-            .WithMessage("Password must be at least 8 characters long.")
-            .MaximumLength(16)
-            .WithMessage("Password cannot exceed 16 characters.")
-            .When(c => c.Password is not null);
-
         // Phone — optional
         RuleFor(c => c.Phone)
             .MaximumLength(20)

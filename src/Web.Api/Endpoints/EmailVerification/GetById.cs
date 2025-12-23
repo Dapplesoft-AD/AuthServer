@@ -10,7 +10,7 @@ public sealed class GetById : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("EmailVerifications/{id:guid}", async (
+        app.MapGet(ApiRoutes.GetById(Base.EmailVerifications), async (
             Guid id,
             IQueryHandler<GetEmailVerificationByIdQuery, EmailVerificationResponse> handler,
             CancellationToken cancellationToken) =>

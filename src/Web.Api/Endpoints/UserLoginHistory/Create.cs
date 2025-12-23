@@ -21,7 +21,7 @@ internal sealed class Create : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost(ApiRoutes.UserLoginHistory.Create, async (
+        app.MapPost(ApiRoutes.Create(Base.UserLoginHistory), async (
             Request request,
             ICommandHandler<CreateUserLoginHistoryCommand, Guid> handler,
             CancellationToken cancellationToken) =>

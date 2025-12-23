@@ -19,7 +19,7 @@ internal sealed class Create : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("localities", async (
+        app.MapPost(ApiRoutes.Create(Base.Localities), async (
             Request request,
             ICommandHandler<CreateLocalityCommand, Guid> handler,
             CancellationToken cancellationToken) =>

@@ -20,7 +20,7 @@ internal sealed class Create : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("MfaSettings", async (
+        app.MapPost(ApiRoutes.Create(Base.MfaSettings), async (
             Request request,
             ICommandHandler<CreateMfaSettingCommand, Guid> handler,
             CancellationToken cancellationToken) =>

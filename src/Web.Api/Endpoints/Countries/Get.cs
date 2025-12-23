@@ -10,7 +10,7 @@ internal sealed class Get : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("/countries", async (
+        app.MapGet(ApiRoutes.GetAll(Base.Countries), async (
             IQueryHandler<GetCountriesQuery, List<GetCountryResponse>> handler,
             CancellationToken cancellationToken) =>
         {

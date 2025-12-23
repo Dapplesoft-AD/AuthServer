@@ -10,6 +10,8 @@ services:
       # - ASPNETCORE_ENVIRONMENT=Production # for Production
       - ASPNETCORE_URLS=http://+:8080;http://+:8081
       - ConnectionStrings__Database=Host=localhost;Port=5432;Database=authserver;Username=postgres;Password=pass1234
+      - FrontendLoginUrl=https://auth.dapplesoft.com/login  # Login page of auth server
+      - IssuerUrl=https://authapi.dapplesoft.com # Auth server Backend Url
     networks:
       - auth-network
     restart: unless-stopped

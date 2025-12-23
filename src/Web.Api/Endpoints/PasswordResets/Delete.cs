@@ -10,7 +10,7 @@ public sealed class Delete : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("PasswordResets/{id:guid}", async (
+        app.MapDelete(ApiRoutes.Delete(Base.PasswordReset), async (
             Guid id,
             ICommandHandler<DeletePasswordResetCommand> handler,
             CancellationToken cancellationToken) =>

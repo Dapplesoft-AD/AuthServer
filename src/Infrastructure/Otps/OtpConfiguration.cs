@@ -10,6 +10,7 @@ internal sealed class OtpConfiguration : IEntityTypeConfiguration<Otp>
     {
         builder.HasKey(t=>t.OtpId);
         builder.Property(t=>t.OtpToken).IsRequired().HasMaxLength(16);
-        builder.Property(t=>t.Email).IsRequired().HasMaxLength(256);
+        builder.Property(t=>t.Email).HasMaxLength(256);
+        builder.Property(t=>t.PhoneNumber).HasMaxLength(256);
     }
 }

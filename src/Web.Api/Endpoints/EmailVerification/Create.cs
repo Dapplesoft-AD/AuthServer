@@ -18,7 +18,7 @@ public sealed class Create : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("EmailVerifications", async (
+        app.MapPost(ApiRoutes.Create(Base.EmailVerifications), async (
             Request request,
             ICommandHandler<CreateEmailVerificationCommand, Guid> handler,
             CancellationToken cancellationToken) =>

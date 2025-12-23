@@ -17,6 +17,7 @@ public static class Tags
     public const string MfaLogs = "MfaLogs";
     public const string AuditLogs = "AuditLogs";
     public const string SmtpConfig = "SmtpConfig";
+    public const string SmsConfig = "SmsConfig";
     public const string Otp = "Otp";
     public const string SendMail = "Sent Email";
     public const string Countries = "Countries";
@@ -24,4 +25,8 @@ public static class Tags
     public const string Districts = "Districts";
     public const string Areas = "Areas";
     public const string Localities = "Localities";
+    public const string CommonOtp = "OtpRequest";
+    public const string VerifyOtp = "VerifyOtp";
+    public const string ClientApps = "ClientApps";
+
 }

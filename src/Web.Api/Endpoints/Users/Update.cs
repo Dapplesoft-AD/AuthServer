@@ -15,8 +15,6 @@ internal sealed class Update : IEndpoint
 
         public string? Email { get; set; }
 
-        public string? Password { get; set; }
-
         public string? Phone { get; set; }
 
         public UserStatus? Status { get; set; }
@@ -27,25 +25,24 @@ internal sealed class Update : IEndpoint
     }
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut(ApiRoutes.User.Update, async (
+        app.MapPut(ApiRoutes.Update(Base.Users), async (
             Guid id,
             Request request,
-            ICommandHandler<UpdateUserCommand> handler,
+            ICommandHandler<UpdateUserCommand, UpdateUserResponse> handler,
             CancellationToken cancellationToken) =>
             {
                 var command = new UpdateUserCommand(
                     UserId: id,
                     Fullname: request.Fullname,
                     Email: request.Email,
-                    Password: request.Password,
                     Phone: request.Phone,
                     Status: request.Status,
                     IsMFAEnabled: request.IsMFAEnabled,
                     IsEmailVerified: request.IsEmailVerified
                 );
 
-                Result result = await handler.Handle(command, cancellationToken);
-                return result.Match(Results.NoContent, CustomResults.Problem);
+                Result<UpdateUserResponse> result = await handler.Handle(command, cancellationToken);
+                return result.Match(Results.Ok, CustomResults.Problem);
             })
             .HasPermission(Permissions.UsersAccess)
             .WithTags(Tags.Users)

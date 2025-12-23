@@ -15,7 +15,7 @@ internal sealed class OtpMail : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("SmtpConfig", async (
+        app.MapPost("SmtpConfig/SendMail", async (
     Request request,
     ICommandHandler<SendOtpCommand, Guid> handler,
     CancellationToken cancellationToken) =>

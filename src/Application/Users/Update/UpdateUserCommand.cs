@@ -8,10 +8,9 @@ public sealed record UpdateUserCommand(
     Guid UserId,
     string? Fullname,
     string? Email,
-    string? Password,
     string? Phone,
     UserStatus? Status,
     bool? IsMFAEnabled,
     bool? IsEmailVerified
-    ) : ICommand;
+    ) : ICommand<UpdateUserResponse>;
 

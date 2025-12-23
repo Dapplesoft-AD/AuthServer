@@ -11,7 +11,7 @@ internal sealed class GetAll : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("localities", async (
+        app.MapGet(ApiRoutes.GetAll(Base.Localities), async (
             IQueryHandler<GetAllLocalitiesQuery, List<LocalityResponse>> handler,
             CancellationToken cancellationToken) =>
         {

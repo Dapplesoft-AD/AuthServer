@@ -10,7 +10,7 @@ internal sealed class Delete : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete(ApiRoutes.UserLoginHistory.Create, async (
+        app.MapDelete(ApiRoutes.Create(Base.UserLoginHistory), async (
             Guid id,
             ICommandHandler<DeleteUserloginHistoryCommand> handler,
             CancellationToken cancellationToken) =>

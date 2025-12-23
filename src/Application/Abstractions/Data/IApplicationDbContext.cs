@@ -1,4 +1,3 @@
-using Domain.Applications;
 using Domain.Areas;
 using Domain.AuditLogs;
 using Domain.Businesses;
@@ -16,9 +15,9 @@ using Domain.Permissions;
 using Domain.Regions;
 using Domain.RolePermissions;
 using Domain.Roles;
+using Domain.SmsConfigs;
 using Domain.SmtpConfigs;
 using Domain.Todos;
-using Domain.Token;
 using Domain.UserLoginHistories;
 using Domain.UserProfiles;
 using Domain.Users;
@@ -32,11 +31,9 @@ public interface IApplicationDbContext
     DbSet<User> Users { get; }
     DbSet<EmailVerifications> EmailVerifications { get; }
     DbSet<PasswordReset> PasswordReset { get; }
-    DbSet<Tokens> Tokens { get; }
     DbSet<TodoItem> TodoItems { get; }
     DbSet<Customer> Customers { get; }
     DbSet<Permission> Permissions { get; }
-    DbSet<Applicationapply> Applications { get; }  // ← ADD THIS
     DbSet<RolePermission> RolePermissions { get; }
     DbSet<Role> Roles { get; }
     DbSet<UserLoginHistory> UserLoginHistory { get; }
@@ -48,6 +45,7 @@ public interface IApplicationDbContext
     DbSet<MfaSetting> MfaSettings { get; }
     DbSet<Otp> Otp { get; }
     DbSet<SmtpConfig> SmtpConfig { get; }
+    DbSet<SmsConfig> SmsConfig { get; }
     DbSet<Country> Countries { get; }
     DbSet<Region> Regions { get; }
     DbSet<District> Districts { get; }

@@ -18,7 +18,7 @@ public sealed class Create : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("PasswordResets", async (
+        app.MapPost(ApiRoutes.Create(Base.PasswordReset), async (
             Request request,
             ICommandHandler<CreatePasswordResetCommand, Guid> handler,
             CancellationToken cancellationToken) =>

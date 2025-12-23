@@ -19,7 +19,7 @@ public class Create : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("customer", async (
+        app.MapPost(ApiRoutes.Create(Base.Customers), async (
             Request request,
             ICommandHandler<CreateCustomerCommand, Guid> handler,
             CancellationToken cancellationToken) =>

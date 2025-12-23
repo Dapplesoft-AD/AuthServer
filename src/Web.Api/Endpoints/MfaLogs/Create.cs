@@ -11,7 +11,7 @@ public class Create : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/mfalogs", async (
+        app.MapPost(ApiRoutes.Create(Base.Mfalogs), async (
             Request request,
             ICommandHandler<CreateMfaLogCommand, Guid> handler,
             CancellationToken cancellationToken) =>

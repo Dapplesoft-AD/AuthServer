@@ -37,6 +37,6 @@ public sealed class UserLoginHistoryConfiguration : IEntityTypeConfiguration<Use
 
         builder.Property(u => u.LogoutTime);
 
-        builder.Property(u => u.Status).IsRequired().HasDefaultValue(LoginStatus.Succeed); // login successful by default
+        builder.Property(u => u.Status).IsRequired();
     }
 }

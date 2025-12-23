@@ -18,7 +18,7 @@ internal sealed class Create : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("Districts", async (
+        app.MapPost(ApiRoutes.Create(Base.Districts), async (
             Request request,
             ICommandHandler<CreateDistrictCommand, Guid> handler,
             CancellationToken cancellationToken) =>
