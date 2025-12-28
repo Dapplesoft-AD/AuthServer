@@ -22,7 +22,7 @@ services:
       - Cors__AllowedOrigins__6=http://authapi.dapplesoft.com
       - Cors__AllowedOrigins__7=https://authapi.dapplesoft.com
       - KnownProxies__0=127.0.0.1
-      - KnownProxies__1=172.18.240.206
+      - KnownProxies__1=172.28.0.1 # can be found from https://authapi.dapplesoft.com/remote-ip
       - KnownProxies__2=172.19.0.1
     networks:
       - auth-network
