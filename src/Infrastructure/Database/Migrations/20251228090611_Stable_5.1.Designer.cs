@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251227121422_SeedRolesAndUsers")]
-    partial class SeedRolesAndUsers
+    [Migration("20251228090611_Stable_5.1")]
+    partial class Stable_51
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
