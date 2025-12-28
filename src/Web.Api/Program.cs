@@ -1,19 +1,18 @@
+using System.Net;
 using System.Reflection;
 using Application;
 using HealthChecks.UI.Client;
 using Infrastructure;
 using Infrastructure.Database;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.HttpOverrides;
 using OpenIddict.Abstractions;
-using OpenIddict.Server.AspNetCore;
-using Org.BouncyCastle.Ocsp;
 using Serilog;
 using Web.Api;
 using Web.Api.Extensions;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
 string[] allowedOrigins = builder.Configuration
                                     .GetSection("Cors:AllowedOrigins")
                                     .Get<string[]>() ?? [];
@@ -21,6 +20,8 @@ string[] allowedOrigins = builder.Configuration
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddSwaggerGenWithAuth();
+
+builder.Services.AddCertificateForwarding(options => options.CertificateHeader = "X-SSL-CERT");
 
 builder.Services
     .AddApplication()
@@ -31,23 +32,6 @@ builder.Services.AddCors(options => options.AddPolicy("Allowed_Origins", builder
             .WithOrigins(allowedOrigins)
             .WithMethods("GET", "POST", "PUT", "DELETE", "PATCH")
             .WithHeaders("Content-Type", "Authorization")
-            .AllowCredentials()));
-
-builder.Services.AddCors(options => options.AddPolicy("LocalhostPolicy", policy => policy
-            .SetIsOriginAllowed(origin =>
-            {
-                if (string.IsNullOrWhiteSpace(origin))
-                {
-                    return false;
-                }
-
-                var uri = new Uri(origin);
-
-                return uri.Host == "localhost"
-                    || uri.Host == "127.0.0.1";
-            })
-            .AllowAnyMethod()
-            .AllowAnyHeader()
             .AllowCredentials()));
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
@@ -64,7 +48,7 @@ builder.Services.AddOpenIddict()
         options.SetAuthorizationEndpointUris("/connect/authorize");
         options.SetTokenEndpointUris("/connect/token");
         options.SetUserInfoEndpointUris("/connect/userinfo");
-        options.SetIssuer(builder.Configuration["IssuerUrl"] ?? "https://"+"localhost:5001"); // Issuer URL (authapi)
+        options.SetIssuer(builder.Configuration["IssuerUrl"] ?? "https://" + "localhost:5001"); // Issuer URL (authapi)
         options.AllowAuthorizationCodeFlow()
                .RequireProofKeyForCodeExchange();
 
@@ -82,7 +66,7 @@ builder.Services.AddOpenIddict()
                .EnableUserInfoEndpointPassthrough();
     });
 
-builder.Services.AddAuthentication( options =>
+builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = "AuthCookie";
         options.DefaultSignInScheme = "AuthCookie";
@@ -92,10 +76,12 @@ builder.Services.AddAuthentication( options =>
     {
         options.Cookie.Name = "auth_server_session";
         options.Cookie.HttpOnly = true;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         //options.Cookie.SameSite = SameSiteMode.Lax;
         options.Cookie.SameSite = SameSiteMode.None;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+        options.Cookie.SecurePolicy = builder.Configuration.GetValue<bool>("AuthServer:AlwaysHTTPS")
+                ? CookieSecurePolicy.Always
+                : CookieSecurePolicy.SameAsRequest;
         options.LoginPath = "/login";
         // do NOT redirect for API calls
         options.Events.OnRedirectToLogin = context =>
@@ -120,15 +106,7 @@ WebApplication app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
-        options.OAuthClientId("swagger");
-        //options.OAuthUsePkce();
-        options.OAuthScopes("openid", "profile", "email", "api");
-        options.OAuthAppName("Swagger UI");
-    });
-
+    app.UseSwaggerUI();
     app.ApplyMigrations();
 }
 
@@ -137,24 +115,42 @@ app.MapHealthChecks("health", new HealthCheckOptions
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
-app.UseHttpsRedirection();
+// ------------------ proxy (need for SSL)----------------------
+string[]? knownProxies = builder.Configuration.GetSection("KnownProxies").Get<string[]>();
+
+var forwardedHeadersOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedProto
+};
+
+if (knownProxies != null)
+{
+    foreach (string proxy in knownProxies)
+    {
+        if (System.Net.IPAddress.TryParse(proxy, out IPAddress? ip))
+        {
+            forwardedHeadersOptions.KnownProxies.Add(ip);
+        }
+    }
+}
+else
+{
+    forwardedHeadersOptions.KnownProxies.Add(IPAddress.Parse("172.18.240.206"));
+}
+app.UseForwardedHeaders(forwardedHeadersOptions);
+// ------------------------------------------------------------
+
+app.UseCertificateForwarding();
+
+app.MapGet("/remote-ip", (HttpContext ctx) => ctx.Connection.RemoteIpAddress?.ToString());
 
 app.UseRequestContextLogging();
 
-app.UseSerilogRequestLogging();
-
 app.UseExceptionHandler();
 
-app.UseRouting();
+app.UseSerilogRequestLogging();
 
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseCors("LocalhostPolicy");
-//}
-//else
-//{
-//    app.UseCors("Allowed_Origins");
-//}
+app.UseRouting();
 
 app.UseCors("Allowed_Origins");
 
@@ -163,9 +159,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapEndpoints();
-
-// REMARK: If you want to use Controllers, you'll need this.
-app.MapControllers();
 
 await app.RunAsync();
 
