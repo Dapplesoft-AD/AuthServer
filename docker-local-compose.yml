@@ -9,7 +9,8 @@ services:
       - 5000:8080
       - 5001:8081
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
+      # ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__Database: Host=postgres;Port=5432;Database=clean-architecture;Username=postgres;Password=1234
       ASPNETCORE_URLS: http://+:8080;http://+:8081
       FrontendLoginUrl: https://localhost:4200/login  # Login page of auth server
@@ -23,9 +24,10 @@ services:
       Cors__AllowedOrigins__5: "https://auth.dapplesoft.com"
       Cors__AllowedOrigins__6: "http://authapi.dapplesoft.com"
       Cors__AllowedOrigins__7: "https://authapi.dapplesoft.com"
-      KnownProxies__0: "127.0.0.1"
+      KnownProxies__0: "127.0.0.1" # can be found from https://authapi.dapplesoft.com/remote-ip
       KnownProxies__1: "172.18.240.206"
       KnownProxies__2: "172.19.0.1"
+      AlwaysRunSwagger: true
     restart: on-failure
     depends_on:
       postgres:
