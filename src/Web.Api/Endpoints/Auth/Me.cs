@@ -1,8 +1,5 @@
 ﻿using System.Security.Claims;
 using Application.Abstractions.Authentication;
-using Application.Abstractions.Messaging;
-using Application.Businesses.Create;
-using Domain.Businesses;
 using OpenIddict.Abstractions;
 
 namespace Web.Api.Endpoints.Auth;

@@ -1,8 +1,6 @@
 ﻿using Application.Abstractions.Messaging;
-using Application.BusinessMembers.Create;
 using Application.ClientApps.Create;
 using SharedKernel;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Web.Api.Endpoints.ClientApps;
 

@@ -1,18 +1,11 @@
-using System.Collections.Generic;
 using Application.Abstractions.Data;
 using Domain.Areas;
 using Domain.AuditLogs;
-using Domain.Businesses;
-using Domain.BusinessMembers;
 using Domain.Countries;
-using Domain.Customers;
 using Domain.Districts;
 using Domain.EmailVerification;
 using Domain.Localities;
-using Domain.MfaLogs;
-using Domain.MfaSettings;
 using Domain.Otps;
-using Domain.PasswordResets;
 using Domain.Permissions;
 using Domain.Regions;
 using Domain.RolePermissions;
@@ -20,17 +13,11 @@ using Domain.Roles;
 using Domain.SmsConfigs;
 using Domain.SmtpConfigs;
 using Domain.Todos;
-using Domain.UserLoginHistories;
-using Domain.UserProfiles;
 using Domain.Users;
-using Infrastructure.Authentication;
 using Infrastructure.DomainEvents;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Org.BouncyCastle.Crypto.Generators;
 using SharedKernel;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Infrastructure.Database;
 
@@ -41,19 +28,11 @@ public sealed class ApplicationDbContext(
 {
     public DbSet<User> Users { get; set; }
     public DbSet<EmailVerifications> EmailVerifications { get; set; }
-    public DbSet<PasswordReset> PasswordReset { get; set; }
-    public DbSet<Customer> Customers { get; set; }
     public DbSet<TodoItem> TodoItems { get; set; }
-    public DbSet<UserLoginHistory> UserLoginHistory { get; set; }
-    public DbSet<UserProfile> UserProfile { get; set; }
     public DbSet<Permission> Permissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<Role> Roles { get; set; }
-    public DbSet<Business> Businesses { get; set; }
-    public DbSet<BusinessMember> BusinessMembers { get; set; }
     public DbSet<AuditLog> AuditLogs { get; set; }
-    public DbSet<MfaLog> MfaLogs { get; set; }
-    public DbSet<MfaSetting> MfaSettings { get; set; }
     public DbSet<Otp> Otp { get; set; }
     public DbSet<SmtpConfig> SmtpConfig { get; set; }
     public DbSet<SmsConfig> SmsConfig { get; set; }

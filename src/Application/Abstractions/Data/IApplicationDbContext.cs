@@ -1,16 +1,10 @@
 using Domain.Areas;
 using Domain.AuditLogs;
-using Domain.Businesses;
-using Domain.BusinessMembers;
 using Domain.Countries;
-using Domain.Customers;
 using Domain.Districts;
 using Domain.EmailVerification;
 using Domain.Localities;
-using Domain.MfaLogs;
-using Domain.MfaSettings;
 using Domain.Otps;
-using Domain.PasswordResets;
 using Domain.Permissions;
 using Domain.Regions;
 using Domain.RolePermissions;
@@ -18,8 +12,6 @@ using Domain.Roles;
 using Domain.SmsConfigs;
 using Domain.SmtpConfigs;
 using Domain.Todos;
-using Domain.UserLoginHistories;
-using Domain.UserProfiles;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -30,19 +22,11 @@ public interface IApplicationDbContext
 {
     DbSet<User> Users { get; }
     DbSet<EmailVerifications> EmailVerifications { get; }
-    DbSet<PasswordReset> PasswordReset { get; }
     DbSet<TodoItem> TodoItems { get; }
-    DbSet<Customer> Customers { get; }
     DbSet<Permission> Permissions { get; }
     DbSet<RolePermission> RolePermissions { get; }
     DbSet<Role> Roles { get; }
-    DbSet<UserLoginHistory> UserLoginHistory { get; }
-    DbSet<UserProfile> UserProfile { get; }
-    DbSet<Business> Businesses { get; }
-    DbSet<BusinessMember> BusinessMembers { get; }
     DbSet<AuditLog> AuditLogs { get; }
-    DbSet<MfaLog> MfaLogs { get; }
-    DbSet<MfaSetting> MfaSettings { get; }
     DbSet<Otp> Otp { get; }
     DbSet<SmtpConfig> SmtpConfig { get; }
     DbSet<SmsConfig> SmsConfig { get; }
