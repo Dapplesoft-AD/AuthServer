@@ -1,45 +1,26 @@
 services:
   auth-server:
+    build:
+      context: .
+      dockerfile: ./Dockerfile  # Path to your Dockerfile
+      args:
+        ASPNETCORE_ENVIRONMENT: Production  # Passed to Dockerfile during build
     image: ghcr.io/dapplesoft-ad/auth-server:latest
-    container_name: auth-server
-    ports:
-      - "8080:8080"
-      - "8081:8081"
     environment:
-      #- ASPNETCORE_ENVIRONMENT=Development # for Development
-      - ASPNETCORE_ENVIRONMENT=Production # for Production
-      - ASPNETCORE_URLS=http://+:8080;http://+:8081
-      - ConnectionStrings__Database=Host=localhost;Port=5432;Database=authserver;Username=postgres;Password=pass1234
-      - FrontendLoginUrl=https://auth.dapplesoft.com/login  # Login page of auth server
-      - IssuerUrl=https://authapi.dapplesoft.com # Auth server Backend Url
-      - AuthServer_AlwaysHTTPS=false
-      - Cors__AllowedOrigins__0=http://localhost:4200
-      - Cors__AllowedOrigins__1=https://localhost:4200
-      - Cors__AllowedOrigins__2=http://localhost:40033
-      - Cors__AllowedOrigins__3=https://localhost:40003
-      - Cors__AllowedOrigins__4=http://auth.dapplesoft.com
-      - Cors__AllowedOrigins__5=https://auth.dapplesoft.com
-      - Cors__AllowedOrigins__6=http://authapi.dapplesoft.com
-      - Cors__AllowedOrigins__7=https://authapi.dapplesoft.com
-      - KnownProxies__0=172.28.0.1 # can be found from https://authapi.dapplesoft.com/remote-ip
-      - KnownProxies__1=172.0.0.1
-      - KnownProxies__2=172.19.0.1
-      - AlwaysRunSwagger=true
-    networks:
-      - auth-network
-    restart: unless-stopped
-
-  auth-server-frontend:
-    image: ghcr.io/dapplesoft-ad/auth-server-frontend:latest
-    container_name: auth-server-frontend
-    ports:
-      - "40003:4200"
-    environment:
-      - NODE_ENV=production
-    networks:
-      - auth-network
-    restart: unless-stopped
-
-networks:
-  auth-network:
-    driver: bridge
+      # ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_ENVIRONMENT: Production
+      FrontendLoginUrl: https://auth.dapplesoft.com/login  # Login page of auth server
+      IssuerUrl: https://authapi.dapplesoft.com # Auth server Backend Url
+      AuthServer_AlwaysHTTPS: false
+      Cors__AllowedOrigins__0: "http://localhost:4200"
+      Cors__AllowedOrigins__1: "https://localhost:4200"
+      Cors__AllowedOrigins__2: "http://localhost:40033"
+      Cors__AllowedOrigins__3: "https://localhost:40003"
+      Cors__AllowedOrigins__4: "http://auth.dapplesoft.com"
+      Cors__AllowedOrigins__5: "https://auth.dapplesoft.com"
+      Cors__AllowedOrigins__6: "http://authapi.dapplesoft.com"
+      Cors__AllowedOrigins__7: "https://authapi.dapplesoft.com"
+      KnownProxies__0: "127.0.0.1" # can be found from https://authapi.dapplesoft.com/remote-ip
+      KnownProxies__1: "172.18.240.206"
+      KnownProxies__2: "172.19.0.1"
+      AlwaysRunSwagger: true
