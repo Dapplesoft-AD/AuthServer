@@ -22,13 +22,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ghcr.io/dapplesoft-ad/auth-server:latest
+      - name: Build and Push Docker Image with Docker Compose
+        run: |
+          # Build the image using Docker Compose
+          docker-compose -f docker-compose.yml build auth-server
+          # Push the built image to GHCR
+          docker-compose -f docker-compose.yml push auth-server
 
   deploy-on-server:
     runs-on: ubuntu-latest
