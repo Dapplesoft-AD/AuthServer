@@ -1,6 +1,8 @@
 ﻿using Application.Abstractions.Authentication;
 using Application.Abstractions.Messaging;
 using Application.Users.GetAll;
+using Domain.Roles;
+using Microsoft.AspNetCore.Authorization;
 using Polly;
 using SharedKernel;
 using Web.Api.Extensions;
@@ -28,6 +30,6 @@ internal sealed class GetAll : IEndpoint
             return result.Match(Results.Ok, CustomResults.Problem);
         })
         .WithTags(Tags.Users)
-        .RequireAuthorization();
+        .RequireRole(RoleCode.Admin);
     }
 }
