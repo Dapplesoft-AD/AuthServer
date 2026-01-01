@@ -42,17 +42,17 @@ internal sealed class RegisterUserCommandHandler(
 
         context.Users.Add(user);
 
-        Role? normalUserRole = await context.Roles
+        Role? publicUser = await context.Roles
             .AsNoTracking()
-            .SingleOrDefaultAsync(r => r.RoleCode == RoleCode.NormalUser, cancellationToken);
+            .SingleOrDefaultAsync(r => r.RoleCode == RoleCode.PublicUser, cancellationToken);
 
-        if (normalUserRole is not null)
+        if (publicUser is not null)
         {
             var userRole = new UserRole
             {
                 Id = Guid.NewGuid(),
                 UserId = user.Id,
-                RoleId = normalUserRole.Id
+                RoleId = publicUser.Id
             };
             context.UserRoles.Add(userRole);
         }
