@@ -1,10 +1,10 @@
 ﻿using Application.Abstractions.Messaging;
-using Application.Areas.Delete;
+using Application.SubDistricts.Delete;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
 
-namespace Web.Api.Endpoints.Areas;
+namespace Web.Api.Endpoints.SubDistrict;
 
 internal sealed class Delete : IEndpoint
 {

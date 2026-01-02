@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentValidation;
 
-namespace Application.Areas.Delete;
+namespace Application.SubDistricts.Delete;
 
 public class DeleteAreaValidator : AbstractValidator<DeleteAreaCommand>
 {

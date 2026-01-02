@@ -25,7 +25,7 @@ internal sealed class CreateCountryCommandHandler
             Name = request.Name,
             Capital = request.Capital,
             PhoneCode = request.PhoneCode,
-            IsActive = request.IsActive
+            IsNew = request.IsActive
         };
 
         await _context.Countries.AddAsync(country, cancellationToken);

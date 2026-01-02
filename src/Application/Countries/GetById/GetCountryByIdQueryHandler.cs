@@ -25,7 +25,7 @@ internal sealed class GetCountryByIdQueryHandler : IQueryHandler<GetCountryByIdQ
                 Name = b.Name,
                 Capital = b.Capital,
                 PhoneCode = b.PhoneCode,
-                IsActive = b.IsActive
+                IsActive = b.IsNew
             })
             .SingleOrDefaultAsync(cancellationToken);
 

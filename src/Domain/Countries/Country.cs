@@ -8,6 +8,6 @@ public sealed class Country : Entity
     public string Name { get; set; } = null!;
     public string Capital { get; set; } = null!;
     public string PhoneCode { get; set; } = null!;
-    public bool IsActive { get; set; }
+    public bool IsNew { get; set; }
 }
 

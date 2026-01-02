@@ -6,7 +6,6 @@ namespace Application.Districts.Update;
 public sealed record UpdateDistrictCommand(
     Guid DistrictId,
     Guid RegionId,
-    Guid CountryId,
     string Name,
-    bool IsActive
+    bool IsNew
 ) : ICommand;

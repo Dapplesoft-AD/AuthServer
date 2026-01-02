@@ -35,10 +35,7 @@ internal sealed class GetRegionByIdQueryHandler
             Id = region.Id,
             CountryId = region.CountryId,
             Name = region.Name,
-            RegionType = region.RegionType,
-            IsActive = region.IsActive,
-            CreatedAt = region.CreatedAt,
-            UpdatedAt = region.UpdatedAt
+            IsNew = region.IsNew ?? false
         };
 
         return response;

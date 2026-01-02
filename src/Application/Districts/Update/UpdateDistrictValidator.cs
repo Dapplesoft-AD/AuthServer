@@ -20,7 +20,7 @@ public sealed class UpdateDistrictValidator : AbstractValidator<UpdateDistrictCo
             .MaximumLength(255)
             .WithMessage("District Name cannot exceed 255 characters.");
 
-        RuleFor(d => d.IsActive)
+        RuleFor(d => d.IsNew)
             .NotNull()
             .WithMessage("IsActive value is required.");
     }

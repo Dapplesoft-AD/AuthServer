@@ -1,27 +1,30 @@
 ﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Domain.Areas;
+using Domain.SubDistricts;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
-namespace Application.Areas.Update;
+namespace Application.SubDistricts.Update;
 
-public sealed class UpdateAreaCommandHandler
-    : ICommandHandler<UpdateAreaCommand, Guid>
+public sealed class UpdateSubDistrictCommandHandler
+    : ICommandHandler<UpdateSubDistrictCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateAreaCommandHandler(IApplicationDbContext context)
+    public UpdateSubDistrictCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
     public async Task<Result<Guid>> Handle(
-        UpdateAreaCommand command,
-        CancellationToken cancellationToken)
+        UpdateSubDistrictCommand command,
+        CancellationToken cancellationToken
+    )
     {
-        Area? area = await _context.Areas
-            .FirstOrDefaultAsync(a => a.Id == command.Id, cancellationToken);
+        SubDistrict? area = await _context.SubDistricts.FirstOrDefaultAsync(
+            a => a.Id == command.Id,
+            cancellationToken
+        );
 
         if (area is null)
         {
@@ -29,12 +32,10 @@ public sealed class UpdateAreaCommandHandler
         }
 
         // Check if area name is unique within the same district (excluding current area)
-        bool areaNameExists = await _context.Areas
-            .AnyAsync(a =>
-                a.DistrictId == command.DistrictId &&
-                a.Name == command.Name &&
-                a.Id != command.Id,
-                cancellationToken);
+        bool areaNameExists = await _context.SubDistricts.AnyAsync(
+            a => a.DistrictId == command.DistrictId && a.Name == command.Name && a.Id != command.Id,
+            cancellationToken
+        );
 
         if (areaNameExists)
         {
@@ -42,11 +43,9 @@ public sealed class UpdateAreaCommandHandler
         }
 
         // Update properties
-        area.CountryId = command.CountryId;
         area.DistrictId = command.DistrictId;
         area.Name = command.Name;
-        area.Type = command.Type;
-        area.IsActive = command.IsActive;
+        area.IsNew = command.IsNew;
 
         await _context.SaveChangesAsync(cancellationToken);
 

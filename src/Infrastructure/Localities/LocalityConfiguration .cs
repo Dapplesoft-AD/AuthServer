@@ -1,4 +1,4 @@
-﻿using Domain.Areas;
+﻿using Domain.SubDistricts;
 using Domain.Localities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -49,7 +49,7 @@ internal sealed class LocalityConfiguration : IEntityTypeConfiguration<Locality>
         builder.HasIndex(l => new { l.AreaId, l.Name })
             .IsUnique();
 
-        builder.HasOne<Area>()
+        builder.HasOne<Domain.SubDistricts.SubDistrict>()
             .WithMany()
             .HasForeignKey(l => l.AreaId)
             .OnDelete(DeleteBehavior.Restrict);

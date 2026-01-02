@@ -1,5 +1,5 @@
 ﻿using Application.Abstractions.Messaging;
 
-namespace Application.Areas.Delete;
+namespace Application.SubDistricts.Delete;
 
 public sealed record DeleteAreaCommand(Guid Id) : ICommand;

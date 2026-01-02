@@ -14,16 +14,12 @@ internal sealed class GetDistrictQueryHandler(
         CancellationToken cancellationToken)
     {
         List<DistrictResponse> districts = await context.Districts
-            .OrderByDescending(x => x.CreatedAt)
             .Select(x => new DistrictResponse
             {
                 Id = x.Id,
-                CountryId = x.CountryId,
                 RegionId = x.RegionId,
                 Name = x.Name,
-                IsActive = x.IsActive,
-                CreatedAt = x.CreatedAt,
-                UpdatedAt = x.UpdatedAt
+                IsNew = x.IsNew,
             })
             .ToListAsync(cancellationToken);
 

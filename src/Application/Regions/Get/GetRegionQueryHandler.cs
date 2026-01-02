@@ -16,16 +16,12 @@ internal sealed class GetRegionQueryHandler(
     
 
         List<RegionResponse> regions = await context.Regions
-            .OrderByDescending(x => x.CreatedAt)
             .Select(x => new RegionResponse
             {
                 Id = x.Id,
                 CountryId = x.CountryId,
                 Name = x.Name,
-                RegionType = x.RegionType,
-                IsActive = x.IsActive,
-                CreatedAt = x.CreatedAt,
-                UpdatedAt = x.UpdatedAt
+                IsNew = x.IsNew
             })
             .ToListAsync(cancellationToken);
 

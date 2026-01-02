@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentValidation;
 
-namespace Application.Areas.Create;
+namespace Application.SubDistricts.Create;
 
     public class CreateAreaValidator : AbstractValidator<CreateAreaCommand>
     {
@@ -24,12 +24,6 @@ namespace Application.Areas.Create;
                 .WithMessage("Name is required.")
                 .MaximumLength(255)
                 .WithMessage("Name must not exceed 255 characters.");
-
-            RuleFor(x => x.Type)
-                .IsInEnum()
-                .WithMessage(
-                    "Invalid area type. Valid values: 1=Upazila, 2=City, 3=Thana, 4=Municipality, 5=Township."
-                );
         }
     }
 

@@ -1,13 +1,12 @@
 ﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
-using Domain.Areas;
+using Domain.SubDistricts;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
-namespace Application.Areas.Delete;
+namespace Application.SubDistricts.Delete;
 
-public sealed class DeleteAreaCommandHandler
-    : ICommandHandler<DeleteAreaCommand>
+public sealed class DeleteAreaCommandHandler : ICommandHandler<DeleteAreaCommand>
 {
     private readonly IApplicationDbContext _context;
 
@@ -18,15 +17,17 @@ public sealed class DeleteAreaCommandHandler
 
     public async Task<Result> Handle(DeleteAreaCommand command, CancellationToken cancellationToken)
     {
-        Area? area = await _context.Areas
-            .FirstOrDefaultAsync(a => a.Id == command.Id, cancellationToken);
+        SubDistrict? area = await _context.SubDistricts.FirstOrDefaultAsync(
+            a => a.Id == command.Id,
+            cancellationToken
+        );
 
         if (area is null)
         {
             return Result.Failure("Area not found.");
         }
 
-        _context.Areas.Remove(area);
+        _context.SubDistricts.Remove(area);
         await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Success();

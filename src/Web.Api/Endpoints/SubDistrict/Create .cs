@@ -1,10 +1,10 @@
 ﻿using Application.Abstractions.Messaging;
-using Application.Areas.Create;
+using Application.SubDistricts.Create;
 using SharedKernel;
 using Web.Api.Extensions;
 using Web.Api.Infrastructure;
 
-namespace Web.Api.Endpoints.Areas;
+namespace Web.Api.Endpoints.SubDistrict;
 
 internal sealed class Create : IEndpoint
 {
@@ -23,18 +23,10 @@ internal sealed class Create : IEndpoint
             ICommandHandler<CreateAreaCommand, Guid> handler,
             CancellationToken cancellationToken) =>
         {
-            if (!Enum.IsDefined(typeof(Domain.Areas.Area.AreaType), request.Type))
-            {
-                return Results.BadRequest("Invalid area type. Use 1=Upazila, 2=City, 3=Thana, 4=Municipality, 5=Township");
-            }
-
-            var areaType = (Domain.Areas.Area.AreaType)request.Type;
-
             var command = new CreateAreaCommand(
                 request.CountryId,
                 request.DistrictId,
                 request.Name,
-                areaType,
                 request.IsActive
             );
 

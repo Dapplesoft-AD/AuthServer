@@ -1,12 +1,11 @@
 ﻿using Application.Abstractions.Messaging;
-using Domain.Areas;
+using Domain.SubDistricts;
 
-namespace Application.Areas.Create;
+namespace Application.SubDistricts.Create;
 
 public sealed record CreateAreaCommand(
     Guid CountryId,
     Guid DistrictId,
     string Name,
-    Area.AreaType Type,
-    bool IsActive
+    bool IsNew
 ) : ICommand<Guid>;
