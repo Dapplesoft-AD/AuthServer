@@ -26,7 +26,7 @@ public sealed class GetSubDistrictByIdQueryHandler
                 a.Id,
                 a.DistrictId,
                 a.Name,
-                a.IsNew
+                a.IsNew?? false
             ))
             .FirstOrDefaultAsync(cancellationToken);
 

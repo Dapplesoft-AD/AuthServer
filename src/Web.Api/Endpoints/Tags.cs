@@ -28,5 +28,5 @@ public static class Tags
     public const string CommonOtp = "OtpRequest";
     public const string VerifyOtp = "VerifyOtp";
     public const string ClientApps = "ClientApps";
-
+    public const string Addresses = "Addresses";
 }

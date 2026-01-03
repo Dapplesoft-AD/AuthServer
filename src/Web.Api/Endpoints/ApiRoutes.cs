@@ -49,4 +49,5 @@ public static class Base
     public const string Roles = "roles";
     public const string OtpVerify = "otp-verify";
     public const string ForgotPassReset = "forgot-password-reset";
+    public const string Addresses = "addresses";
 }

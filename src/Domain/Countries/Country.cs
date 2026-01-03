@@ -2,12 +2,12 @@
 
 namespace Domain.Countries;
 
-public sealed class Country : Entity
+public class Country : Entity
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = null!;
     public string Capital { get; set; } = null!;
     public string PhoneCode { get; set; } = null!;
-    public bool IsNew { get; set; }
+    public bool? IsNew { get; set; }
 }
 

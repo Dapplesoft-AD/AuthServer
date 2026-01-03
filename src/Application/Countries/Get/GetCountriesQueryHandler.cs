@@ -27,7 +27,7 @@ internal sealed class GetCountriesQueryHandler
                 Name = b.Name,
                 Capital = b.Capital,
                 PhoneCode = b.PhoneCode,
-                IsActive = b.IsNew
+                IsActive = b.IsNew?? false
             })
             .ToListAsync(cancellationToken);
         return Result.Success(countries);

@@ -22,7 +22,12 @@ public sealed class GetAllSubDistrictQueryHandler
     )
     {
         List<SubDistrictResponse> areas = await _context
-            .SubDistricts.Select(a => new SubDistrictResponse(a.Id, a.DistrictId, a.Name, a.IsNew))
+            .SubDistricts.Select(a => new SubDistrictResponse(
+                a.Id,
+                a.DistrictId,
+                a.Name,
+                a.IsNew ?? false
+            ))
             .ToListAsync(cancellationToken);
 
         return Result.Success(areas);
