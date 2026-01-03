@@ -33,7 +33,7 @@ internal sealed class UpdateCountryCommandHandler : ICommandHandler<UpdateCountr
         country.Name = command.Name;
         country.Capital = command.Capital;
         country.PhoneCode = command.PhoneCode;
-        country.IsActive = command.IsActive;
+        country.IsNew = command.IsActive;
 
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success();

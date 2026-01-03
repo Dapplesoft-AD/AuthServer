@@ -1,5 +1,4 @@
-﻿using System;
-using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Messaging;
 using Application.Districts.Get;
 
 namespace Application.Districts.GetById;

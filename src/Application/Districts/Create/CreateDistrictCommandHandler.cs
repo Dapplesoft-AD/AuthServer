@@ -12,11 +12,10 @@ internal sealed class CreateDistrictCommandHandler(IApplicationDbContext context
     {
         var district = new District
         {
-            CountryId = command.CountryId,
+            Id = Guid.NewGuid(),
             RegionId = command.RegionId,
             Name = command.Name,
-            IsActive = command.IsActive,
-            CreatedAt = command.CreatedAt
+            IsNew = true
         };
 
         await context.Districts.AddAsync(district, cancellationToken);

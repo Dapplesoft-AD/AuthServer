@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Abstractions.Data;
+﻿using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
 using Domain.Districts;
 using Microsoft.EntityFrameworkCore;
@@ -27,10 +24,8 @@ internal sealed class UpdateDistrictCommandHandler(
 
         // Update fields
         district.RegionId = command.RegionId;
-        district.CountryId = command.CountryId;
         district.Name = command.Name;
-        district.IsActive = command.IsActive;
-        district.UpdatedAt = DateTime.UtcNow;
+        district.IsNew = command.IsNew;
 
         await context.SaveChangesAsync(cancellationToken);
 

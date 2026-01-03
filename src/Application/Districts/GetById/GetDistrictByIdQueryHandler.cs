@@ -33,12 +33,9 @@ internal sealed class GetDistrictByIdQueryHandler
         var response = new DistrictResponse
         {
             Id = district.Id,
-            CountryId = district.CountryId,
             RegionId = district.RegionId,
             Name = district.Name,
-            IsActive = district.IsActive,
-            CreatedAt = district.CreatedAt,
-            UpdatedAt = district.UpdatedAt
+            IsNew = district.IsNew?? false,
         };
 
         return response;

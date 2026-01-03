@@ -18,10 +18,9 @@ internal sealed class Update : IEndpoint
         {
             var command = new UpdateDistrictCommand(
                 DistrictId: id,
-                CountryId: request.CountryId,
                 RegionId: request.RegionId,
                 Name: request.Name,
-                IsActive: request.IsActive
+                IsNew: request.IsNew
             );
 
             Result result = await handler.Handle(command, cancellationToken);
@@ -42,5 +41,5 @@ public sealed record UpdateDistrictRequest(
     Guid CountryId,
     Guid RegionId,
     string Name,
-    bool IsActive
+    bool IsNew
 );

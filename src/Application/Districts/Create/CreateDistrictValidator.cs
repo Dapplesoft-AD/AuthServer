@@ -6,9 +6,6 @@ public sealed class CreateDistrictValidator : AbstractValidator<CreateDistrictCo
 {
     public CreateDistrictValidator()
     {
-        RuleFor(d => d.CountryId)
-            .NotEmpty()
-            .WithMessage("CountryId is required.");
 
         RuleFor(d => d.RegionId)
             .NotEmpty()
@@ -19,9 +16,5 @@ public sealed class CreateDistrictValidator : AbstractValidator<CreateDistrictCo
             .WithMessage("Name is required.")
             .MaximumLength(200)
             .WithMessage("Name cannot exceed 200 characters.");
-
-        RuleFor(d => d.CreatedAt)
-            .NotEmpty()
-            .WithMessage("CreatedAt is required.");
     }
 }

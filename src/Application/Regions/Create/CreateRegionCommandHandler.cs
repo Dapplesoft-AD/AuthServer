@@ -14,9 +14,7 @@ internal sealed class CreateRegionCommandHandler(IApplicationDbContext context)
         {
             CountryId = command.CountryId,
             Name = command.Name,
-            RegionType = command.RegionType,
-            IsActive = command.IsActive,
-            CreatedAt = command.CreatedAt
+            IsNew = command.IsActive,
         };
 
         await context.Regions.AddAsync(region, cancellationToken);

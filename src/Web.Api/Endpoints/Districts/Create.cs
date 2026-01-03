@@ -10,10 +10,8 @@ internal sealed class Create : IEndpoint
 {
     public sealed class Request
     {
-        public Guid CountryId { get; set; }
         public Guid RegionId { get; set; }
         public string Name { get; set; }
-        public bool IsActive { get; set; } = true;
     }
 
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -25,11 +23,8 @@ internal sealed class Create : IEndpoint
         {
             var command = new CreateDistrictCommand
             {
-                CountryId = request.CountryId,
                 RegionId = request.RegionId,
-                Name = request.Name,
-                IsActive = request.IsActive,
-                CreatedAt = DateTime.UtcNow
+                Name = request.Name
             };
 
             Result<Guid> result = await handler.Handle(command, cancellationToken);

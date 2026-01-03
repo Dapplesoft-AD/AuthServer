@@ -28,9 +28,7 @@ internal sealed class UpdateRegionCommandHandler(
         // Update fields
         region.CountryId = command.CountryId;
         region.Name = command.Name;
-        region.RegionType = command.RegionType;
-        region.IsActive = command.IsActive;
-        region.UpdatedAt = DateTime.UtcNow;
+        region.IsNew = command.IsActive;
 
         await context.SaveChangesAsync(cancellationToken);
 

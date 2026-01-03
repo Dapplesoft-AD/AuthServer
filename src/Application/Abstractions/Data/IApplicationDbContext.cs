@@ -1,4 +1,3 @@
-using Domain.Areas;
 using Domain.AuditLogs;
 using Domain.Countries;
 using Domain.Districts;
@@ -11,6 +10,7 @@ using Domain.RolePermissions;
 using Domain.Roles;
 using Domain.SmsConfigs;
 using Domain.SmtpConfigs;
+using Domain.SubDistricts;
 using Domain.Todos;
 using Domain.UserRoles;
 using Domain.Users;
@@ -34,7 +34,7 @@ public interface IApplicationDbContext
     DbSet<Country> Countries { get; }
     DbSet<Region> Regions { get; }
     DbSet<District> Districts { get; }
-    DbSet<Area> Areas { get; }
+    DbSet<SubDistrict> SubDistricts { get; }
     DbSet<Locality> Localities { get; }
     DbSet<UserRole> UserRoles { get; }
     EntityEntry Entry(object entity);
