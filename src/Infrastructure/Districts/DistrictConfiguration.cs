@@ -15,6 +15,7 @@ public class DistrictConfiguration : IEntityTypeConfiguration<District>
 
         builder.Property(d => d.Id).IsRequired();
         builder.Property(d => d.RegionId).IsRequired();
+        builder.Property(d => d.IsNew).HasDefaultValue(false);
         builder.Property(d => d.Name).IsRequired().HasMaxLength(200);
 
         builder.HasOne<Region>()

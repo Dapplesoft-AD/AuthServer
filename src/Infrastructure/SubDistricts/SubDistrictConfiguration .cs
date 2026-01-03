@@ -23,8 +23,7 @@ internal sealed class SubDistrictConfiguration : IEntityTypeConfiguration<SubDis
             .IsRequired();
 
         builder.Property(a => a.IsNew)
-            .IsRequired()
-            .HasDefaultValue(true);
+            .HasDefaultValue(false);
 
         // Add indexes
         builder.HasIndex(a => a.DistrictId);

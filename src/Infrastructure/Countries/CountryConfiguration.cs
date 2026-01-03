@@ -28,6 +28,6 @@ internal sealed class CountryConfiguration : IEntityTypeConfiguration<Country>
                .HasMaxLength(20);
 
         builder.Property(x => x.IsNew)
-               .IsRequired();
+               .HasDefaultValue(false);
     }
 }

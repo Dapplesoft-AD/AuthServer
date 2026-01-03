@@ -15,6 +15,7 @@ public class RegionConfiguration : IEntityTypeConfiguration<Region>
 
         builder.Property(r => r.Id).IsRequired();
         builder.Property(r => r.CountryId).IsRequired();
+        builder.Property(r => r.IsNew).HasDefaultValue(false);
         builder.Property(r => r.Name).IsRequired().HasMaxLength(200);
 
         builder.HasOne<Country>()
