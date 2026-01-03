@@ -8,7 +8,16 @@ namespace Web.Api.Endpoints.Users;
 
 internal sealed class Register : IEndpoint
 {
-    public sealed record Request(string Email, string FullName, string Password, string? Phone);   // gets from client
+    public sealed record Request(
+        string Email, 
+        string FullName, 
+        string Password, 
+        string? Phone, 
+        Guid? CountryId,
+        Guid? RegionId,
+        Guid? DistrictId,
+        Guid? SubDistrictId
+    );   // gets from client
 
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
@@ -21,8 +30,12 @@ internal sealed class Register : IEndpoint
                 request.Email,
                 request.FullName,
                 request.Password,
-                request.Phone
-                );
+                request.Phone,
+                request.CountryId,
+                request.RegionId,
+                request.DistrictId,
+                request.SubDistrictId
+            );
 
             Result<Guid> result = await handler.Handle(command, cancellationToken);
             return result.Match(Results.Ok, CustomResults.Problem);

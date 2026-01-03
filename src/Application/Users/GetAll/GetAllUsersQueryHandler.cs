@@ -21,6 +21,10 @@ internal sealed class GetAllUsersQueryHandler(
                 Phone = user.Phone,
                 IsEmailVerified = user.IsEmailVerified,
                 IsMFAEnabled = user.IsMFAEnabled,
+                CountryId = user.CountryId,
+                RegionId = user.RegionId,
+                DistrictId = user.DistrictId,
+                SubDistrictId = user.SubDistrictId,
                 Status = user.Status,
                 CreatedAt = user.CreatedAt,
                 UpdatedAt = user.UpdatedAt

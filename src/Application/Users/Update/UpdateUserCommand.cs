@@ -9,8 +9,11 @@ public sealed record UpdateUserCommand(
     string? Fullname,
     string? Email,
     string? Phone,
+    Guid? CountryId,
+    Guid? RegionId,
+    Guid? DistrictId,
+    Guid? SubDistrictId,
     UserStatus? Status,
     bool? IsMFAEnabled,
     bool? IsEmailVerified
-    ) : ICommand<UpdateUserResponse>;
-
+) : ICommand<UpdateUserResponse>;

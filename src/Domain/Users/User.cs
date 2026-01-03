@@ -18,6 +18,14 @@ public sealed class User : Entity
 
     public bool IsMFAEnabled { get; set; }
 
+    public Guid? CountryId { get; set; }
+
+    public Guid? RegionId { get; set; }
+    
+    public Guid? DistrictId { get; set; }
+    
+    public Guid? SubDistrictId { get; set; }
+
     public UserStatus Status { get; set; }
 
     public DateTime CreatedAt { get; set; }
