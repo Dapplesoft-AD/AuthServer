@@ -68,6 +68,32 @@ internal sealed class UpdateUserCommandHandler(
             userTuple.IsEmailVerified = command.IsEmailVerified.Value;
         }
 
+        if (command.CountryId.HasValue)
+        {
+            userTuple.CountryId = command.CountryId.Value;
+        }
+
+        if (command.RegionId.HasValue)
+        {
+            userTuple.RegionId = command.RegionId.Value;
+        }
+
+        if (command.DistrictId.HasValue)
+        {
+            userTuple.DistrictId = command.DistrictId.Value;
+        }
+
+        if (command.SubDistrictId.HasValue)
+        {
+            userTuple.SubDistrictId = command.SubDistrictId.Value;
+        }
+
+        if (command.Address is not null)
+        {
+            userTuple.Address = command.Address;
+        }
+
+        // checking if changed
         if (context.Entry(userTuple).State == EntityState.Modified)
         {
             userTuple.UpdatedAt = dateTimeProvider.UtcNow;
@@ -80,6 +106,7 @@ internal sealed class UpdateUserCommandHandler(
             Email: userTuple.Email,
             Phone: userTuple.Phone,
             Status: userTuple.Status,
+            Address: userTuple.Address,
             IsMFAEnabled: userTuple.IsMFAEnabled,
             IsEmailVerified: userTuple.IsEmailVerified
         );

@@ -33,6 +33,10 @@ internal sealed class RegisterUserCommandHandler(
             CreatedAt = dateTimeProvider.UtcNow,
             UpdatedAt = dateTimeProvider.UtcNow,
             Phone = command.Phone,
+            CountryId = command.CountryId,
+            RegionId = command.RegionId,
+            DistrictId = command.DistrictId,
+            SubDistrictId = command.SubDistrictId,
             Status = UserStatus.Active,
             IsEmailVerified = false,
             IsMFAEnabled = false

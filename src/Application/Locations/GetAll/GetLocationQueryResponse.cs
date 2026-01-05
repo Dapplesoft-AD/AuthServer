@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Application.Address.GetAll;
+namespace Application.Locations.GetAll;
 
-public sealed class GetAddressQueryResponse 
+public sealed class GetLocationQueryResponse 
 {
     public CountryDto Country { get; set; }
 }

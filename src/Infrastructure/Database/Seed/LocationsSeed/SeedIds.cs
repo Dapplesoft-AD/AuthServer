@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Infrastructure.Database.Seed.AddressSeed;
+namespace Infrastructure.Database.Seed.LocationsSeed;
 
 internal static class SeedIds
 {

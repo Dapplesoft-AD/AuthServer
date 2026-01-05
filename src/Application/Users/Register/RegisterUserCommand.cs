@@ -6,5 +6,9 @@ public sealed record RegisterUserCommand(
     string Email,
     string FullName,
     string Password,
-    string? Phone)
-    : ICommand<Guid>;
+    string? Phone,
+    Guid? CountryId,
+    Guid? RegionId,
+    Guid? DistrictId,
+    Guid? SubDistrictId
+) : ICommand<Guid>;

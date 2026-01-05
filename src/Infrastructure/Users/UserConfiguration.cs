@@ -11,6 +11,14 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasKey(u => u.Id);
 
         builder.HasIndex(u => u.Email).IsUnique();
+        
+        builder.HasIndex(u => u.CountryId);
+        
+        builder.HasIndex(u => u.RegionId);
+        
+        builder.HasIndex(u => u.DistrictId);
+
+        builder.HasIndex(u => u.SubDistrictId);
 
         builder.Property(u => u.Email).HasMaxLength(150).IsRequired();
 
@@ -20,9 +28,11 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.PasswordHash).HasMaxLength(255).IsRequired();
 
-        builder.Property(u => u.IsEmailVerified).IsRequired();
+        builder.Property(u => u.IsEmailVerified).IsRequired().HasDefaultValue(false);
 
         builder.Property(u => u.IsMFAEnabled).IsRequired();
+
+        builder.Property(u => u.Address).HasMaxLength(300);
 
         builder.Property(u => u.Status).IsRequired();
 

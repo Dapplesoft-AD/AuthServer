@@ -3,19 +3,19 @@ using Application.Abstractions.Messaging;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
 
-namespace Application.Address.GetAll;
+namespace Application.Locations.GetAll;
 
-internal sealed class GetAddressQueryHandler(IApplicationDbContext context)
-    : IQueryHandler<GetAddressQuery, List<GetAddressQueryResponse>>
+internal sealed class GetLocationQueryHandler(IApplicationDbContext context)
+    : IQueryHandler<GetLocationQuery, List<GetLocationQueryResponse>>
 {
-    public async Task<Result<List<GetAddressQueryResponse>>> Handle(
-        GetAddressQuery query,
+    public async Task<Result<List<GetLocationQueryResponse>>> Handle(
+        GetLocationQuery query,
         CancellationToken cancellationToken
     )
     {
-        List<GetAddressQueryResponse> addresses = await context
+        List<GetLocationQueryResponse> addresses = await context
             .Countries.AsNoTracking()
-            .Select(country => new GetAddressQueryResponse
+            .Select(country => new GetLocationQueryResponse
             {
                 Country = new CountryDto
                 {
@@ -53,6 +53,6 @@ internal sealed class GetAddressQueryHandler(IApplicationDbContext context)
             })
             .ToListAsync(cancellationToken);
 
-        return Result<List<GetAddressQueryResponse>>.Success(addresses);
+        return Result<List<GetLocationQueryResponse>>.Success(addresses);
     }
 }

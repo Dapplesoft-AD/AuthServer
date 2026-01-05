@@ -16,6 +16,16 @@ public sealed record UserResponse
 
     public bool IsMFAEnabled { get; init; }
 
+    public Guid? CountryId { get; set; }
+
+    public Guid? RegionId { get; set; }
+
+    public Guid? DistrictId { get; set; }
+
+    public Guid? SubDistrictId { get; set; }
+
+    public string? Address { get; init; }
+
     public UserStatus Status { get; init; }
 
     public DateTime? CreatedAt { get; init; }
