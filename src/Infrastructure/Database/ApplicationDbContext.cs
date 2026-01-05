@@ -16,7 +16,7 @@ using Domain.Todos;
 using Domain.UserRoles;
 using Domain.Users;
 using Infrastructure.Database.Seed;
-using Infrastructure.Database.Seed.AddressSeed;
+using Infrastructure.Database.Seed.LocationsSeed;
 using Infrastructure.DomainEvents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -56,7 +56,7 @@ public sealed class ApplicationDbContext(
 
         UsersAndRoleSeed.Apply(modelBuilder);
 
-        CountriesSeed.Apply(modelBuilder);
+        Locations.Apply(modelBuilder);
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
