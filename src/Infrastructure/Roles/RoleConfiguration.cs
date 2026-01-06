@@ -14,7 +14,7 @@ internal sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
             .IsRequired();
 
         builder.Property(x => x.RoleName)
-            .HasMaxLength(100)
+            .HasMaxLength(20)
             .IsRequired();
 
         builder.Property(x => x.Description);
