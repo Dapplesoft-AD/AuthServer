@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace Infrastructure.Migrations
+namespace Infrastructure.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class Stable_6 : Migration
+    public partial class Stable_61 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -140,6 +140,17 @@ namespace Infrastructure.Migrations
                 table: "users",
                 type: "uuid",
                 nullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "role_name",
+                schema: "public",
+                table: "roles",
+                type: "character varying(20)",
+                maxLength: 20,
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "character varying(100)",
+                oldMaxLength: 100);
 
             migrationBuilder.AddColumn<string>(
                 name: "role_code",
@@ -1499,6 +1510,17 @@ namespace Infrastructure.Migrations
                 oldType: "boolean",
                 oldDefaultValue: false);
 
+            migrationBuilder.AlterColumn<string>(
+                name: "role_name",
+                schema: "public",
+                table: "roles",
+                type: "character varying(100)",
+                maxLength: 100,
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "character varying(20)",
+                oldMaxLength: 20);
+
             migrationBuilder.AddColumn<DateTime>(
                 name: "created_at",
                 schema: "public",
@@ -1537,7 +1559,7 @@ namespace Infrastructure.Migrations
                 table: "districts",
                 type: "uuid",
                 nullable: false,
-                defaultValue: new Guid("00001010-0000-0000-0000-010001000001"));
+                defaultValue: Guid.Empty);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "created_at",
