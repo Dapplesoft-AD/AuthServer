@@ -1,5 +1,5 @@
 ﻿using Application.Abstractions.Messaging;
-using Application.Abstractions.Otp;
+using Application.Abstractions.Otps;
 using Domain.Otps;
 using Microsoft.Extensions.Logging;
 using SharedKernel;
