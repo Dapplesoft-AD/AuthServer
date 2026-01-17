@@ -1,6 +1,8 @@
 ﻿using Application.Abstractions.Behaviors;
 using Application.Abstractions.Messaging;
+using Application.Abstractions.Otps;
 using Application.AuditLogs.AuditLogDecorator;
+using Application.Otps;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using SharedKernel;
@@ -31,6 +33,9 @@ public static class DependencyInjection
         services.Decorate(typeof(IQueryHandler<,>), typeof(LoggingDecorator.QueryHandler<,>));
         services.Decorate(typeof(ICommandHandler<,>), typeof(LoggingDecorator.CommandHandler<,>));
         services.Decorate(typeof(ICommandHandler<>), typeof(LoggingDecorator.CommandBaseHandler<>));
+
+        services.AddScoped<IOtpGenerator, OtpGenerator>();
+        services.AddScoped<IOtpProviderService, OtpProviderService>();
 
         services.Scan(scan => scan.FromAssembliesOf(typeof(DependencyInjection))
             .AddClasses(classes => classes.AssignableTo(typeof(IDomainEventHandler<>)), publicOnly: false)
