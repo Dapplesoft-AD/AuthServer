@@ -50,5 +50,5 @@ public static class Base
     public const string ForgotPassReset = "forgot-password-reset";
     public const string Locations = "locations";
     public const string ReqOtpVerify = "req-otp-verify";
-    public const string VerifyAccountOtp = "Verify-account-otp";
+    public const string VerifyAccountOtp = "verify-account-otp";
 }
