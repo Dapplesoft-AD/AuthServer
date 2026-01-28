@@ -41,7 +41,7 @@ internal sealed class Authorize : IEndpoint
                     properties: new AuthenticationProperties
                     {
                         RedirectUri = httpContext.Request.PathBase + httpContext.Request.Path + QueryString.Create(
-                            httpContext.Request.HasFormContentType ? httpContext.Request.Form.ToList() : httpContext.Request.Query.ToList())
+                            httpContext.Request.HasFormContentType ? httpContext.Request.Form.ToList() : [.. httpContext.Request.Query])
                     },
                     authenticationSchemes: [ "AuthCookie" ]);
             }
