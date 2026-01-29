@@ -3,12 +3,14 @@ using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Email;
 using Application.Abstractions.Openiddict;
+using Application.Abstractions.SMS;
 using Infrastructure.Authentication;
 using Infrastructure.Authorization;
 using Infrastructure.Database;
 using Infrastructure.DomainEvents;
-using Infrastructure.Email;
 using Infrastructure.Openiddict;
+using Infrastructure.SmsConfigs;
+using Infrastructure.SmtpConfigs;
 using Infrastructure.Time;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -32,8 +34,12 @@ public static class DependencyInjection
             .AddHealthChecks(configuration)
             .AddAuthenticationInternal(configuration)
             .AddAuthorizationInternal()
-            .Configure<EmailSettings>(configuration.GetSection("EmailSettings"))
-            .AddScoped<IEmailService, EmailService>();
+            //.Configure<EmailSettings>(configuration.GetSection("EmailSettings"))
+            //.AddScoped<IEmailService, EmailService>();
+            .AddScoped<ISmsConfigRepository, SmsConfigRepository>()
+            .AddScoped<ISmsService, SmsService>()
+            .AddScoped<ISmtpConfigRepository, SmtpConfigRepository>()
+            .AddScoped<IEmailService, SmtpEmailService>();
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {

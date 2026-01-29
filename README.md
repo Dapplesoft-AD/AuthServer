@@ -231,6 +231,13 @@ The project includes:
   - **postgres**: PostgreSQL database (port 5432)
   - **seq**: Structured log viewer (port 8081)
 
+## Default Credentials
+
+```json
+admin@auth.dapplesoft.com
+admin12345
+```
+
 ## 📊 Code Quality
 
 This project maintains high code quality standards:

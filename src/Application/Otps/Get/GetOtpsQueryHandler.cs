@@ -13,13 +13,12 @@ internal sealed class GetOtpsQueryHandler(
         List<OtpResponse> otps = await context.Otp
             .Select(o => new OtpResponse
             {
-                OtpId = o.OtpId,
-                PhoneNumber = o.PhoneNumber,
-                Email = o.Email,
+                OtpId = o.Id,
+                Destination = o.Destination,
                 IsExpired = o.IsExpired,
                 OtpToken = o.OtpToken,
                 Delay = o.Delay,
-                CreatedAt = o.CreatedAt
+                ExpiresAt = o.ExpiresAt,
             })
             .ToListAsync(cancellationToken);
         return otps;

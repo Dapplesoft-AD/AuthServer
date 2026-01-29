@@ -12,11 +12,11 @@ internal sealed class GetSmsConfigByIdQueryHandler(
     public async Task<Result<SmsConfigResponse>> Handle(GetSmsConfigByIdQuery request, CancellationToken cancellationToken)
     {
         SmsConfigResponse smsConfig = await context.SmsConfig
-            .Where(s => s.SmsId == request.SmsId)
+            .Where(s => s.Id == request.SmsId)
             .Select(s => new SmsConfigResponse
             {
-                SmsToken = s.SmsToken,
-                SmsId = s.SmsId
+                SmsToken = s.Token,
+                SmsId = s.Id
             })
             .SingleOrDefaultAsync(cancellationToken);
         if (smsConfig is null)

@@ -2,4 +2,4 @@
 
 namespace Application.Otps.GetById;
 
-public sealed record GetOtpByIdQuery(Guid OtpId) : IQuery<OtpResponse>;
+public sealed record GetOtpByIdQuery(Guid Id) : IQuery<OtpResponse>;

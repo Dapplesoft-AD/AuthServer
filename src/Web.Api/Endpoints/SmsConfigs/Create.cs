@@ -10,7 +10,10 @@ internal sealed class Create : IEndpoint
 {
     public sealed class Request
     {
-        public string SmsToken { get; set; } = string.Empty;
+        public string? ProviderName { get; set; }
+        public string? ProviderUrl { get; set; }
+        public string ApiUrl { get; set; }
+        public string SmsToken { get; set; }
     }
 
     public void MapEndpoint(IEndpointRouteBuilder app)
@@ -22,6 +25,9 @@ internal sealed class Create : IEndpoint
         {
             var command = new CreateSmsOtpCommand
             {
+                ProviderName = request.ProviderName,
+                ProviderUrl = request.ProviderUrl,
+                ApiUrl = request.ApiUrl,
                 SmsToken = request.SmsToken
             };
 

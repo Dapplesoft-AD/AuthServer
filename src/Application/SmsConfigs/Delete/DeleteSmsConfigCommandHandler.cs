@@ -17,7 +17,7 @@ internal sealed class DeleteSmsConfigCommandHandler(
             return Result.Failure(SmsConfigErrors.NotFound(request.SmsId));
         }
         applicationDbContext.SmsConfig.Remove(smsConfig);
-        smsConfig.Raise(new SmsConfigDeletedDomainEvent(smsConfig.SmsId));
+        smsConfig.Raise(new SmsConfigDeletedDomainEvent(smsConfig.Id));
         await applicationDbContext.SaveChangesAsync(cancellationToken);
         return Result.Success();
     }

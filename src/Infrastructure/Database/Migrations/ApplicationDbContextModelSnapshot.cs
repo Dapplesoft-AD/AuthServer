@@ -703,10 +703,9 @@ namespace Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Domain.Otps.Otp", b =>
                 {
-                    b.Property<Guid>("OtpId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("Id")
                         .HasColumnType("uuid")
-                        .HasColumnName("otp_id");
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -716,30 +715,48 @@ namespace Infrastructure.Database.Migrations
                         .HasColumnType("interval")
                         .HasColumnName("delay");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("email");
+                    b.Property<string>("Destination")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("destination");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
 
                     b.Property<bool>("IsExpired")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(false)
                         .HasColumnName("is_expired");
+
+                    b.Property<bool>("IsUsed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_used");
 
                     b.Property<string>("OtpToken")
                         .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("character varying(16)")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
                         .HasColumnName("otp_token");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("phone_number");
+                    b.Property<int>("OtpType")
+                        .HasColumnType("integer")
+                        .HasColumnName("otp_type");
 
-                    b.HasKey("OtpId")
-                        .HasName("pk_otp");
+                    b.HasKey("Id")
+                        .HasName("pk_otps");
 
-                    b.ToTable("otp", "public");
+                    b.HasIndex("Destination")
+                        .HasDatabaseName("ix_otps_destination");
+
+                    b.HasIndex("Destination", "OtpType", "OtpToken", "ExpiresAt")
+                        .HasDatabaseName("ix_otps_destination_otp_type_otp_token_expires_at");
+
+                    b.ToTable("Otps", "public");
                 });
 
             modelBuilder.Entity("Domain.Permissions.Permission", b =>
@@ -957,18 +974,37 @@ namespace Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Domain.SmsConfigs.SmsConfig", b =>
                 {
-                    b.Property<Guid>("SmsId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("sms_id");
+                        .HasColumnName("id");
 
-                    b.Property<string>("SmsToken")
+                    b.Property<string>("ApiUrl")
                         .IsRequired()
-                        .HasMaxLength(4)
-                        .HasColumnType("character varying(4)")
-                        .HasColumnName("sms_token");
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)")
+                        .HasColumnName("api_url");
 
-                    b.HasKey("SmsId")
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("ProviderName")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("provider_name");
+
+                    b.Property<string>("ProviderUrl")
+                        .HasColumnType("text")
+                        .HasColumnName("provider_url");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)")
+                        .HasColumnName("token");
+
+                    b.HasKey("Id")
                         .HasName("pk_sms_config");
 
                     b.ToTable("sms_config", "public");
@@ -4641,15 +4677,15 @@ namespace Infrastructure.Database.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("full_name");
 
-                    b.Property<bool>("IsEmailVerified")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("is_email_verified");
-
                     b.Property<bool>("IsMFAEnabled")
                         .HasColumnType("boolean")
                         .HasColumnName("is_mfa_enabled");
+
+                    b.Property<bool>("IsVerified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_verified");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -4706,8 +4742,8 @@ namespace Infrastructure.Database.Migrations
                             CreatedAt = new DateTime(2025, 12, 16, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "admin@auth.dapplesoft.com",
                             FullName = "Default Admin",
-                            IsEmailVerified = false,
                             IsMFAEnabled = false,
+                            IsVerified = false,
                             PasswordHash = "60358AD3245A0E1D8FC2CA0B0914E45C5F87143DDB2C9E81E09B4E41676F30B8-99D093AF2C44DB8DDCA9FE77BDE4A9F2",
                             Status = 0,
                             UpdatedAt = new DateTime(2025, 12, 16, 0, 0, 0, 0, DateTimeKind.Utc)

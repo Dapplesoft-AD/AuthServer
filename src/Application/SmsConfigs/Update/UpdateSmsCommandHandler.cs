@@ -16,9 +16,9 @@ internal sealed class UpdateSmsCommandHandler(
         {
             return Result.Failure<Guid>(SmsConfigErrors.NotFound(command.SmsId));
         }
-        smsConfig.SmsToken = command.SmsToken;
+        smsConfig.Token = command.SmsToken;
         applicationDbContext.SmsConfig.Update(smsConfig);
         await applicationDbContext.SaveChangesAsync(cancellationToken);
-        return Result.Success(smsConfig.SmsId);
+        return Result.Success(smsConfig.Id);
     }
 }

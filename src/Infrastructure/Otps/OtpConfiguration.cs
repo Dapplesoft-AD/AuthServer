@@ -8,9 +8,50 @@ internal sealed class OtpConfiguration : IEntityTypeConfiguration<Otp>
 {
     public void Configure(EntityTypeBuilder<Otp> builder)
     {
-        builder.HasKey(t=>t.OtpId);
-        builder.Property(t=>t.OtpToken).IsRequired().HasMaxLength(16);
-        builder.Property(t=>t.Email).HasMaxLength(256);
-        builder.Property(t=>t.PhoneNumber).HasMaxLength(256);
+        builder.ToTable("Otps");
+
+        // Primary Key
+        builder.HasKey(t => t.Id);
+
+        // Properties
+        builder.Property(t => t.Id)
+               .ValueGeneratedNever();
+
+        builder.Property(t => t.OtpToken)
+               .IsRequired()
+               .HasMaxLength(10);
+
+        builder.Property(t => t.Destination)
+               .IsRequired()
+               .HasMaxLength(50);
+
+        builder.Property(t => t.ExpiresAt)
+               .IsRequired();
+
+        builder.Property(t => t.Delay)
+                .IsRequired()
+                .HasColumnType("interval");
+
+        builder.Property(t => t.OtpType)
+               .IsRequired()
+               .HasConversion<int>();
+
+        builder.Property(t => t.IsExpired)
+               .IsRequired()
+               .HasDefaultValue(false);
+
+        builder.Property(t => t.IsUsed)
+               .IsRequired()
+               .HasDefaultValue(false);
+
+        // Indexes (important for OTP validation performance)
+        builder.HasIndex(t => t.Destination);
+        builder.HasIndex(t => new 
+        {
+            t.Destination,
+            t.OtpType,
+            t.OtpToken,
+            t.ExpiresAt
+        });
     }
 }

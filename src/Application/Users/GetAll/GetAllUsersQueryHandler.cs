@@ -19,7 +19,7 @@ internal sealed class GetAllUsersQueryHandler(
                 Email = user.Email,
                 FullName = user.FullName,
                 Phone = user.Phone,
-                IsEmailVerified = user.IsEmailVerified,
+                IsEmailVerified = user.IsVerified,
                 IsMFAEnabled = user.IsMFAEnabled,
                 CountryId = user.CountryId,
                 RegionId = user.RegionId,

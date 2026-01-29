@@ -2,6 +2,7 @@
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Common;
 using Domain.Roles;
 using Domain.UserRoles;
 using Domain.Users;
@@ -19,7 +20,7 @@ internal sealed class LoginUserCommandHandler(
 {
     public async Task<Result<LoginUserResponse>> Handle(LoginUserCommand command, CancellationToken cancellationToken)
     {
-        string? emailLower = command.Email.ToLower(CultureInfo.CurrentCulture);
+        string? emailLower = Normalizer.EmailAddressLowerCase(command.Email);
         User? user = await context.Users
             .AsNoTracking()
             .SingleOrDefaultAsync(u => u.Email == emailLower, cancellationToken);

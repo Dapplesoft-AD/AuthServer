@@ -25,6 +25,7 @@ public static class CustomResults
                 ErrorType.Problem => error.Code,
                 ErrorType.NotFound => error.Code,
                 ErrorType.Conflict => error.Code,
+                ErrorType.Failure => error.Code,
                 _ => "Server failure"
             };
 
@@ -35,6 +36,7 @@ public static class CustomResults
                 ErrorType.Problem => error.Description,
                 ErrorType.NotFound => error.Description,
                 ErrorType.Conflict => error.Description,
+                ErrorType.Failure => error.Description,
                 _ => "An unexpected error occurred"
             };
 
@@ -45,13 +47,14 @@ public static class CustomResults
                 ErrorType.Problem => "https://tools.ietf.org/html/rfc7231#section-6.5.1",
                 ErrorType.NotFound => "https://tools.ietf.org/html/rfc7231#section-6.5.4",
                 ErrorType.Conflict => "https://tools.ietf.org/html/rfc7231#section-6.5.8",
+                ErrorType.Failure => "https://tools.ietf.org/html/rfc7231#section-6.5.1",
                 _ => "https://tools.ietf.org/html/rfc7231#section-6.6.1"
             };
 
         static int GetStatusCode(ErrorType errorType) =>
             errorType switch
             {
-                ErrorType.Validation or ErrorType.Problem => StatusCodes.Status400BadRequest,
+                ErrorType.Validation or ErrorType.Failure or ErrorType.Problem => StatusCodes.Status400BadRequest,
                 ErrorType.NotFound => StatusCodes.Status404NotFound,
                 ErrorType.Conflict => StatusCodes.Status409Conflict,
                 _ => StatusCodes.Status500InternalServerError
@@ -59,15 +62,26 @@ public static class CustomResults
 
         static Dictionary<string, object?>? GetErrors(Result result)
         {
-            if (result.Error is not ValidationError validationError)
+            // Case 1: ValidationError – already a collection of errors
+            if (result.Error is ValidationError validationError)
             {
-                return null;
+                return new Dictionary<string, object?>
+                {
+                    ["errors"] = validationError.Errors
+                };
             }
 
-            return new Dictionary<string, object?>
+            // Case 2: Problem / Failure – expose a single error in an array
+            if (result.Error.Type is ErrorType.Problem or ErrorType.Failure)
             {
-                { "errors", validationError.Errors }
-            };
+                return new Dictionary<string, object?>
+                {
+                    ["errors"] = new[] { result.Error }
+                };
+            }
+
+            // Case 3: Other types (NotFound, Conflict, etc.) – no extra 'errors' section
+            return null;
         }
     }
 

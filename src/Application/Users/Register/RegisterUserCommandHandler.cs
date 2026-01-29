@@ -1,12 +1,12 @@
 ﻿using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Common;
 using Domain.Roles;
 using Domain.UserRoles;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
-using System.Globalization;
 
 namespace Application.Users.Register;
 
@@ -18,7 +18,7 @@ internal sealed class RegisterUserCommandHandler(
 {
     public async Task<Result<Guid>> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {
-        string? emailLower = command.Email.ToLower(CultureInfo.CurrentCulture);
+        string? emailLower = Normalizer.EmailAddressLowerCase(command.Email);
         if (await context.Users.AnyAsync(u => u.Email == emailLower, cancellationToken))
         {
             return Result.Failure<Guid>(UserErrors.EmailNotUnique);
@@ -32,13 +32,13 @@ internal sealed class RegisterUserCommandHandler(
             PasswordHash = passwordHasher.Hash(command.Password),
             CreatedAt = dateTimeProvider.UtcNow,
             UpdatedAt = dateTimeProvider.UtcNow,
-            Phone = command.Phone,
+            Phone = Normalizer.PhoneNumber(command.Phone),
             CountryId = command.CountryId,
             RegionId = command.RegionId,
             DistrictId = command.DistrictId,
             SubDistrictId = command.SubDistrictId,
             Status = UserStatus.Active,
-            IsEmailVerified = false,
+            IsVerified = false,
             IsMFAEnabled = false
         };
 

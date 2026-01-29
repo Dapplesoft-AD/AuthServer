@@ -12,16 +12,15 @@ internal sealed class GetOtpByIdQueryHandler(
     {
 
         OtpResponse otps = await applicationDbContext.Otp
-            .Where(o => o.OtpId == request.OtpId)
+            .Where(o => o.Id == request.Id)
             .Select(o => new OtpResponse
             {
-                OtpId = o.OtpId,
-                PhoneNumber = o.PhoneNumber,
-                Email = o.Email,
+                Id = o.Id,
+                Destination = o.Destination,
                 IsExpired = o.IsExpired,
                 OtpToken = o.OtpToken,
                 Delay = o.Delay,
-                CreatedAt = o.CreatedAt
+                ExpiresAt = o.ExpiresAt,
             })
             .SingleOrDefaultAsync(cancellationToken);
         if (otps is null)

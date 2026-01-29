@@ -12,12 +12,15 @@ internal class CreateSmsOtpCommandHandler(
     {
         var smsConfig = new SmsConfig
         {
-            SmsId = Guid.NewGuid(),
-            SmsToken = request.SmsToken
+            Id = Guid.NewGuid(),
+            ProviderName = request.ProviderName,
+            ProviderUrl = request.ProviderUrl,
+            ApiUrl = request.ApiUrl,
+            Token = request.SmsToken
         };
-        smsConfig.Raise(new SmsConfigCreatedDomainEvent(smsConfig.SmsId));
+        smsConfig.Raise(new SmsConfigCreatedDomainEvent(smsConfig.Id));
         applicationDbContext.SmsConfig.Add(smsConfig);
         await applicationDbContext.SaveChangesAsync(cancellationToken);
-        return smsConfig.SmsId;
+        return smsConfig.Id;
     }
 }

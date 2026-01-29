@@ -13,8 +13,8 @@ internal sealed class GetSmsConfigsQueryHandler(
         List<SmsConfigResponse> smsConfigs = await context.SmsConfig
             .Select(s => new SmsConfigResponse
             {
-                SmsToken = s.SmsToken,
-                SmsId = s.SmsId
+                SmsToken = s.Token,
+                SmsId = s.Id
             })
             .ToListAsync(cancellationToken);
         return Result.Success(smsConfigs);

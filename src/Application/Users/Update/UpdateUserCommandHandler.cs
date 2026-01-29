@@ -2,6 +2,7 @@
 using Application.Abstractions.Authentication;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Common;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
@@ -16,7 +17,7 @@ internal sealed class UpdateUserCommandHandler(
 {
     public async Task<Result<UpdateUserResponse>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
     {
-        string emailLower = command.Email?.ToLower(CultureInfo.CurrentCulture);
+        string emailLower = Normalizer.EmailAddressLowerCase(command.Email);
 
         if (command.UserId != userContext.UserId)
         {
@@ -50,7 +51,7 @@ internal sealed class UpdateUserCommandHandler(
 
         if (command.Phone is not null)
         {
-            userTuple.Phone = command.Phone;
+            userTuple.Phone = Normalizer.PhoneNumber(command.Phone);
         }
 
         if (command.Status.HasValue)
@@ -65,7 +66,7 @@ internal sealed class UpdateUserCommandHandler(
 
         if (command.IsEmailVerified.HasValue)
         {
-            userTuple.IsEmailVerified = command.IsEmailVerified.Value;
+            userTuple.IsVerified = command.IsEmailVerified.Value;
         }
 
         if (command.CountryId.HasValue)
@@ -108,7 +109,7 @@ internal sealed class UpdateUserCommandHandler(
             Status: userTuple.Status,
             Address: userTuple.Address,
             IsMFAEnabled: userTuple.IsMFAEnabled,
-            IsEmailVerified: userTuple.IsEmailVerified
+            IsEmailVerified: userTuple.IsVerified
         );
 
         return response;

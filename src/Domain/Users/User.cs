@@ -14,7 +14,7 @@ public sealed class User : Entity
 
     public string? Phone { get; set; }
 
-    public bool IsEmailVerified { get; set; }
+    public bool IsVerified { get; set; }
 
     public bool IsMFAEnabled { get; set; }
 
