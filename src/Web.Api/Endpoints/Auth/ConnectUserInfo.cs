@@ -22,7 +22,7 @@ internal sealed class ConnectUserInfo : IEndpoint
             if (result.Principal is null)
             {
                 return Results.Challenge(
-                    authenticationSchemes: new[] { OpenIddictServerAspNetCoreDefaults.AuthenticationScheme },
+                    authenticationSchemes: [OpenIddictServerAspNetCoreDefaults.AuthenticationScheme],
                     properties: new AuthenticationProperties(new Dictionary<string, string?>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidToken,
@@ -51,9 +51,7 @@ internal sealed class ConnectUserInfo : IEndpoint
                 claims[OpenIddictConstants.Claims.Name] = name;
             }
 
-            object[] roles = result.Principal.FindAll(OpenIddictConstants.Claims.Role)
-                .Select(c => c.Value)
-                .ToArray();
+            object[] roles = [.. result.Principal.FindAll(OpenIddictConstants.Claims.Role).Select(c => c.Value)];
 
             if (roles.Length > 0)
             {

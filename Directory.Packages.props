@@ -9,6 +9,7 @@
     <PackageVersion Include="MediatR" Version="9.0.0" />
     <PackageVersion Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.1" />
+    <PackageVersion Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.15.0" />
     <PackageVersion Include="MimeKit" Version="4.14.0" />
     <PackageVersion Include="OpenIddict" Version="7.2.0" />
     <PackageVersion Include="OpenIddict.AspNetCore" Version="7.2.0" />
